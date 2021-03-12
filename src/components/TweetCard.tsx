@@ -12,10 +12,10 @@ const TweetCard = () => {
         className="w-10 h-10 rounded-full cursor-pointer"
       />
 
-      <div className="flex-col shadow-sm space-y-3 bg-dark-500 rounded-md p-3 px-4 ">
+      <div className="flex-col shadow-sm space-y-3 bg-dark-600 rounded-md p-3 px-4 ">
         {/* top */}
         <div className="flex">
-          <span>Jack Sheldon</span>
+          <span className="text-white">Jack Sheldon</span>
           <span className="ml-2 text-gray-400 cursor-pointer hover:text-blue-700">
             @Jack
           </span>

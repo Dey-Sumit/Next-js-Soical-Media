@@ -2,6 +2,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { AiFillGoogleCircle } from "react-icons/ai";
 import { BiLoaderAlt, BiUserCircle } from "react-icons/bi";
 import { MdEmail, MdLock } from "react-icons/md";
 // import axiosInstance from "../util/axiosInstance";
@@ -42,22 +43,42 @@ export default function Register() {
     }
   };
   return (
-    <div className="mt-5">
+    <div className="flex flex-col space-y-4">
+      <h1 className="text-2xl font-bold text-white">Sign up to Twitter</h1>
+      <div className="bg-blue-700 flex justify-center items-center p-2 text-white rounded-md space-x-2">
+        <AiFillGoogleCircle />
+        <span>Sign up with Google</span>
+      </div>
       <form
-        className="flex flex-col gap-y-1"
+        className="flex flex-col space-y-3"
         onSubmit={handleSubmit(handleClick)}
       >
+        {/* // wrapper of the form 👆*/}
+        <div className="flex space-x-4">
+          <Input
+            label="Name"
+            type="text"
+            register={register({
+              required: { value: true, message: "Name is Required" },
+            })}
+            name="name"
+            error={errors.name}
+          />
+          <Input
+            label="Username"
+            type="text"
+            register={register({
+              required: { value: true, message: "Username is Required" },
+            })}
+            name="username"
+            error={errors.username}
+          />
+        </div>
         <Input
-          register={register({
-            required: { value: true, message: "Username is Required" },
-          })}
-          Icon={BiUserCircle}
-          type="text"
-          placeholder="Username"
-          name="username"
-          error={errors.Name}
-        />
-        <Input
+          label="Email"
+          type="email"
+          name="email"
+          error={errors.email}
           register={register({
             required: { value: true, message: "Email is Required" },
             pattern: {
@@ -65,13 +86,13 @@ export default function Register() {
               message: "Email is not valid",
             },
           })}
-          Icon={MdEmail}
-          type="email"
-          name="email"
-          placeholder="Email"
-          error={errors.email}
         />
         <Input
+          label="Password"
+          type="password"
+          placeholder="6+ Characters"
+          name="password"
+          error={errors.password}
           register={register({
             required: { value: true, message: "Password is Required" },
             minLength: {
@@ -79,53 +100,18 @@ export default function Register() {
               message: "Password Length must be at least 6",
             },
           })}
-          Icon={MdLock}
-          name="password"
-          placeholder="Password"
-          type="password"
-          error={errors.password}
         />
 
-        {!loading ? (
-          <button
-            type="submit"
-            className="p-2 text-base font-medium text-white rounded-lg bg-green"
-          >
-            Register
-          </button>
-        ) : (
-          <button
-            type="submit"
-            className="flex items-center justify-center p-2 text-base font-medium text-white rounded-lg bg-green"
-          >
-            <BiLoaderAlt className="mr-2 animate-spin" /> Processing
-          </button>
-        )}
+        <button className="bg-blue-700  justify-center  p-2 text-white rounded-md text-lg font-bold">
+          {!loading ? (
+            "Sign Up"
+          ) : (
+            <>
+              <BiLoaderAlt className="mr-2 animate-spin" /> Processing
+            </>
+          )}
+        </button>
       </form>
     </div>
   );
-}
-
-{
-  /* 
-            <div>
-               <div className='relative flex items-center py-1 '>
-                  <MdEmail
-                     className='absolute mr-2 text-white'
-                     size={20}
-                     style={{ left: '0.5rem' }}
-                  />
-
-                  <input
-                     ref={register({ required: true, pattern: /\S+@\S+\.\S+/ })}
-                     className='w-full px-8 py-2 text-white bg-transparent border-2 border-gray-500 rounded-lg focus:outline-none focus:border-green'
-                  />
-               </div>
-               {errors.email && errors.email.type === 'required' && (
-                  <span className='text-red-600'>Email is required</span>
-               )}
-               {errors.email?.type === 'pattern' && (
-                  <span className='text-red-600'>Enter a valid email</span>
-               )}
-            </div> */
 }

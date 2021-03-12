@@ -1,22 +1,28 @@
+import { FunctionComponent, LegacyRef } from "react";
 import { IoMdLock } from "react-icons/io";
 
-export default function Input({ register, Icon, error, ...rest }) {
+const Input: FunctionComponent<{
+  register: LegacyRef<HTMLInputElement>;
+  label: string;
+  error: any;
+  name: string;
+  type: string;
+  placeholder?: string;
+}> = ({ register, label, error, ...rest }) => {
   return (
     <div>
-      <div className="relative flex items-center py-1 ">
-        <Icon
-          className="absolute mr-2 text-white"
-          size={20}
-          style={{ left: "0.5rem" }}
-        />
-
+      <div className="flex flex-col space-y-1">
+        <span className="text-lg">{label}</span>
         <input
+          type="text"
           {...rest}
           ref={register}
-          className="w-full px-8 py-2 text-white bg-transparent border-2 border-gray-500 rounded-lg focus:outline-none focus:border-green"
+          className="bg-dark-400 p-1 rounded-md focus:outline-none"
         />
       </div>
       {error && <p className="m-0 text-sm text-red-600">{error?.message}</p>}
     </div>
   );
-}
+};
+
+export default Input;

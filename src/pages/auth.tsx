@@ -4,51 +4,30 @@ import Register from "../components/Register";
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
-  console.log("rendered");
 
   //TODO font-serif globally | search better font
   return (
-    <div className="h-screen p-2 md:px-12 md:py-20 xl:px-40 xl:py-24 bg-dark-c">
-      <div className="grid h-full gap-3 overflow-hidden border-2 rounded-lg lg:border-yellow-700 xl:border-yellow-100 md:grid-cols-8">
-        <div className="hidden p-4 md:col-span-5 gradientImage md:block">
-          <h4 className="my-2 text-2xl font-bold text-white">ShopHub</h4>
-          <h1 className="my-2 text-3xl font-extrabold text-white">
-            Lorem ipsum dolor
-            <br /> sit amet consectetur.
+    <div className="grid grid-cols-8  text-white h-screen">
+      <div className="bg-blue-700 col-span-3 p-4 grid place-items-center ">
+        <div className="">
+          <h1 className="text-xl font-semibold mb-5">
+            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Velit,
+            ipsa!
           </h1>
+          <img src="/image_3d.png" alt="" className="" />
         </div>
-
-        <div className="px-6 pt-6 md:col-span-3">
-          <h2 className="my-2 text-xl font-semibold text-white">
-            Join Over 2 Millions Fans around the globe on Oh My Goal
-          </h2>
-          <p className="my-2 text-gray-400">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Rerum
-            consequatur similique, facere nulla tempore nesciunt
-          </p>
-          {isLogin ? <Login /> : <Register />}
-          {!isLogin ? (
-            <p className="my-3 text-center text-white">
-              Already a member?{" "}
-              <span
-                className="cursor-pointer text-green"
-                onClick={() => setIsLogin(true)}
-              >
-                Login
-              </span>
-            </p>
-          ) : (
-            <p className="my-3 text-center text-white">
-              Don't have an account yet?{" "}
-              <span
-                className="cursor-pointer text-green"
-                onClick={() => setIsLogin(false)}
-              >
-                Register
-              </span>
-            </p>
-          )}
-        </div>
+      </div>
+      <div className="bg-dark-700 col-span-5 p-4 grid place-items-center">
+        {isLogin ? <Login /> : <Register />}
+        <p className="text-center text-white tracking-wide">
+          {!isLogin ? "Already a member?" : " Don't have an account yet?"}
+          <span
+            className="cursor-pointer text-green"
+            onClick={() => setIsLogin((value) => !value)}
+          >
+            {!isLogin ? " Sign In" : " Sign Up"}
+          </span>
+        </p>
       </div>
     </div>
   );

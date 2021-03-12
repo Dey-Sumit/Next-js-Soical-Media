@@ -1,31 +1,31 @@
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/router";
-import { MdEmail, MdLock } from "react-icons/md";
-import { useState } from "react";
-import { BiLoaderAlt } from "react-icons/bi";
-
 import axios from "axios";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { AiFillGoogleCircle } from "react-icons/ai";
+import { BiLoaderAlt, BiUserCircle } from "react-icons/bi";
+import { MdEmail, MdLock } from "react-icons/md";
+// import axiosInstance from "../util/axiosInstance";
+
 import Input from "./Input";
 
-export default function Login() {
-  // const { signIn } = useAuth()
-  const router = useRouter();
-
-  const [loading, setLoading] = useState(false);
-
+//TODO use yup for the validation, reuse server side code
+export default function Register() {
   const { register, errors, handleSubmit } = useForm({
     mode: "onBlur",
   });
+  const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
 
   //TODO solve type any!
   const handleClick = async (data: any) => {
     try {
       setLoading(true);
-      // await signIn(data)
       const res = await axios({
         method: "post",
-        url: "http://localhost:3000/api/auth/login",
-        data,
+        url: "http://localhost:3000/api/auth/signup",
+        data: data,
       });
       router.push("/");
     } catch (error) {
@@ -35,27 +35,40 @@ export default function Login() {
     }
   };
 
+  const signUp = async ({ Name, email, password }) => {
+    try {
+    } catch (error) {
+      console.log({ error });
+      throw error.message;
+    }
+  };
   return (
-    <div className="mt-8">
+    <div className="flex flex-col space-y-4 w-full md:w-6/12">
+      <h1 className="text-2xl font-bold text-white">Sign up to Twitter</h1>
+      <div className="bg-blue-700 flex justify-center items-center p-2 text-white rounded-md space-x-2">
+        <AiFillGoogleCircle />
+        <span>Sign up with Google</span>
+      </div>
       <form
-        className="flex flex-col space-y-2"
+        className="flex flex-col space-y-3"
         onSubmit={handleSubmit(handleClick)}
       >
+        {/* //TODO handler email or username in react hook form error */}
         <Input
-          register={register({
-            required: { value: true, message: "Email is Required" },
-            pattern: {
-              value: /\S+@\S+\.\S+/,
-              message: "Email is not valid",
-            },
-          })}
-          Icon={MdEmail}
-          type="email"
+          label="Email or Username"
+          type="text"
           name="email"
-          placeholder="Email"
           error={errors.email}
+          register={register({
+            required: { value: true, message: "Email or Username is Required" },
+          })}
         />
         <Input
+          label="Password"
+          type="password"
+          placeholder="6+ Characters"
+          name="password"
+          error={errors.password}
           register={register({
             required: { value: true, message: "Password is Required" },
             minLength: {
@@ -63,41 +76,17 @@ export default function Login() {
               message: "Password Length must be at least 6",
             },
           })}
-          Icon={MdLock}
-          name="password"
-          placeholder="Password"
-          type="password"
-          error={errors.password}
         />
-
-        {/* //TODO create a separate component for the button and the loader */}
-
-        {!loading ? (
-          <button
-            type="submit"
-            className="p-2 text-base font-medium text-white rounded-lg bg-yellow"
-          >
-            Login
-          </button>
-        ) : (
-          <button
-            type="submit"
-            className="flex items-center justify-center p-2 text-base font-medium text-white rounded-lg bg-yellow"
-          >
-            <BiLoaderAlt className="mr-2 animate-spin" /> Processing
-          </button>
-        )}
+        <button className="bg-blue-700  justify-center  p-2 text-white rounded-md text-lg font-bold">
+          {!loading ? (
+            "Sign In"
+          ) : (
+            <>
+              <BiLoaderAlt className="mr-2 animate-spin" /> Processing
+            </>
+          )}
+        </button>
       </form>
-
-      {/* //! add in next version :) 😂😂😂 */}
-      {/* <p className="my-4 text-center text-gray-400">or continue with</p>
-
-      <button
-        className="w-full p-2 text-base font-medium text-white bg-gray-600 rounded-lg"
-        onClick={() => {}}
-      >
-        Google
-      </button> */}
     </div>
   );
 }

@@ -6,7 +6,7 @@ import Sidebar from "../components/Sidebar";
 
 export default function Home() {
   return (
-    <div className="flex h-screen bg-dark-700 text-dark-100">
+    <div className="flex h-screen  text-dark-100">
       {/* // wrapper 👆 */}
 
       <Sidebar />
