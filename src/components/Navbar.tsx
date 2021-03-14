@@ -19,7 +19,10 @@ const Navbar = () => {
           className="bg-transparent text-dark-100 focus:outline-none w-full"
         />
       </div>
-      <div className="flex space-x-3 items-center">
+      <div
+        className="flex space-x-3 items-center cursor-pointer hover:bg-dark-700 rounded-md p-2"
+        onClick={() => push("/profile")}
+      >
         <span>Hey Sumit!</span>
         <img
           src="https://images.vexels.com/media/users/3/145908/preview2/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"

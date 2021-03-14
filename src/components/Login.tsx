@@ -15,6 +15,7 @@ export default function Register() {
     mode: "onBlur",
   });
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const router = useRouter();
 
@@ -22,28 +23,22 @@ export default function Register() {
   const handleClick = async (data: any) => {
     try {
       setLoading(true);
-      const res = await axios({
+      await axios({
         method: "post",
-        url: "http://localhost:3000/api/auth/signup",
+        url: "/api/auth/login",
         data: data,
       });
       router.push("/");
     } catch (error) {
-      console.log({ error });
+      console.log(error.response.data);
+      setErrorMessage(error.response.data.message);
     } finally {
       setLoading(false);
     }
   };
 
-  const signUp = async ({ Name, email, password }) => {
-    try {
-    } catch (error) {
-      console.log({ error });
-      throw error.message;
-    }
-  };
   return (
-    <div className="flex flex-col space-y-4 w-full md:w-6/12">
+    <div className="flex flex-col space-y-4 w-10/12 md:w-6/12">
       <h1 className="text-2xl font-bold text-white">Sign up to Twitter</h1>
       <div className="bg-blue-700 flex justify-center items-center p-2 text-white rounded-md space-x-2">
         <AiFillGoogleCircle />
@@ -77,7 +72,7 @@ export default function Register() {
             },
           })}
         />
-        <button className="bg-blue-700  justify-center  p-2 text-white rounded-md text-lg font-bold">
+        <button className="bg-blue-700 flex items-center justify-center  p-2 text-white rounded-md text-lg font-bold">
           {!loading ? (
             "Sign In"
           ) : (
@@ -87,6 +82,11 @@ export default function Register() {
           )}
         </button>
       </form>
+      {errorMessage && (
+        <div className="border p-1 text-center border-red-600 text-red-600">
+          {errorMessage}
+        </div>
+      )}
     </div>
   );
 }

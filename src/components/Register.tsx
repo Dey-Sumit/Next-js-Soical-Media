@@ -17,6 +17,7 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   //TODO solve type any!
   const handleClick = async (data: any) => {
@@ -24,22 +25,17 @@ export default function Register() {
       setLoading(true);
       const res = await axios({
         method: "post",
-        url: "http://localhost:3000/api/auth/signup",
+        url: "/api/auth/signup",
         data: data,
       });
+      console.log(res);
+
       router.push("/");
     } catch (error) {
-      console.log({ error });
+      console.log(error.response.data);
+      setErrorMessage(error.response.data.message);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const signUp = async ({ Name, email, password }) => {
-    try {
-    } catch (error) {
-      console.log({ error });
-      throw error.message;
     }
   };
   return (
@@ -102,7 +98,7 @@ export default function Register() {
           })}
         />
 
-        <button className="bg-blue-700  justify-center  p-2 text-white rounded-md text-lg font-bold">
+        <button className="bg-blue-700  justify-center flex items-center p-2 text-white rounded-md text-lg font-bold">
           {!loading ? (
             "Sign Up"
           ) : (
@@ -112,6 +108,11 @@ export default function Register() {
           )}
         </button>
       </form>
+      {errorMessage && (
+        <div className="border p-1 text-center border-red-600 text-red-600">
+          {errorMessage}
+        </div>
+      )}
     </div>
   );
 }
