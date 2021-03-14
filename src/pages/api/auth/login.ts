@@ -11,7 +11,6 @@ handler.post(
   passport.authenticate("local"),
   (req: ExtendedNextApiRequest, res: NextApiResponse) => {
     console.log(req.session);
-    console.log(req.body);
 
     res.json({ user: req.user });
   }

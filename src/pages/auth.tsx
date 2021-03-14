@@ -1,9 +1,19 @@
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import Login from "../components/Login";
 import Register from "../components/Register";
+import { useAuthState } from "../context/auth.context";
 
 export default function Auth() {
+  const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
+  const { user } = useAuthState();
+
+  useEffect(() => {
+    if (user) {
+      router.back();
+    }
+  }, [user]);
 
   //TODO font-serif globally | search better font
   return (

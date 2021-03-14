@@ -5,6 +5,8 @@ import { useForm } from "react-hook-form";
 import { AiFillGoogleCircle } from "react-icons/ai";
 import { BiLoaderAlt, BiUserCircle } from "react-icons/bi";
 import { MdEmail, MdLock } from "react-icons/md";
+import { useAuthDispatch } from "../context/auth.context";
+import { AUTH_SUCCESS } from "../context/types";
 // import axiosInstance from "../util/axiosInstance";
 
 import Input from "./Input";
@@ -19,14 +21,20 @@ export default function Register() {
 
   const router = useRouter();
 
+  const dispatch = useAuthDispatch();
+
   //TODO solve type any!
   const handleClick = async (data: any) => {
     try {
       setLoading(true);
-      await axios({
+      const res = await axios({
         method: "post",
         url: "/api/auth/login",
         data: data,
+      });
+      dispatch({
+        type: AUTH_SUCCESS,
+        payload: res.data.user,
       });
       router.push("/");
     } catch (error) {

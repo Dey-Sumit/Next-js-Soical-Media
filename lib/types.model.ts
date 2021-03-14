@@ -4,6 +4,7 @@ export interface User {
   _id: mongoose.Types.ObjectId;
   firstName: string;
   lastName?: string;
+  name: string;
   username: string;
   password: string;
   isAdmin?: boolean;

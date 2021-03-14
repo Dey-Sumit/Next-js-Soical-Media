@@ -6,4 +6,5 @@ export interface ExtendedNextApiRequest extends NextApiRequest {
   user: {
     _id: mongoose.Types.ObjectId;
   };
+  logOut: Function;
 }

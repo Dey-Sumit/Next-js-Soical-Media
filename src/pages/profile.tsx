@@ -1,8 +1,21 @@
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { BsLockFill } from "react-icons/bs";
 import { MdDelete, MdSettings } from "react-icons/md";
 import TweetCard from "../components/TweetCard";
+import { useAuthState } from "../context/auth.context";
 
 const profile = () => {
+  const router = useRouter();
+  const { user } = useAuthState();
+
+  useEffect(() => {
+    if (!user) {
+      router.push("/auth");
+    }
+  }, [user]);
+
+  //TODO looks like you don't have a profile :) show funny image ; don't redirect
   return (
     <div className="grid grid-cols-8 gap-x-8">
       <div className="col-span-3">
