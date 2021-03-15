@@ -16,7 +16,7 @@ handler
       res: NextApiResponse,
       next: NextApiHandler
     ) => {
-      const posts = await Post.find({});
+      const posts = await Post.find({}).populate("user").sort("-createdAt");
       res.send(posts);
     }
   )

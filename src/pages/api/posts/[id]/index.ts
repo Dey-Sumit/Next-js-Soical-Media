@@ -27,7 +27,8 @@ handler
 
         const post = await Post.findById(id)
           .populate("user")
-          .populate("likes.user");
+          .populate("likes.user")
+          .populate("comments.user");
 
         // console.log(post.populated("user")); // check if the model is populated
 

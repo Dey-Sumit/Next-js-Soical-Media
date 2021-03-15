@@ -20,7 +20,11 @@ handler.put(
     next: NextApiHandler
   ) => {
     try {
+      console.log("got it bro");
+
       const post = await Post.findById(req.query.id);
+
+      console.log("got post bro");
 
       const { rate }: { rate: Number } = req.body;
 
@@ -29,6 +33,8 @@ handler.put(
       }
 
       if (rate === 1) {
+        console.log("here");
+
         // check if the post has already been liked
         if (
           post.likes.filter(
@@ -41,6 +47,8 @@ handler.put(
         }
         post.likes.unshift({ user: req.user._id });
       } else {
+        console.log("hereee");
+
         if (
           post.likes.filter(
             (like) => like.user.toHexString() === req.user._id.toHexString()

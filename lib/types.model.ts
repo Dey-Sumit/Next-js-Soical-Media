@@ -10,7 +10,7 @@ export interface User {
   isAdmin?: boolean;
   // company: Types.ObjectId | Record<string, unknown>;
 }
-
+// frontend backend different interface
 export interface Post {
   _id?: mongoose.Types.ObjectId;
   user: mongoose.Types.ObjectId;
@@ -24,7 +24,7 @@ export interface Post {
   comments?: [
     {
       user: mongoose.Types.ObjectId;
-      text: string;
+      content: string;
       date?: Date;
     }
   ];

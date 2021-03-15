@@ -8,7 +8,7 @@ const Navbar = () => {
   const { user } = useAuthState();
 
   return (
-    <div className="flex items-center justify-between p-3 bg-dark-600 text-dark-100 md:px-10 lg:px-16">
+    <div className="flex items-center justify-between p-3 bg-dark-600 text-dark-100 md:px-10 lg:px-16 sticky top-0 left-0">
       <div className="flex space-x-3">
         <span>About</span>
         <span>Help</span>
@@ -33,7 +33,7 @@ const Navbar = () => {
         // </div>
         <div
           className="flex space-x-3 items-center cursor-pointer hover:bg-dark-700 rounded-md p-2"
-          onClick={() => push("/profile")}
+          onClick={() => push(`/user/${user._id}`)}
         >
           {<span>Hey {user.name}!</span>}
           <img

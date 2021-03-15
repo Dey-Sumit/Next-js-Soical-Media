@@ -2,8 +2,8 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { BsLockFill } from "react-icons/bs";
 import { MdDelete, MdSettings } from "react-icons/md";
-import TweetCard from "../components/TweetCard";
-import { useAuthState } from "../context/auth.context";
+import TweetCard from "../../../components/TweetCard";
+import { useAuthState } from "../../../context/auth.context";
 
 const profile = () => {
   const router = useRouter();
@@ -15,10 +15,10 @@ const profile = () => {
     }
   }, [user]);
 
-  //TODO looks like you don't have a profile :) show funny image ; don't redirect
+  // TODO looks like you don't have a profile :) show funny image ; don't redirect
   return (
-    <div className="grid grid-cols-8 gap-x-8">
-      <div className="col-span-3">
+    <div className="grid grid-cols-8 gap-8 ">
+      <div className="col-span-8 md:col-span-3">
         {/* profile */}
         <div className="shadow-md flex flex-col space-y-2 items-center p-3 bg-dark-600 rounded-sm">
           <img
@@ -57,18 +57,19 @@ const profile = () => {
         </div>
       </div>
       {/* <div className="col-span-2">Sidebar</div> */}
-      <div className="col-span-5 bg-dark-500 rounded-sm">
+      <div className="col-span-8 md:col-span-5 bg-dark-500 rounded-sm">
         <div className="flex space-x-4 shadow-lg px-4 py-2 ">
           <span className="text-blue-600">Tweets</span>
           <span>Retweets</span>
-          <span>Medias</span>
+          <span>Follwers</span>
+          <span>Save</span>
         </div>
         <div className="p-2">
+          {/* <TweetCard />
           <TweetCard />
           <TweetCard />
           <TweetCard />
-          <TweetCard />
-          <TweetCard />
+          <TweetCard /> */}
         </div>
       </div>
     </div>

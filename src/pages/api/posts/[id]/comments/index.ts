@@ -3,7 +3,6 @@ import nextConnect from "next-connect";
 import { ExtendedNextApiRequest } from "../../../../../../lib/types.api";
 import { all } from "../../../../../../middlewares";
 import Post from "../../../../../../models/Post";
-import User from "../../../../../../models/User";
 
 const handler = nextConnect();
 handler.use(all);
@@ -20,10 +19,11 @@ handler
         const post = await Post.findById(req.query.id);
 
         const newComment = {
-          text: req.body.text,
+          content: req.body.content,
           user: req.user._id,
           // avatar: user.avatar,
         };
+
         post.comments.unshift(newComment);
         await post.save();
         const comments = post.populate("comments.user", "username");

@@ -4,7 +4,7 @@ import Trends from "./Trends";
 
 const Layout = ({ children }) => {
   return (
-    <div className="flex h-screen  text-dark-100">
+    <div className="flex  text-dark-100">
       {/* // wrapper 👆 */}
 
       <Sidebar />

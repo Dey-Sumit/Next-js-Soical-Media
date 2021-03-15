@@ -19,7 +19,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className=" flex flex-col py-8 px-6 justify-between pb-20 text-lg shadow-lg ">
+    <div className=" flex flex-col py-8 px-6 justify-between pb-20 text-lg shadow-lg h-screen sticky top-0 left-0 bottom-0">
       <div className="flex space-x-2 items-center font-medium justify-center">
         <Link href="/">
           <a>
@@ -50,7 +50,10 @@ const Sidebar = () => {
           <MdNotifications size="24" />
           <span className="hidden lg:block">Notifications</span>
         </div>
-        <div className="flex space-x-2 items-center " onClick={logout}>
+        <div
+          className="flex space-x-2 items-center text-red-600 "
+          onClick={logout}
+        >
           <IoMdLogOut size="24" />
           <span className="hidden lg:block">Log out</span>
         </div>
