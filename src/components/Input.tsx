@@ -1,5 +1,4 @@
 import { FunctionComponent, LegacyRef } from "react";
-import { IoMdLock } from "react-icons/io";
 
 const Input: FunctionComponent<{
   register: LegacyRef<HTMLInputElement>;
