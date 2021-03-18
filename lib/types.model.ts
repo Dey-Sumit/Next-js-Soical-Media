@@ -8,6 +8,10 @@ export interface User {
   username: string;
   password: string;
   isAdmin?: boolean;
+  following: [mongoose.Types.ObjectId];
+  follwoers: [mongoose.Types.ObjectId];
+  //TODO fix the type
+  // followers: string[];
   // company: Types.ObjectId | Record<string, unknown>;
 }
 // frontend backend different interface

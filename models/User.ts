@@ -31,6 +31,21 @@ const UserSchema = new Schema<UserDocument>({
     type: Boolean,
     default: false,
   },
+  //? people follows me
+  followers: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
+  //? people follows me
+
+  following: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
 });
 
 // Virtuals

@@ -32,7 +32,7 @@ handler
         // console.log(post.populated("user")); // check if the model is populated
 
         if (!user) return res.status(404).json({ msg: "User not found" });
-        res.send(user);
+        res.json({ user });
       } catch (error) {
         console.log(error.message);
 
