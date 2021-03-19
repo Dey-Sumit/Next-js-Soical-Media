@@ -45,3 +45,7 @@ POST MODEL
 
 - Frontend UI - auth page same as dribble website
   // https://dribbble.com/shots/10034795-Twitter-Redesign-Dark-Mode/attachments/2053017?mode=media
+
+/api/users?uid=<> => return the user by id
+/api/users?username=<> => return the user by username
+/api/users/:username?tweets = true & followers = true => return the user by username

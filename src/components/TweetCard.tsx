@@ -22,7 +22,7 @@ const TweetCard: FunctionComponent<{ tweet: Post }> = ({
 }) => {
   const { user } = useAuthState();
   // console.log(user);
-  console.log({ createdAt });
+  //console.log({ createdAt });
 
   const { push } = useRouter();
   const [likesCount, setLikesCount] = useState<number>(likes.length);
@@ -48,6 +48,7 @@ const TweetCard: FunctionComponent<{ tweet: Post }> = ({
       <img
         src="https://images.vexels.com/media/users/3/145908/preview2/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
         alt=""
+        onClick={() => push(`/user/${uid}`)}
         className="w-10 h-10 rounded-full cursor-pointer"
       />
 

@@ -6,12 +6,19 @@ import { useAuthState } from "../context/auth.context";
 import axios from "axios";
 import useSWR from "swr";
 import { Post } from "../types.frontend";
+import { useEffect } from "react";
 
 export default function Home() {
   const { push } = useRouter();
   const { user } = useAuthState();
 
-  const { data }: { data?: Post[] } = useSWR("/api/posts");
+  useEffect(() => {
+    if (!user) {
+      push("/auth");
+    }
+  }, [user]);
+
+  const { data }: { data?: { posts: Post[] } } = useSWR("/api/posts");
   // console.log(data);
 
   return (
@@ -36,7 +43,7 @@ export default function Home() {
             </button>
           </div>
         )}
-        {data?.map((tweet) => (
+        {data?.posts.map((tweet) => (
           <TweetCard tweet={tweet} key={tweet._id} />
         ))}
       </div>

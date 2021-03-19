@@ -25,5 +25,7 @@ export interface User {
   name: string;
   username: string;
   isAdmin?: boolean;
+  followers: string[];
+  following: string[];
   // company: Types.ObjectId | Record<string, unknown>;
 }

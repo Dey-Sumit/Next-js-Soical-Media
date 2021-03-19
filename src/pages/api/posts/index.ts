@@ -9,6 +9,7 @@ import Post from "../../../../models/Post";
 const handler = nextConnect();
 handler.use(all);
 
+// GET: /posts/?uid=12
 handler
   .get(
     async (
@@ -16,8 +17,29 @@ handler
       res: NextApiResponse,
       next: NextApiHandler
     ) => {
-      const posts = await Post.find({}).populate("user").sort("-createdAt");
-      res.send(posts);
+      console.log(req.query);
+      const uid = req.query.uid?.toString(); // toString for the typescript
+      // const username = req.query.username?.toString(); // toString for the typescript
+      let posts: IPost[];
+      // GET: /posts/?uid=12
+      if (uid) {
+        posts = await Post.find({ user: uid })
+          .populate("user")
+          .sort("-createdAt");
+        res.json({ posts });
+        return;
+      }
+
+      // // GET: /posts/?username=x5
+      // if (username) {
+      //   posts = await Post.find({ "user.username": username })
+      //     .populate("user")
+      //     .sort("-createdAt");
+      //   res.json({ posts });
+      //   return;
+      // }
+      posts = await Post.find({}).populate("user").sort("-createdAt");
+      res.status(200).json({ posts });
     }
   )
   .post(
