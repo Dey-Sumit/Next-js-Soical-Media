@@ -4,6 +4,7 @@ import Layout from "../components/Layout";
 import { useRouter } from "next/router";
 import { AuthProvider } from "../context/auth.context";
 import { SWRConfig } from "swr";
+import { LayoutProvider } from "../context/layout.context";
 
 axios.defaults.baseURL = "http://localhost:3000"; // the prefix of the URL
 
@@ -11,20 +12,24 @@ function MyApp({ Component, pageProps }) {
   const { pathname } = useRouter();
   return pathname === "/auth" ? (
     <AuthProvider>
-      <Component {...pageProps} />
+      <LayoutProvider>
+        <Component {...pageProps} />
+      </LayoutProvider>
     </AuthProvider>
   ) : (
     <AuthProvider>
-      <SWRConfig
-        value={{
-          fetcher: (url: string) => axios(url).then((r) => r.data),
-          dedupingInterval: 100000,
-        }}
-      >
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </SWRConfig>
+      <LayoutProvider>
+        <SWRConfig
+          value={{
+            fetcher: (url: string) => axios(url).then((r) => r.data),
+            dedupingInterval: 100000,
+          }}
+        >
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </SWRConfig>
+      </LayoutProvider>
     </AuthProvider>
   );
 }

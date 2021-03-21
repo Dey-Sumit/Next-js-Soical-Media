@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiFillGoogleCircle } from "react-icons/ai";
 import { BiLoaderAlt, BiUserCircle } from "react-icons/bi";
-import { MdEmail, MdLock } from "react-icons/md";
+// import { MdEmail, MdLock } from "react-icons/md";
 import { useAuthDispatch } from "../context/auth.context";
 import { AUTH_SUCCESS } from "../context/types";
 // import axiosInstance from "../util/axiosInstance";
@@ -12,7 +12,7 @@ import { AUTH_SUCCESS } from "../context/types";
 import Input from "./Input";
 
 //TODO use yup for the validation, reuse server side code
-export default function Register() {
+export default function Login() {
   const { register, errors, handleSubmit } = useForm({
     mode: "onBlur",
   });
@@ -46,8 +46,8 @@ export default function Register() {
   };
 
   return (
-    <div className="flex flex-col space-y-4 w-10/12 md:w-6/12">
-      <h1 className="text-2xl font-bold text-white">Sign up to Twitter</h1>
+    <div className="flex flex-col space-y-4  ">
+      <h1 className="text-2xl font-bold text-white">Sign in to Twitter</h1>
       <div className="bg-blue-700 flex justify-center items-center p-2 text-white rounded-md space-x-2">
         <AiFillGoogleCircle />
         <span>Sign up with Google</span>

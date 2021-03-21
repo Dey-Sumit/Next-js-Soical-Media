@@ -8,6 +8,8 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { useAuthState } from "../context/auth.context";
 import timeSince from "../../lib/timeSince";
+import { useLayoutDispatch } from "../context/layout.context";
+import { SHOW_MODAL } from "../context/types";
 // import Heart from "react-animated-heart";
 
 const TweetCard: FunctionComponent<{ tweet: Post }> = ({
@@ -21,6 +23,7 @@ const TweetCard: FunctionComponent<{ tweet: Post }> = ({
   },
 }) => {
   const { user } = useAuthState();
+  const dispatch = useLayoutDispatch();
   // console.log(user);
   //console.log({ createdAt });
 
@@ -33,7 +36,12 @@ const TweetCard: FunctionComponent<{ tweet: Post }> = ({
   const handleLike = async (e: any) => {
     console.log(user);
 
-    if (!user) return;
+    if (!user) {
+      dispatch({
+        type: SHOW_MODAL,
+      });
+      return;
+    }
     e.stopPropagation();
     setLikedByMe((value) => !value);
     if (!likedByMe) {
