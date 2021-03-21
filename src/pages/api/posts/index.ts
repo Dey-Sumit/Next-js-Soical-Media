@@ -1,5 +1,6 @@
 import { NextApiHandler, NextApiResponse } from "next";
 import nextConnect from "next-connect";
+import { match } from "node:assert";
 
 import { ExtendedNextApiRequest } from "../../../../lib/types.api";
 import { Post as IPost } from "../../../../lib/types.model";
@@ -17,17 +18,32 @@ handler
       res: NextApiResponse,
       next: NextApiHandler
     ) => {
+      const uid = req.query?.uid?.toString(); // toString for the typescript
       console.log(req.query);
-      const uid = req.query.uid?.toString(); // toString for the typescript
+
       // const username = req.query.username?.toString(); // toString for the typescript
+
+      const pageSize = 2;
+      const page = Number(req.query?.page?.toString()) || 1;
+
       let posts: IPost[];
       // GET: /posts/?uid=12
+
       if (uid) {
+        // the query can be better
+        const allPosts = await Post.find({ user: uid });
+        const count = allPosts.length;
+
         posts = await Post.find({ user: uid })
+          .limit(pageSize)
+          .skip(pageSize * (page - 1))
           .populate("user")
           .sort("-createdAt");
-        res.json({ posts });
-        return;
+        return res.json({
+          posts,
+          page,
+          pages: Math.ceil(count / pageSize),
+        });
       }
 
       // // GET: /posts/?username=x5
@@ -38,6 +54,7 @@ handler
       //   res.json({ posts });
       //   return;
       // }
+
       posts = await Post.find({}).populate("user").sort("-createdAt");
       res.status(200).json({ posts });
     }
