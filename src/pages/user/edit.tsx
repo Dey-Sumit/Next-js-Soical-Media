@@ -1,11 +1,13 @@
+import axios from "axios";
+import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { BsLockFill } from "react-icons/bs";
-import { MdDelete, MdSettings } from "react-icons/md";
-import useSWR from "swr";
+// import { BsLockFill } from "react-icons/bs";
+// import { MdDelete, MdSettings } from "react-icons/md";
+// import useSWR from "swr";
 import Input from "../../components/Input";
 import { useAuthState } from "../../context/auth.context";
-import { User } from "../../types.frontend";
+// import { User } from "../../types.frontend";
 
 const profile = () => {
   const { push, query } = useRouter();
@@ -49,4 +51,23 @@ const profile = () => {
 
 export default profile;
 
-// export const getServerSi
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  // const cookie = context.req.headers?.cookie;
+  // console.log("inside");
+  try {
+    const cookie = context.req.headers.cookie;
+    if (!cookie) throw new Error("Missing auth token cookie");
+
+    // it returns 401 if the user is not authenticated
+    await axios.get("/api/auth/me", { headers: { cookie } });
+
+    return { props: {} };
+  } catch (error) {
+    return {
+      redirect: {
+        destination: "/auth",
+        statusCode: 302,
+      },
+    };
+  }
+}

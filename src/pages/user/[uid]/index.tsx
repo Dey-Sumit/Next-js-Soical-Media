@@ -1,4 +1,5 @@
 import axios from "axios";
+import { GetServerSidePropsContext } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -8,7 +9,7 @@ import useSWR, { mutate } from "swr";
 import TweetCard from "../../../components/TweetCard";
 import { useAuthState } from "../../../context/auth.context";
 import { Post, User } from "../../../types.frontend";
-
+import Head from "next/head";
 const profile = () => {
   const { push, query } = useRouter();
   const { user: authUser } = useAuthState();
@@ -26,30 +27,35 @@ const profile = () => {
   console.log(data);
   const profileData = data?.user;
   const [isFollowing, setIsFollowing] = useState(
-    profileData?.followers.includes(authUser._id)
+    profileData?.followers.includes(authUser?._id)
   );
 
-  useEffect(() => {
-    if (!authUser) {
-      push("/auth");
-    }
-  }, [authUser]);
+  // useEffect(() => {
+  //   if (!authUser) {
+  //     push("/auth");
+  //   }
+  // }, [authUser]);
   console.log(query.uid);
   //TODO refactor these function , make one 👇
   const handleFollow = async () => {
     setIsFollowing(true);
     await axios.put(`api/users/${profileData._id}/follow`); //? make the request
     mutate(`api/users/${profileData._id}/follow`); //? refetch the data and compare if everything is fine or anything goes wrong in the previous request
+    mutate(`/api/users/${query?.uid}`); // update the profile data
   };
   const handleUnFollow = async () => {
     setIsFollowing(false);
     await axios.put(`api/users/${profileData._id}/unfollow`); //? make the request
     mutate(`api/users/${profileData._id}/unfollow`); //? refetch the data and compare if everything is fine or anything goes wrong in the previous request
+    mutate(`/api/users/${query?.uid}`); // update the profile data
   };
 
   // TODO looks like you don't have a profile :) show funny image ; don't redirect
   return (
     <div className="grid grid-cols-8 gap-8 ">
+      <Head>
+        <title>{profileData ? profileData.username : "Profile"}</title>
+      </Head>
       <div className="col-span-8 md:col-span-3">
         {/* profile */}
         <div className="flex flex-col items-center p-3 space-y-2 rounded-sm shadow-md bg-dark-600">
@@ -135,4 +141,24 @@ const profile = () => {
 
 export default profile;
 
-// export const getServerSi
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  // const cookie = context.req.headers?.cookie;
+  // console.log("inside");
+  try {
+    const cookie = context.req.headers.cookie;
+    if (!cookie) throw new Error("Missing auth token cookie");
+    // const res = await axios.get("/api/auth/me/");
+
+    // it returns 401 if the user is not authenticated
+    await axios.get("/api/auth/me", { headers: { cookie } });
+
+    return { props: {} };
+  } catch (error) {
+    return {
+      redirect: {
+        destination: "/auth",
+        statusCode: 302,
+      },
+    };
+  }
+}

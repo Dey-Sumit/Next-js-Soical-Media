@@ -2,12 +2,13 @@ import { IoMdHome, IoMdLogOut, IoMdShareAlt } from "react-icons/io";
 import { MdNotifications } from "react-icons/md";
 import { SiTwitter } from "react-icons/si";
 import Link from "next/link";
-import { useAuthDispatch } from "../context/auth.context";
+import { useAuthDispatch, useAuthState } from "../context/auth.context";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { LOG_OUT } from "../context/types";
 const Sidebar = () => {
   const dispatch = useAuthDispatch();
+  const { user } = useAuthState();
 
   const router = useRouter();
 
@@ -29,41 +30,43 @@ const Sidebar = () => {
         </Link>
       </div>
       <div className="flex flex-col space-y-4 ">
-        <div className="flex space-x-2 items-center ">
+        <div className="flex space-x-2 items-center cursor-pointer ">
           <IoMdHome size="24" />
           <span className="hidden lg:block">Home</span>
         </div>
-        <div className="flex space-x-2 items-center ">
+        <div className="flex space-x-2 items-center cursor-pointer ">
           <IoMdHome size="24" />
           <span className="hidden lg:block">Messages</span>
         </div>
-        <div className="flex space-x-2 items-center ">
+        <div className="flex space-x-2 items-center cursor-pointer ">
           <IoMdHome size="24" />
           <span className="hidden lg:block">Messages</span>
         </div>
 
-        <div className="flex space-x-2 items-center ">
+        <div className="flex space-x-2 items-center cursor-pointer ">
           <IoMdHome size="24" />
           <span className="hidden lg:block">Explore</span>
         </div>
-        <div className="flex space-x-2 items-center ">
+        <div className="flex space-x-2 items-center cursor-pointer">
           <MdNotifications size="24" />
           <span className="hidden lg:block">Notifications</span>
         </div>
-        <div
-          className="flex space-x-2 items-center text-red-600 "
-          onClick={logout}
-        >
-          <IoMdLogOut size="24" />
-          <span className="hidden lg:block">Log out</span>
-        </div>
-        <div className="flex space-x-2 items-center ">
+        {user && (
+          <div
+            className="flex space-x-2 items-center text-red-600 cursor-pointer"
+            onClick={logout}
+          >
+            <IoMdLogOut size="24" />
+            <span className="hidden lg:block">Log out</span>
+          </div>
+        )}
+        <div className="flex space-x-2 items-center cursor-pointer">
           <MdNotifications size="24" />
           <span className="hidden lg:block">More</span>
         </div>
       </div>
       <button className="bg-blue-600 text-white tracking-wider text-lg px-3 py-1 rounded-sm">
-        Tweet
+        {user ? "Tweet" : "Sign in to Tweet"}
       </button>
     </div>
   );

@@ -27,10 +27,13 @@ const TweetCard: FunctionComponent<{ tweet: Post }> = ({
   const { push } = useRouter();
   const [likesCount, setLikesCount] = useState<number>(likes.length);
   const [likedByMe, setLikedByMe] = useState<boolean>(
-    likes?.map((like) => like.user).includes(user._id)
+    likes?.map((like) => like.user).includes(user?._id)
   );
 
   const handleLike = async (e: any) => {
+    console.log(user);
+
+    if (!user) return;
     e.stopPropagation();
     setLikedByMe((value) => !value);
     if (!likedByMe) {

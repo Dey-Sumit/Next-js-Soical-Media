@@ -8,11 +8,11 @@ const handler = nc();
 handler.use(all);
 
 handler.get((req: ExtendedNextApiRequest, res: NextApiResponse) => {
-  if (!req.user) return res.json({ user: null });
+  if (!req.user) return res.status(401).json({ user: null });
   //   const {password,...r} = req.user
-  console.log(req.user);
+  // console.log(req.user);
 
-  return res.json({user:req.user});
+  return res.json({ user: req.user });
 });
 
 export default handler;

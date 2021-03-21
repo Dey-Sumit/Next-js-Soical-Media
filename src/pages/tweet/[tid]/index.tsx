@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import CommentCard from "../../../components/CommentCard";
@@ -22,6 +23,11 @@ const index = () => {
   }
   return (
     <div className="grid grid-cols-8 gap-x-8 ">
+      <Head>
+        <title>
+          {data.content} | {data.user.username}
+        </title>
+      </Head>
       <div className="sm:col-span-5 col-span-8">
         <TweetCard tweet={data} />
         {/* Comment */}
