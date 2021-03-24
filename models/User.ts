@@ -15,6 +15,11 @@ const UserSchema = new Schema<UserDocument>({
     required: true,
     lowercase: true,
   },
+  profilePicture: {
+    type: String,
+    default:
+      "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+  },
   email: {
     type: String,
     unique: true,

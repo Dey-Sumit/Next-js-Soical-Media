@@ -22,9 +22,6 @@ const profile = () => {
   }: { data?: { posts: Post[] }; error?: any } = useSWR(
     `/api/posts?uid=${query?.uid}`
   );
-  console.log(posts);
-
-  console.log(data);
   const profileData = data?.user;
   const [isFollowing, setIsFollowing] = useState(
     profileData?.followers.includes(authUser?._id)
@@ -35,7 +32,7 @@ const profile = () => {
   //     push("/auth");
   //   }
   // }, [authUser]);
-  console.log(query.uid);
+  // console.log(query.uid);
   //TODO refactor these function , make one 👇
   const handleFollow = async () => {
     setIsFollowing(true);
@@ -85,14 +82,14 @@ const profile = () => {
             <>
               {!isFollowing ? (
                 <button
-                  className=" p-1 space-x-2 border rounded-sm cursor-pointer border-blue-600 bg-blue-600 hover:bg-transparent hover:text-blue-600"
+                  className="p-1 space-x-2 bg-blue-600 border border-blue-600 rounded-sm cursor-pointer hover:bg-transparent hover:text-blue-600"
                   onClick={handleFollow}
                 >
                   Follow
                 </button>
               ) : (
                 <button
-                  className=" p-1 space-x-2 border rounded-sm cursor-pointer border-blue-500 bg-blue-500 hover:bg-transparent hover:text-blue-500"
+                  className="p-1 space-x-2 bg-blue-500 border border-blue-500 rounded-sm cursor-pointer hover:bg-transparent hover:text-blue-500"
                   onClick={handleUnFollow}
                 >
                   UnFollow

@@ -5,8 +5,9 @@ const Input: FunctionComponent<{
   label: string;
   error: any;
   name: string;
-  type: string;
+  type?: string;
   placeholder?: string;
+  defaultValue?: string;
 }> = ({ register, label, error, ...rest }) => {
   return (
     <div>
@@ -16,7 +17,7 @@ const Input: FunctionComponent<{
           type="text"
           {...rest}
           ref={register}
-          className="bg-dark-400 p-1 rounded-md focus:outline-none"
+          className="p-1 rounded-md bg-dark-400 focus:outline-none"
         />
       </div>
       {error && <p className="m-0 text-sm text-red-600">{error?.message}</p>}

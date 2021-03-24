@@ -10,6 +10,7 @@ export interface User {
   isAdmin?: boolean;
   following: [mongoose.Types.ObjectId];
   follwoers: [mongoose.Types.ObjectId];
+  profilePicture: string;
   //TODO fix the type
   // followers: string[];
   // company: Types.ObjectId | Record<string, unknown>;

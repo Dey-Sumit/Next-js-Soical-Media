@@ -45,7 +45,7 @@ export default function Register() {
   return (
     <div className="flex flex-col space-y-4">
       <h1 className="text-2xl font-bold text-white">Sign up to Twitter</h1>
-      <div className="bg-blue-700 flex justify-center items-center p-2 text-white rounded-md space-x-2">
+      <div className="flex items-center justify-center p-2 space-x-2 text-white bg-blue-700 rounded-md">
         <AiFillGoogleCircle />
         <span>Sign up with Google</span>
       </div>
@@ -102,7 +102,7 @@ export default function Register() {
           })}
         />
 
-        <button className="bg-blue-700  justify-center flex items-center p-2 text-white rounded-md text-lg font-bold">
+        <button className="flex items-center justify-center p-2 text-lg font-bold text-white bg-blue-700 rounded-md">
           {!loading ? (
             "Sign Up"
           ) : (
@@ -113,7 +113,7 @@ export default function Register() {
         </button>
       </form>
       {errorMessage && (
-        <div className="border p-1 text-center border-red-600 text-red-600">
+        <div className="p-1 text-center text-red-600 border border-red-600">
           {errorMessage}
         </div>
       )}

@@ -40,7 +40,7 @@ const TweetInput: FunctionComponent<{
     setText("");
   };
   return (
-    <div className="flex space-x-2 p-2">
+    <div className="flex p-2 space-x-2">
       <img
         src="https://images.vexels.com/media/users/3/145908/preview2/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
         alt=""
@@ -48,14 +48,14 @@ const TweetInput: FunctionComponent<{
       />
       <div className="flex-1">
         <textarea
-          className="w-full h-24 bg-transparent border-dark-100 border p-2 focus:outline-none resize-none "
+          className="w-full h-24 p-2 bg-transparent border resize-none border-dark-100 focus:outline-none "
           placeholder={placeholder}
           onChange={(e) => setText(e.target.value)}
           value={text}
         />
-        <div className=" p-1 flex">
+        <div className="flex p-1 ">
           <button
-            className="bg-blue-700 px-4 py-1 rounded-md ml-auto font-bold tracking-wide"
+            className="px-4 py-1 ml-auto font-bold tracking-wide bg-blue-700 rounded-md"
             onClick={handleTweet}
           >
             {buttonText}
