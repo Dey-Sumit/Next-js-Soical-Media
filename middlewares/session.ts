@@ -1,13 +1,15 @@
 import connectMongo from "connect-mongo";
 
 import session from "express-session";
-import { NextApiRequest, NextApiResponse } from "next";
-import { NextHandler } from "next-connect";
+// import { NextApiRequest, NextApiResponse } from "next";
+// import { NextHandler } from "next-connect";
+// import { ExtendedNextApiRequest } from "../lib/types.api";
 
 export default function sessionMiddleware(
-  req: NextApiRequest,
-  res: NextApiResponse,
-  next: NextHandler
+  //!TODO set types
+  req: any,
+  res: any,
+  next: any
 ) {
   //   const mongoStore = new MongoStore({
   //     client: process.env.MONGODB_URI,
@@ -16,8 +18,8 @@ export default function sessionMiddleware(
   const options = {
     mongoUrl: process.env.MONGODB_URI,
   };
-  console.log("inside session middlware");
-  console.log(req.body);
+  // console.log("inside session middlware");
+  // console.log(req.body);
 
   return session({
     secret: "123456",
