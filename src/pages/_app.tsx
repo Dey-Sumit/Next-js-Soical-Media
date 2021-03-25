@@ -6,7 +6,7 @@ import { AuthProvider } from "../context/auth.context";
 import { SWRConfig } from "swr";
 import { LayoutProvider } from "../context/layout.context";
 
-axios.defaults.baseURL = "http://localhost:3000"; // the prefix of the URL
+axios.defaults.baseURL = process.env.API_ENDPOINT_BASE_URL; // the prefix of the URL
 
 function MyApp({ Component, pageProps }) {
   const { pathname } = useRouter();
