@@ -23,7 +23,7 @@ const upload = multer({ dest: "/tmp" });
 // @ route GET api/posts/:id
 // @ desc get  post by id
 // @ access private
-
+handler.use(upload.single("profilePicture")); //? REVIEW
 handler
   .get(
     async (
@@ -56,7 +56,6 @@ handler
     }
   )
   .post(
-    upload.single("profilePicture"),
     async (
       req: ExtendedNextApiRequest,
       res: NextApiResponse,

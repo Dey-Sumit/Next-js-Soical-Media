@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
 import isEmail from "validator/lib/isEmail";
+import { ExtendedNextApiRequest } from "../../../../lib/types.api";
 
 import { all } from "../../../../middlewares";
 import User from "../../../../models/User";
@@ -13,7 +14,7 @@ handler.use(all);
 //      user:{}
 //      login:()=>{}
 // }
-handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
+handler.post(async (req: ExtendedNextApiRequest, res: NextApiResponse) => {
   const { name, username, email, password } = req.body;
 
   // data validation

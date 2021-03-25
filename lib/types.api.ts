@@ -14,4 +14,5 @@ export interface ExtendedNextApiRequest extends NextApiRequest {
     path: string;
   };
   logOut: Function;
+  login: Function;
 }
