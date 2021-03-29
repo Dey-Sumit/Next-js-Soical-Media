@@ -64,12 +64,12 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex items-center justify-between p-3 bg-dark-600 text-dark-100 md:px-10 lg:px-16 sticky top-0 left-0">
-      <div className="flex space-x-3">
+    <div className="flex items-center justify-between p-3 bg-dark-600 text-dark-100 md:px-10 lg:px-16 sticky top-0 left-0 space-x-4">
+      {/* <div className="flex space-x-3">
         <span>About</span>
         <span>Help</span>
-      </div>
-      <div className="flex items-center space-x-3 bg-dark-700 px-3 py-1 justify-center lg:w-96 w-72 relative">
+      </div> */}
+      <div className="flex items-center space-x-3 bg-dark-700 px-3 py-1 justify-center flex-1 relative">
         <BiSearchAlt />
         <input
           type="text"
@@ -110,9 +110,9 @@ const Navbar = () => {
         // <div className="flex space-x-3">
         <button
           onClick={() => push("/auth")}
-          className="border border-blue-600 p-1 bg-blue-600"
+          className="border border-blue-600 p-1 text-blue-600"
         >
-          Sign up / Sign in
+          Log in
         </button>
       ) : (
         // </div>

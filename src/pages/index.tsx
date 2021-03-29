@@ -2,11 +2,11 @@ import TweetCard from "../components/TweetCard";
 import TweetInput from "../components/TweetInput";
 import Trends from "../components/Trends";
 import { useRouter } from "next/router";
-import { useAuthState } from "../context/auth.context";
+// import { useAuthState } from "../context/auth.context";
 import axios from "axios";
 import useSWR from "swr";
 import { Post } from "../types.frontend";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import Head from "next/head";
 import { GetServerSidePropsContext } from "next";
 
@@ -21,7 +21,6 @@ export default function Home({ user }) {
   // }, [user]);
 
   const { data }: { data?: { posts: Post[] } } = useSWR("/api/posts");
-  // console.log(data);
 
   return (
     <div className="grid grid-cols-8 gap-x-8 ">
@@ -29,7 +28,7 @@ export default function Home({ user }) {
       <Head>
         <title>Twitter Clone</title>
       </Head>
-      <div className="md:col-span-5 col-span-8">
+      <div className="col-span-8 md:col-span-5">
         {user ? (
           <TweetInput
             placeholder="Hey Sumit! What's on your mind ?"
@@ -37,12 +36,12 @@ export default function Home({ user }) {
             endpoint="/api/posts"
           />
         ) : (
-          <div className="text-center p-3">
+          <div className="p-3 text-center">
             {" "}
             <p>Sign in to talk to the world 😉</p>
             <button
               onClick={() => push("/auth")}
-              className="border border-blue-600 p-1 bg-blue-600 my-3"
+              className="p-1 my-3 bg-blue-600 border border-blue-600"
             >
               Sign up / Sign in
             </button>

@@ -3,19 +3,23 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiFillGoogleCircle } from "react-icons/ai";
-import { BiLoaderAlt, BiUserCircle } from "react-icons/bi";
-import { MdEmail, MdLock } from "react-icons/md";
+import { BiLoaderAlt } from "react-icons/bi";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+import { registrationSchema } from "../../lib/schemaValidation";
 import { useAuthDispatch } from "../context/auth.context";
 import { AUTH_SUCCESS } from "../context/types";
 // import axiosInstance from "../util/axiosInstance";
 
 import Input from "./Input";
 
-//TODO use yup for the validation, reuse server side code
+//TODO use yup for the validation, re use server side code
 export default function Register() {
   const { register, errors, handleSubmit } = useForm({
-    mode: "onBlur",
+    mode: "onTouched",
+    resolver: yupResolver(registrationSchema),
   });
+
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
@@ -23,16 +27,14 @@ export default function Register() {
 
   const dispatch = useAuthDispatch();
 
-  //TODO solve type any!
   const handleClick = async (data: any) => {
     try {
       setLoading(true);
       const res = await axios({
-        method: "post",
+        method: "POST",
         url: "/api/auth/signup",
         data: data,
       });
-      // console.log(res);
       dispatch({ type: AUTH_SUCCESS, payload: res.data.user });
       router.push("/");
     } catch (error) {
@@ -58,18 +60,14 @@ export default function Register() {
           <Input
             label="Name"
             type="text"
-            register={register({
-              required: { value: true, message: "Name is Required" },
-            })}
+            register={register}
             name="name"
             error={errors.name}
           />
           <Input
             label="Username"
             type="text"
-            register={register({
-              required: { value: true, message: "Username is Required" },
-            })}
+            register={register}
             name="username"
             error={errors.username}
           />
@@ -79,13 +77,7 @@ export default function Register() {
           type="email"
           name="email"
           error={errors.email}
-          register={register({
-            required: { value: true, message: "Email is Required" },
-            pattern: {
-              value: /\S+@\S+\.\S+/,
-              message: "Email is not valid",
-            },
-          })}
+          register={register}
         />
         <Input
           label="Password"
@@ -93,16 +85,10 @@ export default function Register() {
           placeholder="6+ Characters"
           name="password"
           error={errors.password}
-          register={register({
-            required: { value: true, message: "Password is Required" },
-            minLength: {
-              value: 6,
-              message: "Password Length must be at least 6",
-            },
-          })}
+          register={register}
         />
 
-        <button className="flex items-center justify-center p-2 text-lg font-bold text-white bg-blue-700 rounded-md">
+        <button className="flex items-center justify-center p-2 text-lg font-bold text-white bg-blue-700 rounded-md focus:outline-none">
           {!loading ? (
             "Sign Up"
           ) : (

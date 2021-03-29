@@ -14,7 +14,7 @@ const Modal = () => {
   }
   return showModal ? (
     <div
-      className="absolute z-10 bg-opacity-70 bg-dark-700 grid place-items-center w-full h-screen"
+      className="absolute z-10 grid w-full h-screen bg-opacity-70 bg-dark-700 place-items-center"
       onClick={() =>
         dispatch({
           type: HIDE_MODAL,
@@ -22,11 +22,11 @@ const Modal = () => {
       }
     >
       <div
-        className="bg-dark-700 rounded-lg p-4 shadow-2xl"
+        className="p-4 rounded-lg shadow-2xl bg-dark-700"
         onClick={(e) => e.stopPropagation()}
       >
-        {isLogin ? <Login /> : <Register />}
-        <p className="text-center text-white tracking-wide my-2">
+        {isLogin ? <Login large={false} /> : <Register />}
+        <p className="my-2 tracking-wide text-center text-white">
           {!isLogin ? "Already a member?" : " Don't have an account yet?"}
           <span
             className="cursor-pointer"

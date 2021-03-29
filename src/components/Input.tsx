@@ -20,7 +20,7 @@ const Input: FunctionComponent<{
           className="p-1 rounded-md bg-dark-400 focus:outline-none"
         />
       </div>
-      {error && <p className="m-0 text-sm text-red-600">{error?.message}</p>}
+      {error && <p className="m-0 text-red-600">{error?.message}</p>}
     </div>
   );
 };

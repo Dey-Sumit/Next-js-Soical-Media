@@ -1,21 +1,32 @@
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { FunctionComponent, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiFillGoogleCircle } from "react-icons/ai";
-import { BiLoaderAlt, BiUserCircle } from "react-icons/bi";
-// import { MdEmail, MdLock } from "react-icons/md";
+import { BiLoaderAlt } from "react-icons/bi";
+import classNames from "classnames";
+import { yupResolver } from "@hookform/resolvers/yup";
+
 import { useAuthDispatch } from "../context/auth.context";
 import { AUTH_SUCCESS } from "../context/types";
-// import axiosInstance from "../util/axiosInstance";
 
 import Input from "./Input";
+import { loginSchema } from "../../lib/schemaValidation";
 
-//TODO use yup for the validation, reuse server side code
-export default function Login() {
+// interface loginData {
+//   email?: string;
+//   username?: string;
+//   password: string;
+// }
+
+const Login: FunctionComponent<{
+  large: Boolean;
+}> = ({ large }) => {
   const { register, errors, handleSubmit } = useForm({
-    mode: "onBlur",
+    mode: "onTouched", // when to execute the validation first time
+    resolver: yupResolver(loginSchema),
   });
+
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -23,19 +34,20 @@ export default function Login() {
 
   const dispatch = useAuthDispatch();
 
-  //TODO solve type any!
   const handleClick = async (data: any) => {
     try {
       setLoading(true);
       const res = await axios({
-        method: "post",
+        method: "POST",
         url: "/api/auth/login",
         data: data,
       });
+      // 2. set the global state
       dispatch({
         type: AUTH_SUCCESS,
         payload: res.data.user,
       });
+      // 3. redirect to home page
       router.push("/");
     } catch (error) {
       console.log(error.response.data);
@@ -46,9 +58,13 @@ export default function Login() {
   };
 
   return (
-    <div className="flex flex-col space-y-4  ">
+    <div
+      className={classNames("flex flex-col space-y-4", {
+        "w-10/12 md:w-6/12": large,
+      })}
+    >
       <h1 className="text-2xl font-bold text-white">Sign in to Twitter</h1>
-      <div className="bg-blue-700 flex justify-center items-center p-2 text-white rounded-md space-x-2">
+      <div className="flex items-center justify-center p-2 space-x-2 text-white bg-blue-700 rounded-md">
         <AiFillGoogleCircle />
         <span>Sign up with Google</span>
       </div>
@@ -56,15 +72,12 @@ export default function Login() {
         className="flex flex-col space-y-3"
         onSubmit={handleSubmit(handleClick)}
       >
-        {/* //TODO handler email or username in react hook form error */}
         <Input
-          label="Email or Username"
+          label="Username"
           type="text"
-          name="email"
-          error={errors.email}
-          register={register({
-            required: { value: true, message: "Email or Username is Required" },
-          })}
+          name="username"
+          error={errors.username}
+          register={register}
         />
         <Input
           label="Password"
@@ -72,15 +85,9 @@ export default function Login() {
           placeholder="6+ Characters"
           name="password"
           error={errors.password}
-          register={register({
-            required: { value: true, message: "Password is Required" },
-            minLength: {
-              value: 6,
-              message: "Password Length must be at least 6",
-            },
-          })}
+          register={register}
         />
-        <button className="bg-blue-700 flex items-center justify-center  p-2 text-white rounded-md text-lg font-bold">
+        <button className="flex items-center justify-center p-2 text-lg font-bold text-white bg-blue-700 rounded-md focus:outline-none">
           {!loading ? (
             "Sign In"
           ) : (
@@ -91,10 +98,11 @@ export default function Login() {
         </button>
       </form>
       {errorMessage && (
-        <div className="border p-1 text-center border-red-600 text-red-600">
+        <div className="p-1 text-center text-red-600 border border-red-600">
           {errorMessage}
         </div>
       )}
     </div>
   );
-}
+};
+export default Login;

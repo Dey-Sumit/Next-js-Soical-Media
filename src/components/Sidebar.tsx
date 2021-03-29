@@ -39,15 +39,15 @@ const Sidebar = () => {
           <BsBookmark size="24" />
           <span className="hidden lg:block">Saved</span>
         </div>
-
-        <div
-          className="flex space-x-2 items-center cursor-pointer hover:bg-blue-light p-1 rounded-lg "
-          onClick={() => router.push(`/user/${user._id}`)}
-        >
-          <AiOutlineUser size="24" />
-          <span className="hidden lg:block">Profile</span>
-        </div>
-
+        {user && (
+          <div
+            className="flex space-x-2 items-center cursor-pointer hover:bg-blue-light p-1 rounded-lg "
+            onClick={() => router.push(`/user/${user._id}`)}
+          >
+            <AiOutlineUser size="24" />
+            <span className="hidden lg:block">Profile</span>
+          </div>
+        )}
         <div className="flex space-x-2 items-center cursor-pointer hover:bg-blue-light p-1 rounded-lg ">
           <MdExplore size="24" />
           <span className="hidden lg:block">Explore</span>
@@ -70,8 +70,15 @@ const Sidebar = () => {
           <span className="hidden lg:block">More</span>
         </div>
       </div>
-      <button className="bg-blue-600 text-white tracking-wider text-lg px-3 py-1 rounded-sm">
-        {user ? "Tweet" : "Sign in to Tweet"}
+      <button
+        className=" text-white tracking-wider text-lg px-3 py-1 rounded-sm"
+        onClick={() => router.push("/")}
+      >
+        {user ? (
+          "Tweet"
+        ) : (
+          <SiTwitter className="text-white cursor-pointer " size="28" />
+        )}
       </button>
     </div>
   );

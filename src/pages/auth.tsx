@@ -6,33 +6,34 @@ import { useAuthState } from "../context/auth.context";
 
 export default function Auth() {
   const router = useRouter();
+
   const [isLogin, setIsLogin] = useState(true);
+
   const { user } = useAuthState();
 
   useEffect(() => {
     if (user) {
-      router.back();
+      router.back(); // redirect to the prev page(route)
     }
   }, [user]);
 
-  //TODO font-serif globally | search better font
   return (
-    <div className="grid grid-cols-8  text-white h-screen">
-      <div className="bg-blue-700 col-span-3 p-4 md:grid place-items-center hidden">
-        <div className="">
-          <h1 className="text-xl font-semibold mb-5">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Velit,
-            ipsa!
-          </h1>
-          <img src="/image_3d.png" alt="" className="" />
-        </div>
+    <div className="grid h-screen grid-cols-8 text-white">
+      {/* left part */}
+      <div className="hidden col-span-3 p-4 bg-blue-700 md:grid place-items-center">
+        <h1 className="mb-5 text-xl font-semibold">
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Velit, ipsa!
+        </h1>
+        <img src="/image_3d.png" alt="" className="" />
       </div>
-      <div className="bg-dark-700 col-span-8 md:col-span-5 p-4 grid place-items-center">
-        {isLogin ? <Login /> : <Register />}
-        <p className="text-center text-white tracking-wide">
+
+      {/* right part */}
+      <div className="grid col-span-8 p-4 bg-dark-700 md:col-span-5 place-items-center">
+        {isLogin ? <Login large /> : <Register />}
+        <p className="text-lg tracking-wide text-center text-white">
           {!isLogin ? "Already a member?" : " Don't have an account yet?"}
           <span
-            className="cursor-pointer text-green"
+            className="text-blue-700 cursor-pointer"
             onClick={() => setIsLogin((value) => !value)}
           >
             {!isLogin ? " Sign In" : " Sign Up"}

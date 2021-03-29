@@ -158,10 +158,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     return { props: {} };
   } catch (error) {
-    console.log({ error });
-    console.log("error   ");
 
-    console.log(error.message);
 
     return {
       redirect: {

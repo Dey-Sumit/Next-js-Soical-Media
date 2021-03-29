@@ -6,7 +6,7 @@ export interface ExtendedNextApiRequest extends NextApiRequest {
   user: {
     _id: mongoose.Types.ObjectId;
     following: [mongoose.Types.ObjectId];
-    follwoers: [mongoose.Types.ObjectId];
+    followers: [mongoose.Types.ObjectId];
   };
   file: {
     //TODO add full typescript on multer and other packages
