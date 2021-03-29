@@ -11,8 +11,6 @@ import { useAuthState } from "../../../context/auth.context";
 import { Post, User } from "../../../types.frontend";
 import Head from "next/head";
 const profile = ({ sameUser }) => {
-  console.log(sameUser);
-
   const { push, query } = useRouter();
   const { user: authUser } = useAuthState();
   const { data, error }: { data?: { user: User }; error?: any } = useSWR(

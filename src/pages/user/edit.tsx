@@ -30,6 +30,7 @@ const profile = () => {
 
   //TODO validation using yup
   const onSubmit = async (data) => {
+    // TODO show loader for is updating
     if (isUpdating) return;
 
     const formData = new FormData();

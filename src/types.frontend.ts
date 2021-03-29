@@ -2,6 +2,8 @@ export interface Post {
   _id?: string;
   user: User;
   content: string;
+  attachementURL?: string;
+
   parentPost?: Post;
   likes?: [
     {

@@ -9,9 +9,13 @@ const PostSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
+    // change this to text
     content: {
       type: String,
       required: true,
+    },
+    attachementURL: {
+      type: String,
     },
     parentPost: {
       type: Schema.Types.ObjectId,

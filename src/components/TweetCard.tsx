@@ -18,6 +18,7 @@ const TweetCard: FunctionComponent<{ tweet: Post }> = ({
     user: { _id: uid, name, username, profilePicture },
     likes,
     comments,
+    attachementURL,
     _id,
     createdAt,
   },
@@ -83,6 +84,15 @@ const TweetCard: FunctionComponent<{ tweet: Post }> = ({
           </div>
         </div>
         <div>{content}</div>
+        <div>
+          {attachementURL && (
+            <img
+              src={attachementURL}
+              alt="attachement"
+              className="border rounded-xl w-full h-72 object-contain"
+            />
+          )}
+        </div>
         <div className="flex justify-around divide-x divide-dark-400">
           <div className="flex space-x-2 pl-5 items-center  cursor-pointer">
             <FaCommentAlt />
