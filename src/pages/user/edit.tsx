@@ -15,11 +15,18 @@ import { useAuthState } from "../../context/auth.context";
 const profile = () => {
   const { push, query } = useRouter();
   const { user: authUser } = useAuthState();
+  const [picture, setPicture] = useState("");
+
   const { register, handleSubmit, errors } = useForm();
   const [isUpdating, setIsUpdating] = useState(false);
   const ENDPOINT = authUser && `/api/users/${authUser._id}`;
   const { data: profileData } = useSWR(ENDPOINT);
   console.log(profileData);
+
+  const onChangePicture = (e) => {
+    // console.log('picture: ', picture);
+    setPicture(URL.createObjectURL(e.target.files[0]));
+  };
 
   //TODO validation using yup
   const onSubmit = async (data) => {
@@ -52,6 +59,10 @@ const profile = () => {
     }
   }, [authUser]);
 
+  // useEffect(() => {
+  //   setPicture(picture || profileData?.user.profilePicture);
+  // }, [picture]);
+
   //   const { data, error }: { data?: { user: User }; error?: any } = useSWR(
   //     `/api/users/${query?.uid}`
   //   );
@@ -70,7 +81,7 @@ const profile = () => {
             <>
               <div className="relative">
                 <img
-                  src={profileData?.user.profilePicture}
+                  src={picture || profileData?.user.profilePicture}
                   alt="profile picture"
                   className="w-40 h-40 mx-auto border rounded-full border-3 inset-1/2 "
                 />
@@ -90,6 +101,7 @@ const profile = () => {
                 <input
                   id="file-input"
                   ref={register}
+                  onChange={onChangePicture}
                   type="file"
                   name="profilePicture"
                   className="hidden"
@@ -146,6 +158,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     return { props: {} };
   } catch (error) {
     console.log({ error });
+    console.log("error   ");
 
     console.log(error.message);
 

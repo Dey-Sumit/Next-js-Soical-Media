@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }) => {
         // use swr
         const res = await axios.get("/api/auth/me");
         // dispatch("LOGIN", res.data);
-        console.log(res.data);
+        // console.log(res.data);
 
         dispatch({
           type: AUTH_SUCCESS,

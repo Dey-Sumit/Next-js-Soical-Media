@@ -10,7 +10,9 @@ import TweetCard from "../../../components/TweetCard";
 import { useAuthState } from "../../../context/auth.context";
 import { Post, User } from "../../../types.frontend";
 import Head from "next/head";
-const profile = () => {
+const profile = ({ sameUser }) => {
+  console.log(sameUser);
+
   const { push, query } = useRouter();
   const { user: authUser } = useAuthState();
   const { data, error }: { data?: { user: User }; error?: any } = useSWR(
@@ -78,7 +80,7 @@ const profile = () => {
               <span>{profileData?.following.length}</span>
             </div>
           </div>
-          {authUser?._id !== profileData?._id && (
+          {!sameUser && (
             <>
               {!isFollowing ? (
                 <button
@@ -147,9 +149,13 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     // const res = await axios.get("/api/auth/me/");
 
     // it returns 401 if the user is not authenticated
-    await axios.get("/api/auth/me", { headers: { cookie } });
+    const { data } = await axios.get("/api/auth/me", { headers: { cookie } });
 
-    return { props: {} };
+    return {
+      props: {
+        sameUser: data.user._id == context.query.uid,
+      },
+    };
   } catch (error) {
     return {
       redirect: {

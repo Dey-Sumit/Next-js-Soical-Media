@@ -15,7 +15,7 @@ import { SHOW_MODAL } from "../context/types";
 const TweetCard: FunctionComponent<{ tweet: Post }> = ({
   tweet: {
     content,
-    user: { _id: uid, name, username },
+    user: { _id: uid, name, username, profilePicture },
     likes,
     comments,
     _id,
@@ -53,11 +53,15 @@ const TweetCard: FunctionComponent<{ tweet: Post }> = ({
     }
     //TODO optimistic using SWR
   };
+  // https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjIwP9FAQJOd8w7eHWWcjJyZnUwZN8ENSjFg&usqp=CAU
 
   return (
     <div className="flex p-2 space-x-3 ">
       <img
-        src="https://images.vexels.com/media/users/3/145908/preview2/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
+        src={
+          profilePicture ||
+          "https://images.vexels.com/media/users/3/145908/preview2/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
+        }
         alt=""
         onClick={() => push(`/user/${uid}`)}
         className="w-10 h-10 rounded-full cursor-pointer"

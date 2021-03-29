@@ -8,10 +8,11 @@ import useSWR from "swr";
 import { Post } from "../types.frontend";
 import { useEffect } from "react";
 import Head from "next/head";
+import { GetServerSidePropsContext } from "next";
 
-export default function Home() {
+export default function Home({ user }) {
   const { push } = useRouter();
-  const { user } = useAuthState();
+  // const { user } = useAuthState();
 
   // useEffect(() => {
   //   if (!user) {
@@ -56,4 +57,22 @@ export default function Home() {
       </div>
     </div>
   );
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  // const cookie = context.req.headers?.cookie;
+  // console.log("inside");
+  try {
+    const cookie = context.req.headers.cookie;
+    if (!cookie) throw new Error("Missing auth token cookie");
+    // await axios.get("/api/auth/me/");
+
+    // it returns 401 if the user is not authenticated
+    const res = await axios.get("/api/auth/me", { headers: { cookie } });
+    console.log("executed :(");
+
+    return { props: { user: res.data.user } };
+  } catch (error) {
+    return { props: { user: null } };
+  }
 }

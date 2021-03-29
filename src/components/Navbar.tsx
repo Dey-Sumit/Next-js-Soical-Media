@@ -90,7 +90,10 @@ const Navbar = () => {
               onClick={() => goToUser(user._id)}
             >
               <img
-                src="https://images.vexels.com/media/users/3/145908/preview2/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
+                src={
+                  user?.profilePicture ||
+                  "https://images.vexels.com/media/users/3/145908/preview2/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
+                }
                 alt=""
                 className="w-7 h-7 rounded-full "
               />

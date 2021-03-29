@@ -24,6 +24,7 @@ export interface User {
   lastName?: string;
   name: string;
   username: string;
+  profilePicture: string;
   isAdmin?: boolean;
   followers: string[];
   following: string[];

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { FunctionComponent, useState } from "react";
 import useSWR, { mutate } from "swr";
+import { useAuthState } from "../context/auth.context";
 
 const TweetInput: FunctionComponent<{
   buttonText: string;
@@ -9,6 +10,7 @@ const TweetInput: FunctionComponent<{
   mutationEndpoint?: string;
 }> = ({ buttonText, placeholder, endpoint, mutationEndpoint = endpoint }) => {
   const [text, setText] = useState("");
+  const { user } = useAuthState();
 
   const { data } = useSWR(endpoint);
 
@@ -42,7 +44,10 @@ const TweetInput: FunctionComponent<{
   return (
     <div className="flex p-2 space-x-2">
       <img
-        src="https://images.vexels.com/media/users/3/145908/preview2/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
+        src={
+          user?.profilePicture ||
+          "https://images.vexels.com/media/users/3/145908/preview2/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
+        }
         alt=""
         className="w-10 h-10 rounded-full "
       />
