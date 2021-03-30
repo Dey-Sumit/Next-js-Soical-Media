@@ -13,7 +13,6 @@ const index = () => {
   const { data, error }: { data?: Post; error?: any } = useSWR(
     `/api/posts/${tid}`
   );
-  console.log(data);
 
   if (!data) {
     return <h3>Loading...</h3>;
@@ -32,7 +31,7 @@ const index = () => {
         <TweetCard tweet={data} />
         {/* Comment */}
 
-        <CreateComment tid={tid} />
+        <CreateComment tid={tid.toString()} />
 
         <div className="pl-14">
           {data?.comments.map((comment) => (
