@@ -1,5 +1,5 @@
 import TweetCard from "../components/TweetCard";
-import TweetInput from "../components/TweetInput";
+import CreateComment from "../components/CreateComment";
 import Trends from "../components/Trends";
 import { useRouter } from "next/router";
 // import { useAuthState } from "../context/auth.context";
@@ -9,6 +9,8 @@ import { Post } from "../types.frontend";
 // import { useEffect } from "react";
 import Head from "next/head";
 import { GetServerSidePropsContext } from "next";
+import React from "react";
+import CreateTweet from "../components/CreateTweet";
 
 export default function Home({ user }) {
   const { push } = useRouter();
@@ -30,11 +32,7 @@ export default function Home({ user }) {
       </Head>
       <div className="col-span-8 md:col-span-5">
         {user ? (
-          <TweetInput
-            placeholder="Hey Sumit! What's on your mind ?"
-            buttonText="Tweet"
-            endpoint="/api/posts"
-          />
+          <CreateTweet />
         ) : (
           <div className="p-3 text-center">
             {" "}

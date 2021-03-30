@@ -38,7 +38,7 @@ const Login: FunctionComponent<{
     try {
       setLoading(true);
       const res = await axios({
-        method: "POST",
+        method: "post",
         url: "/api/auth/login",
         data: data,
       });

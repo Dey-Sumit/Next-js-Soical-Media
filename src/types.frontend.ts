@@ -2,7 +2,7 @@ export interface Post {
   _id?: string;
   user: User;
   content: string;
-  attachementURL?: string;
+  attachmentURL?: string;
 
   parentPost?: Post;
   likes?: [

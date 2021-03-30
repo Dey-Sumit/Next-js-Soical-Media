@@ -21,7 +21,7 @@ export interface Post {
   user: mongoose.Types.ObjectId;
   content: string;
   parentPost?: Post;
-  attachementURL?: string;
+  attachmentURL?: string;
   likes?: [
     {
       user: mongoose.Types.ObjectId;

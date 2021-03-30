@@ -4,7 +4,7 @@ import useSWR from "swr";
 import CommentCard from "../../../components/CommentCard";
 import Trends from "../../../components/Trends";
 import TweetCard from "../../../components/TweetCard";
-import TweetInput from "../../../components/TweetInput";
+import CreateComment from "../../../components/CreateComment";
 import { Post } from "../../../types.frontend";
 
 const index = () => {
@@ -28,16 +28,11 @@ const index = () => {
           {data.content} | {data.user.username}
         </title>
       </Head>
-      <div className="sm:col-span-5 col-span-8">
+      <div className="col-span-8 sm:col-span-5">
         <TweetCard tweet={data} />
         {/* Comment */}
 
-        <TweetInput
-          placeholder="What's your opinion on this post? "
-          buttonText="Add Comment"
-          endpoint={`/api/posts/${tid}/comments`}
-          mutationEndpoint={`/api/posts/${tid}`}
-        />
+        <CreateComment tid={tid} />
 
         <div className="pl-14">
           {data?.comments.map((comment) => (

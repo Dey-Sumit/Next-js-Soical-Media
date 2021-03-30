@@ -1,4 +1,4 @@
-import mongoose, { Model, Schema, Document } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 import bcrypt from "bcryptjs";
 
 import { User } from "../lib/types.model";
@@ -18,7 +18,7 @@ const UserSchema = new Schema<UserDocument>({
   profilePicture: {
     type: String,
     default:
-      "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+      "https://images.vexels.com/media/users/3/145908/preview2/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg",
   },
   email: {
     type: String,
@@ -53,7 +53,7 @@ const UserSchema = new Schema<UserDocument>({
   ],
 });
 
-// Virtuals
+// Virtual
 UserSchema.virtual("fullName").get(function (this: UserDocument) {
   return this.firstName + this.lastName;
 });

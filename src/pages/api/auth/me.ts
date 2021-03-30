@@ -7,11 +7,11 @@ const handler = nc();
 
 handler.use(all);
 
+//? /api/auth/me
+//? returns the logged in user or null
+
 handler.get((req: ExtendedNextApiRequest, res: NextApiResponse) => {
   if (!req.user) return res.status(401).json({ user: null });
-  //   const {password,...r} = req.user
-  // console.log(req.user);
-
   return res.json({ user: req.user });
 });
 
