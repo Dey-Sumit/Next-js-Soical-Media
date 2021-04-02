@@ -6,13 +6,13 @@ import { User } from "../lib/types.model";
 const UserSchema = new Schema<UserDocument>({
   name: {
     type: String,
-    required: true,
+    // required: true,
   },
 
   username: {
     type: String,
     unique: true,
-    required: true,
+    // required: true,
     lowercase: true,
   },
   profilePicture: {
@@ -23,13 +23,16 @@ const UserSchema = new Schema<UserDocument>({
   email: {
     type: String,
     unique: true,
-    required: true,
+    // required: true,
     lowercase: true,
+  },
+  googleId: {
+    type: String,
   },
 
   password: {
     type: String,
-    required: true,
+    // required: true,
     select: false,
   },
   isAdmin: {

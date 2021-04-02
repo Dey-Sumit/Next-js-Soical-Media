@@ -3,8 +3,6 @@ import nextConnect from "next-connect";
 import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
 
-import formidable from "formidable";
-
 import { ExtendedNextApiRequest } from "../../../../../lib/types.api";
 import { all } from "../../../../../middlewares";
 import User from "../../../../../models/User";

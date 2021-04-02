@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import passport from "passport";
 import { Strategy as LocalStratagy } from "passport-local";
+import { Strategy as GoogleStratagy } from "passport-google-oauth20";
 import User from "../models/User";
 
 // https://lavalite.org/blog/passport-serialize-and-deserialize-in-nodejs#:~:text=and%20passport.deserialize.-,Passport,user%20info%20in%20a%20callback
@@ -18,6 +19,7 @@ const findUserById = async (id: string) => {
   return await User.findOne({ _id: id }).select("+password");
 };
 
+// Local stratagy
 passport.use(
   new LocalStratagy(
     {
@@ -36,6 +38,33 @@ passport.use(
       } else {
         // uhh!!! invalid credentials
         done(null, false, { message: "Email or password is incorrect" });
+      }
+    }
+  )
+);
+
+// Passport google stratagy
+passport.use(
+  new GoogleStratagy(
+    {
+      clientID: process.env.GOOGLE_OAUTH_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
+      callbackURL: "http://localhost:3000/api/auth/google/redirect",
+    },
+    async (acccessToken, refreshToken, profile, done) => {
+      console.log("access token", acccessToken);
+      const currentUser = await User.findOne({
+        googleId: profile.id,
+      });
+      if (currentUser) done(null, currentUser);
+      else {
+        const user = new User({
+          googleId: profile.id,
+        });
+        console.log(profile);
+
+        const newUser = await user.save();
+        done(null, newUser);
       }
     }
   )

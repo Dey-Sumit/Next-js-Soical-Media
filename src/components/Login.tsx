@@ -34,6 +34,12 @@ const Login: FunctionComponent<{
 
   const dispatch = useAuthDispatch();
 
+  const handleGoogleAuth = async () => {
+    await axios({
+      url: "/api/auth/google/",
+    });
+  };
+
   const handleClick = async (data: any) => {
     try {
       setLoading(true);
@@ -64,10 +70,13 @@ const Login: FunctionComponent<{
       })}
     >
       <h1 className="text-2xl font-bold text-white">Sign in to Twitter</h1>
-      <div className="flex items-center justify-center p-2 space-x-2 text-white bg-blue-700 rounded-md">
+      <button
+        className="flex items-center justify-center p-2 space-x-2 text-white bg-blue-700 rounded-md"
+        onClick={handleGoogleAuth}
+      >
         <AiFillGoogleCircle />
         <span>Sign up with Google</span>
-      </div>
+      </button>
       <form
         className="flex flex-col space-y-3"
         onSubmit={handleSubmit(handleClick)}
