@@ -1,27 +1,32 @@
 import axios from "axios";
-import { ChangeEvent, FunctionComponent, useState } from "react";
+import { ChangeEvent, FunctionComponent, useEffect, useState } from "react";
 import { mutate } from "swr";
 import { useAuthState } from "../context/auth.context";
 import { MdCancel } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { BiImage } from "react-icons/bi";
+// import { WithContext as ReactTags } from "react-tag-input";
 
 const CreateTweet: FunctionComponent<{}> = () => {
   const [picture, setPicture] = useState("");
+  const [tags, setTags] = useState([]);
+  const [tweet, setTweet] = useState("");
+  const ENDPOINT = "/api/posts";
+
   const { user } = useAuthState();
 
-  const { register, handleSubmit, reset, getValues } = useForm();
+  // const { register, handleSubmit, reset, getValues } = useForm();
 
   const onChangePicture = (e: ChangeEvent<HTMLInputElement>) =>
     setPicture(URL.createObjectURL(e.target.files[0]));
 
-  const ENDPOINT = "/api/posts";
-
-  const handleTweet = async (data: { text: string; attachment?: string }) => {
-    if (!data.text) return;
+  const handleTweet = async (e) => {
+    e.preventDefault();
+    if (!tweet) return;
     const formData = new FormData();
-    formData.append("content", data.text);
-    if (data.attachment[0]) formData.append("attachment", data.attachment[0]);
+    formData.append("content", tweet);
+    if (tags.length > 0) formData.append("tags", tags.join(","));
+    // if (data.attachment[0]) formData.append("attachment", data.attachment[0]);
 
     await axios(ENDPOINT, {
       method: "POST",
@@ -30,8 +35,15 @@ const CreateTweet: FunctionComponent<{}> = () => {
 
     mutate(ENDPOINT);
 
-    reset(); // reset the form
+    setTweet("");
+    setTags([]); // reset the form
     setPicture("");
+  };
+
+  const handleChange = (e) => {
+    setTweet(e.target.value);
+    const s = e.target.value;
+    setTags(s.match(/#[a-z]+/gi));
   };
   return (
     <div className="flex p-2 space-x-2">
@@ -44,13 +56,28 @@ const CreateTweet: FunctionComponent<{}> = () => {
         className="w-10 h-10 rounded-full "
       />
       <div className="flex-1">
-        <form onSubmit={handleSubmit(handleTweet)}>
-          <textarea
-            ref={register}
-            className="w-full h-24 p-2 bg-transparent border rounded-md resize-none border-dark-100 focus:outline-none"
-            placeholder={`Hey ${user?.username}, what's going on?`}
-            name="text"
-          />
+        <form onSubmit={handleTweet}>
+          <div
+            className={`border ${
+              tweet.length < 100 ? "border-dark-100" : "border-red-500"
+            }`}
+          >
+            <textarea
+              // ref={register}
+              className="w-full h-24 p-2 bg-transparent  rounded-md resize-none focus:outline-none"
+              placeholder={`Hey ${user?.username}, what's going on?`}
+              name="text"
+              value={tweet}
+              onChange={handleChange}
+            />
+            <div className="my-1">
+              {tags?.map((tag, i) => (
+                <span key={i} className="bg-blue-500 mx-1 p-1 rounded-sm">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
           {picture && (
             <div className="relative">
               <img
@@ -75,7 +102,6 @@ const CreateTweet: FunctionComponent<{}> = () => {
                 type="file"
                 name="attachment"
                 className="hidden"
-                ref={register}
               />
             </div>
             <button

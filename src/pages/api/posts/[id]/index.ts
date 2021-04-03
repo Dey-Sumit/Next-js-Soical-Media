@@ -18,8 +18,6 @@ handler
       res: NextApiResponse,
       next: NextApiHandler
     ) => {
-      console.log(req.query);
-
       const { id } = req.query;
       try {
         // const post = await Post.findById(id).populate("user", [
@@ -30,7 +28,8 @@ handler
         const post = await Post.findById(id)
           .populate("user")
           .populate("likes.user")
-          .populate("comments.user");
+          .populate("comments.user")
+          .populate("tags", "name");
 
         // console.log(post.populated("user")); // check if the model is populated
 

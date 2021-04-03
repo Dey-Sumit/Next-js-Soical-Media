@@ -1,4 +1,4 @@
-import mongoose, { Document } from "mongoose";
+import mongoose from "mongoose";
 
 export interface User {
   _id: mongoose.Types.ObjectId;
@@ -34,4 +34,15 @@ export interface Post {
       date?: Date;
     }
   ];
+  tags?: [
+    {
+      tag: mongoose.Types.ObjectId;
+    }
+  ];
+}
+
+export interface Tag {
+  _id?: mongoose.Types.ObjectId;
+  name: string;
+  posts: [Post];
 }

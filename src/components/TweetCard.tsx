@@ -12,6 +12,7 @@ import { useLayoutDispatch } from "../context/layout.context";
 import { SHOW_MODAL } from "../context/types";
 import { MdDelete } from "react-icons/md";
 import { mutate } from "swr";
+import { spawn } from "node:child_process";
 // import Heart from "react-animated-heart";
 
 const TweetCard: FunctionComponent<{ tweet: Post }> = ({
@@ -23,11 +24,12 @@ const TweetCard: FunctionComponent<{ tweet: Post }> = ({
     attachmentURL,
     _id,
     createdAt,
+    tags,
   },
 }) => {
   const { user } = useAuthState();
   const dispatch = useLayoutDispatch();
-
+  const extractedTags = tags.map((tag) => tag.name);
   const { push } = useRouter();
   const [likesCount, setLikesCount] = useState<number>(likes.length);
   const [likedByMe, setLikedByMe] = useState<boolean>(
@@ -117,8 +119,13 @@ const TweetCard: FunctionComponent<{ tweet: Post }> = ({
             <BsClockHistory size="14" />{" "}
             <span>{timeSince(new Date(createdAt))}</span>
           </div>
-        </div>
+        </div>   
         <div>{content}</div>
+        <div className="flex space-x-3">
+          {extractedTags.map((tag) => (
+            <span className="bg-blue-500 p-1 rounded-sm">{tag}</span>
+          ))}
+        </div>
         <div>
           {attachmentURL && (
             <img

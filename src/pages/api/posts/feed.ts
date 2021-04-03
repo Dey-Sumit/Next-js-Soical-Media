@@ -30,12 +30,13 @@ handler.get(
       $or: [{ user: { $in: user.following } }, { user: req.user._id }],
     })
       .populate({ path: "user", select: "name username" })
+      .populate("tags", "name")
       .sort("-createdAt");
     // const posts = await Post.find({ user: { $in: user.following } })
     //   .populate({ path: "user", select: "name username" })
     //   .sort("-createdAt");
 
-    res.send(posts);
+    res.json({ posts });
   }
 );
 

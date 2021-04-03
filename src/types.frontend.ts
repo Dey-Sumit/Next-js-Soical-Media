@@ -5,6 +5,7 @@ export interface Post {
   attachmentURL?: string;
 
   parentPost?: Post;
+  tags?: [{ name: string; id: string }];
   likes?: [
     {
       user: string;
