@@ -61,6 +61,7 @@ const PostSchema = new Schema(
   }
 );
 
+// create virtual fields on comment count, like count etc
 type PostDocument = Post & Document;
 
 export default (mongoose.models.Post as mongoose.Model<PostDocument>) ||

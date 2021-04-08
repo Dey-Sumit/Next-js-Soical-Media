@@ -36,11 +36,11 @@ async function dbConnect() {
     console.log("MIDDLEWARE : DB ALREADY CONNECTED");
     return;
   }
+  console.log("DB not connected, trying to connect");
 
   return mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: false,
     useCreateIndex: true,
   });
   //   mongoose.connection.on("connected", () => {

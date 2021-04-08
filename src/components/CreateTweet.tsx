@@ -9,7 +9,7 @@ import { BiImage } from "react-icons/bi";
 
 const CreateTweet: FunctionComponent<{}> = () => {
   const [picture, setPicture] = useState("");
-  const [tags, setTags] = useState([]);
+  const [tags, setTags] = useState<string>([]);
   const [tweet, setTweet] = useState("");
   const ENDPOINT = "/api/posts";
 
@@ -25,7 +25,7 @@ const CreateTweet: FunctionComponent<{}> = () => {
     if (!tweet) return;
     const formData = new FormData();
     formData.append("content", tweet);
-    if (tags.length > 0) formData.append("tags", tags.join(","));
+    if (tags.length > 0) formData.append("tags", tags.join(",").replaceAll("#",""));
     // if (data.attachment[0]) formData.append("attachment", data.attachment[0]);
 
     await axios(ENDPOINT, {

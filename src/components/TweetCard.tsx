@@ -12,7 +12,6 @@ import { useLayoutDispatch } from "../context/layout.context";
 import { SHOW_MODAL } from "../context/types";
 import { MdDelete } from "react-icons/md";
 import { mutate } from "swr";
-import { spawn } from "node:child_process";
 // import Heart from "react-animated-heart";
 
 const TweetCard: FunctionComponent<{ tweet: Post }> = ({
@@ -61,6 +60,15 @@ const TweetCard: FunctionComponent<{ tweet: Post }> = ({
     await axios.delete(`/api/posts/${_id}/`);
     //TODO optimistic using SWR
     mutate("/api/posts/");
+  };
+
+  const handleTags = (e, tag: string) => {
+    console.log(e);
+
+    e.stopPropagation();
+    console.log(`tags/${tag}`);
+
+    push(`/tags/${tag}`);
   };
   // https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjIwP9FAQJOd8w7eHWWcjJyZnUwZN8ENSjFg&usqp=CAU
 
@@ -119,11 +127,17 @@ const TweetCard: FunctionComponent<{ tweet: Post }> = ({
             <BsClockHistory size="14" />{" "}
             <span>{timeSince(new Date(createdAt))}</span>
           </div>
-        </div>   
+        </div>
         <div>{content}</div>
         <div className="flex space-x-3">
           {extractedTags.map((tag) => (
-            <span className="bg-blue-500 p-1 rounded-sm">{tag}</span>
+            <span
+              className="p-1 bg-blue-500 rounded-sm"
+              onClick={(e) => handleTags(e, tag)}
+              key={tag}
+            >
+              #{tag}
+            </span>
           ))}
         </div>
         <div>

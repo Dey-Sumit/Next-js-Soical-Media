@@ -33,3 +33,9 @@ export interface User {
   following: string[];
   // company: Types.ObjectId | Record<string, unknown>;
 }
+
+export interface Tag {
+  _id?: string;
+  name: string;
+  posts: [Post];
+}

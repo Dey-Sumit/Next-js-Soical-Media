@@ -9,7 +9,7 @@ import { User } from "../types.frontend";
 const Navbar = () => {
   const { push } = useRouter();
   const { user } = useAuthState();
-  const [showResultsDiv, setshowResultsDiv] = useState(false);
+  // const [showResultsDiv, setShowResultsDiv] = useState(false);
   const [query, setQuery] = useState("");
   const [timer, setTimer] = useState(null);
   const [searchResults, setSearchResults] = useState<User[]>([]);

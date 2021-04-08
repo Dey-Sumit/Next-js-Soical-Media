@@ -1,20 +1,24 @@
+import { useRouter } from "next/router";
+import useSWR from "swr";
+import { Tag } from "../types.frontend";
+
 const Trends = () => {
+  const { push } = useRouter();
+
+  const { data }: { data?: { tags: Tag[] } } = useSWR("/api/tags");
+
   return (
-    <div className="flex flex-col space-y-3 p-2 bg-dark-600 rounded-md shadow-sm divide-y divide-dark-500">
+    <div className="flex flex-col p-2 space-y-3 divide-y rounded-md shadow-sm bg-dark-600 divide-dark-500">
       <h3 className="text-lg font-medium">Trends For You</h3>
-      <div className="flex flex-col pt-2 ">
-        <span className="text-white">#ModiJobDo</span>
-        <span>4.3m Tweets</span>
-      </div>
-      <div className="flex flex-col pt-2">
-        <span className="text-white">#ModiJobDo</span>
-        <span>4.3m Tweets</span>
-      </div>
-      <div className="flex flex-col pt-2">
-        <span className="text-white">#ModiJobDo</span>
-        <span>4.3m Tweets</span>
-      </div>
-      <div className="text-center py-2">SEE MORE</div>
+      {data?.tags.map((tag) => (
+        <div
+          className="flex flex-col pt-2 cursor-pointer"
+          onClick={() => push(`/tags/${tag.name.substring(1)}`)}
+        >
+          <span className="text-white">#{tag.name}</span>
+          <span>{data.tags.length} Tweets</span>
+        </div>
+      ))}
     </div>
   );
 };
