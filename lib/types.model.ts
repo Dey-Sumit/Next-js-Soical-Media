@@ -1,24 +1,22 @@
 import mongoose from "mongoose";
 
 export interface User {
-  _id: mongoose.Types.ObjectId;
-  firstName: string;
-  lastName?: string;
+  _id: mongoose.Types.ObjectId | string;
   name: string;
   username: string;
   password: string;
-  isAdmin?: boolean;
-  following: [mongoose.Types.ObjectId];
-  follwoers: [mongoose.Types.ObjectId];
   profilePicture: string;
-  //TODO fix the type
-  // followers: string[];
-  // company: Types.ObjectId | Record<string, unknown>;
+  bio: string;
+  following: (mongoose.Types.ObjectId | string)[];
+  followers: (mongoose.Types.ObjectId | string)[];
+  // virtual fields
+  noOfFollowers: number;
+  noOfFollowing: number;
 }
 // frontend backend different interface
 export interface Post {
-  _id?: mongoose.Types.ObjectId;
-  user: mongoose.Types.ObjectId;
+  _id?: mongoose.Types.ObjectId | string;
+  user: mongoose.Types.ObjectId | string;
   content: string;
   parentPost?: Post;
   attachmentURL?: string;

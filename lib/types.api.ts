@@ -1,13 +1,10 @@
 import mongoose from "mongoose";
 import { NextApiRequest } from "next";
+import { User } from "./types.model";
 
 export interface ExtendedNextApiRequest extends NextApiRequest {
   session: {};
-  user: {
-    _id: mongoose.Types.ObjectId;
-    following: [mongoose.Types.ObjectId];
-    followers: [mongoose.Types.ObjectId];
-  };
+  user: User;
   file: {
     //TODO add full typescript on multer and other packages
     filename: string;

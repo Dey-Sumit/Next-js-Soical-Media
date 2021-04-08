@@ -11,8 +11,8 @@ import User from "../models/User";
 
 // HOW PASSPORT WORKS : http://toon.io/understanding-passportjs-authentication-flow/
 
-const findUserByUsername = async (username: string) => {
-  return await User.findOne({ username }).select("+password");
+const findUserByEmail = async (email: string) => {
+  return await User.findOne({ email }).select("+password");
 };
 const findUserById = async (id: string) => {
   return await User.findOne({ _id: id }).select("+password");
@@ -21,12 +21,12 @@ const findUserById = async (id: string) => {
 passport.use(
   new LocalStratagy(
     {
-      usernameField: "username", // password field is by default password
+      usernameField: "email", // password field is by default password
       //   passReqToCallback: true, // if set, retq becomes the first user, useful for additional data from the request
     },
     async (username, password, done) => {
       // check if the user exist
-      const user: any = await findUserByUsername(username);
+      const user: any = await findUserByEmail(username);
 
       // if(user === null) // no user exists
 

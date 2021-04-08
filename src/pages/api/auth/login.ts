@@ -1,5 +1,6 @@
 import { NextApiResponse } from "next";
 import nc from "next-connect";
+import extractUser from "../../../../lib/extractUser";
 import { loginSchema } from "../../../../lib/schemaValidation";
 import { ExtendedNextApiRequest } from "../../../../lib/types.api";
 import { all, passport, schemaValidate } from "../../../../middlewares";
@@ -13,7 +14,7 @@ handler.post(
   (req: ExtendedNextApiRequest, res: NextApiResponse) => {
     console.log(req.session);
 
-    res.json({ user: req.user });
+    res.json({ user: extractUser(req.user) });
   }
 );
 

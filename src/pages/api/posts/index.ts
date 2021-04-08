@@ -10,35 +10,27 @@ import { Post as IPost, Tag as ITag } from "../../../../lib/types.model";
 import { all } from "../../../../middlewares";
 import Post from "../../../../models/Post";
 import Tag from "../../../../models/Tag";
+import uploadMulter from "@/middlewares/fileUpload";
 
 const handler = nextConnect();
+
 handler.use(all);
 
-// cloudinary configuration
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
-const upload = multer({ dest: "/tmp" });
-
-//? /api/posts/
-handler.use(upload.single("attachment")); //? REVIEW
+handler.use(uploadMulter().single("attachment"));
 
 handler
+  //? /api/posts?uid=<> => returns posts by user id
+  //? /api/posts  => returns all posts
   .get(
     async (
       req: ExtendedNextApiRequest,
       res: NextApiResponse,
       _next: NextApiHandler
     ) => {
-      //? /api/posts?uid=<> => returns posts by user id
-      //? /api/posts  => returns all posts
-      const uid = req.query?.uid?.toString(); // toString for the typescript
+      const { uid, page } = req.query;
 
       const pageSize = 10;
-      const page = Number(req.query?.page?.toString()) || 1;
+      const pageNumber = Number(page) || 1;
 
       let posts: IPost[];
 
@@ -47,13 +39,14 @@ handler
 
       if (uid) {
         try {
-          allPosts = await Post.find({ user: uid });
+          //! FIX the DUPLICATION
+          allPosts = await Post.find({ user: uid.toString() });
           count = allPosts.length;
 
-          posts = await Post.find({ user: uid })
+          posts = await Post.find({ user: uid.toString() })
             .limit(pageSize)
-            .skip(pageSize * (page - 1))
-            .populate("user") // check password field
+            .skip(pageSize * (pageNumber - 1))
+            .populate("user")
             .populate("tags", "name")
             .sort("-createdAt");
           return res.json({
@@ -63,17 +56,19 @@ handler
           });
         } catch (error) {
           if (error.kind === "ObjectId")
-            return res.status(404).json({ message: "User not found" });
+            return res.status(404).json({ msg: "User not found" });
 
-          return res.status(500).json({ message: "Server crashed" });
+          return res.status(500).json({ msg: "Server crashed" });
         }
       }
-      // posts = await Post.find({}).populate("user").sort("-createdAt");
+
+      // if not user, then return all the posts with pagination
       count = await Post.estimatedDocumentCount();
+
       posts = await Post.find({})
         .limit(pageSize)
-        .skip(pageSize * (page - 1))
-        .populate("user") // check password field
+        .skip(pageSize * (pageNumber - 1))
+        .populate("user")
         .populate("tags", "name")
         .sort("-createdAt");
       return res.json({
@@ -90,19 +85,14 @@ handler
       _next: NextApiHandler
     ) => {
       try {
-        console.log("-------------------------");
-        console.log("-------------------------");
-
         const { content, tags }: { content: string; tags?: string } = req.body;
-        console.log(tags);
 
         const tagsArray = tags.split(",");
-        console.log({ tagsArray });
 
-        if (!req.user) return res.status(401).json({ message: "unauthorized" });
+        if (!req.user) return res.status(401).json({ msg: "unauthorized" });
 
         if (!content)
-          return res.status(400).json({ message: "content is required" });
+          return res.status(400).json({ msg: "content is required" });
 
         // insert post
         let attachmentURL: string;
@@ -114,7 +104,6 @@ handler
             crop: "fill",
           });
           attachmentURL = image.secure_url;
-          console.log(attachmentURL);
         }
 
         const postDoc: IPost = {
@@ -124,26 +113,20 @@ handler
         };
 
         const post = await Post.create(postDoc);
-        console.log({ post });
-        console.log("----------------------------");
 
         let updated;
+
         // add tag to post
         //Promise.all = stackoverflow.com/questions/40140149/use-async-await-with-array-map
 
         https: await Promise.all(
           tagsArray.map(async (tag) => {
-            console.log({ tag });
-
             try {
               const t = await Tag.findOne({
                 name: tag,
               });
-              // console.log("p", { t });
               //stackoverflow.com/questions/11963684/how-to-push-an-array-of-objects-into-an-array-in-mongoose-with-one-call
               if (t) {
-                console.log("got the tag", t);
-
                 updated = await Post.findByIdAndUpdate(
                   post._id,
                   {
@@ -155,6 +138,7 @@ handler
                     new: true,
                   }
                 ).populate("tags");
+
                 updated = await Post.findById(post._id).populate(
                   "tags", // field name
                   "name"

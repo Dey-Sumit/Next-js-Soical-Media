@@ -3,59 +3,73 @@ import bcrypt from "bcryptjs";
 
 import { User } from "../lib/types.model";
 
-const UserSchema = new Schema<UserDocument>({
-  name: {
-    type: String,
-    required: true,
-  },
-
-  username: {
-    type: String,
-    unique: true,
-    required: true,
-    lowercase: true,
-  },
-  profilePicture: {
-    type: String,
-    default:
-      "https://images.vexels.com/media/users/3/145908/preview2/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg",
-  },
-  email: {
-    type: String,
-    unique: true,
-    required: true,
-    lowercase: true,
-  },
-
-  password: {
-    type: String,
-    required: true,
-    select: false,
-  },
-  isAdmin: {
-    type: Boolean,
-    default: false,
-  },
-  //? people follows me
-  followers: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "User",
+const UserSchema = new Schema<UserDocument>(
+  {
+    name: {
+      type: String,
+      required: true,
     },
-  ],
-  //? people follows me
-
-  following: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "User",
+    bio: {
+      type: String,
     },
-  ],
-});
+    username: {
+      type: String,
+      unique: true,
+      required: true,
+      lowercase: true,
+    },
+    profilePicture: {
+      type: String,
+      default:
+        "https://images.vexels.com/media/users/3/145908/preview2/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg",
+    },
+    email: {
+      type: String,
+      unique: true,
+      required: true,
+      lowercase: true,
+    },
 
+    password: {
+      type: String,
+      required: true,
+      select: false,
+    },
+    // people follow this user
+    followers: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    // people this user follow
+
+    following: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+  },
+  {
+    timestamps: true,
+    toObject: {
+      virtuals: true,
+    },
+    toJSON: {
+      virtuals: true,
+    },
+  }
+);
+
+// UserSchema.set("toObject", { virtuals: true });
+// UserSchema.set("toJSON", { virtuals: true });
 // Virtual
-UserSchema.virtual("fullName").get(function (this: UserDocument) {
-  return this.firstName + this.lastName;
+UserSchema.virtual("noOfFollowers").get(function (this: UserDocument) {
+  return this.followers.length;
+});
+UserSchema.virtual("noOfFollowing").get(function (this: UserDocument) {
+  return this.following.length;
 });
 
 // methods
@@ -78,11 +92,6 @@ UserSchema.pre("save", async function (this: UserDocument, next: Function) {
 });
 
 type UserDocument = User & Document;
-
-//  interface UserModel extends Model<UserDocument> {
-//     build(attrs: User): UserDocument
-//     //add
-//  }
 
 //? Fix this type
 export default (mongoose.models.User as mongoose.Model<UserDocument>) ||

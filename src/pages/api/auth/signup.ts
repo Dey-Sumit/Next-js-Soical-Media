@@ -1,6 +1,7 @@
 import { NextApiResponse } from "next";
 import nextConnect from "next-connect";
 import isEmail from "validator/lib/isEmail";
+import extractUser from "../../../../lib/extractUser";
 
 //TODO uninstall validator lib
 import { registrationSchema } from "../../../../lib/schemaValidation";
@@ -44,7 +45,7 @@ handler.post(async (req: ExtendedNextApiRequest, res: NextApiResponse) => {
       if (err) throw err;
       //TODO extract password
       res.status(201).json({
-        user: req.user,
+        user: extractUser(req.user),
       });
     });
   } catch (error) {
