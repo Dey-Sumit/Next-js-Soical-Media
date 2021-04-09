@@ -5,7 +5,7 @@ import CommentCard from "../../../components/CommentCard";
 import Trends from "../../../components/Trends";
 import TweetCard from "../../../components/TweetCard";
 import CreateComment from "../../../components/CreateComment";
-import { Post } from "../../../types.frontend";
+import { Post } from "../../lib/types.model";
 
 const index = () => {
   const router = useRouter();

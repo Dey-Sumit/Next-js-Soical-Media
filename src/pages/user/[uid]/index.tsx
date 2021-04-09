@@ -8,18 +8,19 @@ import { MdDelete, MdSettings } from "react-icons/md";
 import useSWR, { mutate } from "swr";
 import TweetCard from "../../../components/TweetCard";
 import { useAuthState } from "../../../context/auth.context";
-import { Post, User } from "../../../types.frontend";
+import { FPost, FUser } from "lib/types";
 import Head from "next/head";
+import Loader from "components/Loader";
 const profile = ({ sameUser }) => {
   const { push, query } = useRouter();
   const { user: authUser } = useAuthState();
-  const { data, error }: { data?: { user: User }; error?: any } = useSWR(
+  const { data, error }: { data?: { user: FUser }; error?: any } = useSWR(
     `/api/users/${query?.uid}`
   );
   const {
     data: posts,
     error: postsError,
-  }: { data?: { posts: Post[] }; error?: any } = useSWR(
+  }: { data?: { posts: FPost[] }; error?: any } = useSWR(
     `/api/posts?uid=${query?.uid}`
   );
   const profileData = data?.user;
@@ -78,6 +79,7 @@ const profile = ({ sameUser }) => {
               <span>{profileData?.following.length}</span>
             </div>
           </div>
+          {!data && <Loader />}
           {!sameUser && (
             <>
               {!isFollowing ? (
@@ -116,17 +118,17 @@ const profile = ({ sameUser }) => {
               <MdDelete /> <span> Delete Account </span>
             </div>
           </div>
-        )}{" "}
+        )}
       </div>
       {/* <div className="col-span-2">Sidebar</div> */}
       <div className="col-span-8 rounded-sm md:col-span-5 bg-dark-500">
         <div className="flex px-4 py-2 space-x-4 shadow-lg ">
           <span className="text-blue-600">Tweets</span>
-          <span>Retweets</span>
-          <span>Follwers</span>
-          <span>Save</span>
+          <span>Followers</span>
+          <span>Followings</span>
         </div>
         <div className="p-2">
+          {!posts && <Loader />}
           {posts?.posts.map((tweet) => (
             <TweetCard tweet={tweet} key={tweet._id} />
           ))}

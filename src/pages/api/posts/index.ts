@@ -3,13 +3,11 @@ import nextConnect from "next-connect";
 
 import { v2 as cloudinary } from "cloudinary";
 
-import { Post as IPost, Tag as ITag } from "lib/types.model";
+import { Post as IPost, Tag as ITag } from "lib/types";
 
 import { Post, Tag } from "models";
 import { uploadMulter, all } from "middlewares";
 import { ExtendedNextApiRequest } from "lib/types.api";
-
-// TODO TEST ENDPOINT UPDATED
 
 const handler = nextConnect();
 
@@ -75,7 +73,6 @@ handler
   .post(async (req: ExtendedNextApiRequest, res: NextApiResponse) => {
     try {
       const { content, tags }: { content: string; tags?: string } = req.body;
-
       const tagsArray = [...new Set(tags.split(","))]; // convert to an array and remove duplicates
 
       if (!req.user) return res.status(401).json({ msg: "unauthorized" });
@@ -176,6 +173,7 @@ const addPostToTag = async (tag: ITag, post: IPost) => {
       $push: {
         //@ts-ignore
         posts: post._id,
+        $inc: { totalPosts: 1 }, // TODO dec totalPosts when the post is deleted
       },
     },
     {

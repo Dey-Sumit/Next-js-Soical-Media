@@ -10,7 +10,7 @@ import useSWR, { mutate } from "swr";
 // import useSWR from "swr";
 import Input from "../../components/Input";
 import { useAuthState } from "../../context/auth.context";
-// import { User } from "../../types.frontend";
+// import { User } from "../lib/types.model";
 
 const profile = () => {
   const { push, query } = useRouter();
@@ -158,8 +158,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     return { props: {} };
   } catch (error) {
-
-
     return {
       redirect: {
         destination: "/auth",

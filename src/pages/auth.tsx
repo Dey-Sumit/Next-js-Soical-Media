@@ -22,7 +22,7 @@ export default function Auth() {
       {/* left part */}
       <div className="hidden col-span-3 p-4 bg-blue-700 md:grid place-items-center">
         <h1 className="mb-5 text-xl font-semibold">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Velit, ipsa!
+          Tweety helps you connect and share with the people in your life.{" "}
         </h1>
         <img src="/image_3d.png" alt="" className="" />
       </div>

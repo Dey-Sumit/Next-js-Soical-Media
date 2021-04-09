@@ -1,12 +1,13 @@
 import { NextApiResponse } from "next";
 import nextConnect from "next-connect";
 import { ExtendedNextApiRequest } from "lib/types.api";
-import { all } from "middlewares";
+import { all, auth } from "middlewares";
 import Post from "models/Post";
 import { Types } from "mongoose";
 
 const handler = nextConnect();
 handler.use(all);
+handler.use(auth);
 
 // @ route GET api/posts/:id/rate
 // @ desc rate post by id

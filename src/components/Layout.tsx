@@ -6,7 +6,6 @@ const Layout = ({ children }) => {
   return (
     <div className="flex text-dark-100">
       {/* // wrapper 👆 */}
-
       <Modal />
       {/* modal absolute position 👆 */}
       <Sidebar />
@@ -20,5 +19,5 @@ const Layout = ({ children }) => {
     </div>
   );
 };
-
+// sm->640
 export default Layout;

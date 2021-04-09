@@ -2,17 +2,20 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { BiSearchAlt } from "react-icons/bi";
-import { FaShoppingBag } from "react-icons/fa";
 import { useAuthState } from "../context/auth.context";
-import { User } from "../types.frontend";
+import { FUser } from "lib/types";
+import { SiTwitter } from "react-icons/si";
+import { useLayoutDispatch, useLayoutState } from "src/context/layout.context";
+import { TOGGLE_NAVBAR } from "src/context/types";
 
 const Navbar = () => {
   const { push } = useRouter();
   const { user } = useAuthState();
+  const dispatch = useLayoutDispatch();
   // const [showResultsDiv, setShowResultsDiv] = useState(false);
   const [query, setQuery] = useState("");
   const [timer, setTimer] = useState(null);
-  const [searchResults, setSearchResults] = useState<User[]>([]);
+  const [searchResults, setSearchResults] = useState<FUser[]>([]);
   const fetchResults = async (e: any) => {
     setQuery(e.target.value);
     if (e.target.value == "") {
@@ -31,7 +34,7 @@ const Navbar = () => {
       console.log(error.message);
     }
   };
-  //TODO add deduplication
+  //TODO add de duplication
   const goToUser = (uid: string) => {
     setQuery("");
     push(`/user/${uid}`);
@@ -64,29 +67,31 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex items-center justify-between p-3 bg-dark-600 text-dark-100 md:px-10 lg:px-16 sticky top-0 left-0 space-x-4">
-      {/* <div className="flex space-x-3">
-        <span>About</span>
-        <span>Help</span>
-      </div> */}
-      <div className="flex items-center space-x-3 bg-dark-700 px-3 py-1 justify-center flex-1 relative">
+    <div className="sticky top-0 left-0 flex items-center justify-between p-3 space-x-4 bg-dark-600 text-dark-100 md:px-10 lg:px-16">
+      <SiTwitter
+        className="text-blue-600 cursor-pointer sm:hidden"
+        size="24"
+        onClick={() => dispatch({ type: TOGGLE_NAVBAR })}
+      />
+
+      <div className="relative flex items-center justify-center flex-1 px-3 py-1 space-x-3 bg-dark-700">
         <BiSearchAlt />
         <input
           type="text"
           placeholder="Search"
-          className="bg-transparent text-dark-100 focus:outline-none w-full"
+          className="w-full bg-transparent text-dark-100 focus:outline-none"
           onClick={(e: any) => setQuery(e.target.value)}
           onChange={fetchResults}
           value={query}
         />
         {/* {showResultsDiv && ( */}
         <div
-          className="flex flex-col space-y-1 absolute w-full top-8 bg-dark-600  left-0 rounded-sm "
+          className="absolute left-0 flex flex-col w-full space-y-1 rounded-sm top-8 bg-dark-600 "
           style={{ marginLeft: 0 }}
         >
-          {searchResults?.map((user: User) => (
+          {searchResults?.map((user: FUser) => (
             <div
-              className="flex items-center space-x-6 bg-dark-700 px-4 py-1 cursor-pointer"
+              className="flex items-center px-4 py-1 space-x-6 cursor-pointer bg-dark-700"
               onClick={() => goToUser(user._id)}
             >
               <img
@@ -95,7 +100,7 @@ const Navbar = () => {
                   "https://images.vexels.com/media/users/3/145908/preview2/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
                 }
                 alt=""
-                className="w-7 h-7 rounded-full "
+                className="rounded-full w-7 h-7 "
               />
               <div>
                 <p>{user.name}</p>
@@ -110,17 +115,17 @@ const Navbar = () => {
         // <div className="flex space-x-3">
         <button
           onClick={() => push("/auth")}
-          className="border border-blue-600 p-1 text-blue-600"
+          className="p-1 text-blue-600 border border-blue-600"
         >
           Log in
         </button>
       ) : (
         // </div>
         <div
-          className="flex space-x-3 items-center cursor-pointer hover:bg-dark-700 rounded-md p-2"
+          className="flex items-center p-2 space-x-3 rounded-md cursor-pointer hover:bg-dark-700"
           onClick={() => push(`/user/${user._id}`)}
         >
-          {<span>Hey {user.name}!</span>}
+          {<span className="hidden sm:block">Hey {user.name}!</span>}
           <img
             src="https://images.vexels.com/media/users/3/145908/preview2/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
             alt=""

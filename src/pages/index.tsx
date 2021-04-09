@@ -5,22 +5,17 @@ import { useRouter } from "next/router";
 // import { useAuthState } from "../context/auth.context";
 import axios from "axios";
 import useSWR from "swr";
-import { Post } from "../types.frontend";
+import { Post } from "lib/types";
 // import { useEffect } from "react";
 import Head from "next/head";
 import { GetServerSidePropsContext } from "next";
 import React from "react";
 import CreateTweet from "../components/CreateTweet";
+import People from "components/People";
+import Loader from "components/Loader";
 
 export default function Home({ user }) {
   const { push } = useRouter();
-  // const { user } = useAuthState();
-
-  // useEffect(() => {
-  //   if (!user) {
-  //     push("/auth");
-  //   }
-  // }, [user]);
 
   const { data }: { data?: { posts: Post[] } } = useSWR("/api/posts");
 
@@ -45,12 +40,14 @@ export default function Home({ user }) {
             </button>
           </div>
         )}
+        {!data && <Loader />}
         {data?.posts.map((tweet) => (
-          <TweetCard tweet={tweet} key={tweet._id} />
+          <TweetCard tweet={tweet} key={tweet._id.toString()} />
         ))}
       </div>
-      <div className="col-span-8 md:col-span-3">
+      <div className="col-span-8 space-y-4 md:col-span-3">
         <Trends />
+        <People />
       </div>
     </div>
   );
@@ -66,7 +63,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     // it returns 401 if the user is not authenticated
     const res = await axios.get("/api/auth/me", { headers: { cookie } });
-    console.log("executed :(");
 
     return { props: { user: res.data.user } };
   } catch (error) {

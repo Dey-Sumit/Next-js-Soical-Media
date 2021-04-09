@@ -1,6 +1,6 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useReducer } from "react";
-import { User } from "../types.frontend";
+import { User } from "lib/types";
 import { AUTH_FAIL, AUTH_SUCCESS, LOG_OUT } from "./types";
 // import { User } from '../types'
 

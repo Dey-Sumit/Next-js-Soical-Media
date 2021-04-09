@@ -22,6 +22,7 @@ handler.get(async (req: ExtendedNextApiRequest, res: NextApiResponse) => {
       { $sort: { length: -1 } },
       { $limit: 5 },
     ]);
+    // const tags = await Tag.find({}).sort({ totalPosts: -1 }).limit(5);
 
     return res.status(200).json({ tags });
   } catch (error) {

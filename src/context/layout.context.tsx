@@ -1,9 +1,10 @@
 import { createContext, useContext, useReducer } from "react";
-import { SHOW_MODAL, HIDE_MODAL } from "./types";
+import { SHOW_MODAL, HIDE_MODAL, TOGGLE_NAVBAR } from "./types";
 // import { User } from '../types'
 
 interface State {
   showModal: boolean;
+  showNavbar: boolean;
 }
 
 interface Action {
@@ -14,6 +15,7 @@ interface Action {
 // create two context; one for the state and one for the dispatchs
 const StateContext = createContext<State>({
   showModal: false,
+  showNavbar: false,
 });
 
 const DispatchContext = createContext(null);
@@ -30,6 +32,11 @@ const reducer = (state: State, { type }: Action) => {
         ...state,
         showModal: false,
       };
+    case TOGGLE_NAVBAR:
+      return {
+        ...state,
+        showNavbar: !state.showNavbar,
+      };
 
     default:
       throw new Error(`Unknown action type"${type}`);
@@ -39,6 +46,7 @@ const reducer = (state: State, { type }: Action) => {
 export const LayoutProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, {
     showModal: false,
+    showNavbar: false,
   });
 
   return (

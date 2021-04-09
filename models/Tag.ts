@@ -1,5 +1,6 @@
+import Post from "models/Post";
 import mongoose, { Document } from "mongoose";
-import { Tag } from "../lib/types.model";
+import { Tag } from "../lib/types";
 
 const Schema = mongoose.Schema;
 
@@ -11,9 +12,13 @@ const TagSchema = new Schema({
   posts: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Post",
+      ref: Post, // import the model
     },
   ],
+  totalPosts: {
+    type: Number,
+    default: 0,
+  },
 });
 
 type TagDocument = Tag & Document;

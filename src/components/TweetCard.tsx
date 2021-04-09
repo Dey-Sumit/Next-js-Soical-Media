@@ -3,7 +3,7 @@ import { AiOutlineRetweet } from "react-icons/ai";
 import { FaCommentAlt, FaHeart } from "react-icons/fa";
 import { IoMdShareAlt } from "react-icons/io";
 import { FunctionComponent, useState } from "react";
-import { Post } from "../types.frontend";
+import { Post } from "lib/types";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { useAuthState } from "../context/auth.context";
@@ -63,7 +63,6 @@ const TweetCard: FunctionComponent<{ tweet: Post }> = ({
   };
 
   const handleTags = (e, tag: string) => {
-
     e.stopPropagation();
 
     push(`/tags/${tag}`);

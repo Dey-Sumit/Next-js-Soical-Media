@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { NextApiRequest } from "next";
-import { User } from "./types.model";
+import { User } from "./types";
 
 export interface ExtendedNextApiRequest extends NextApiRequest {
   session: {};

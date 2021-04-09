@@ -3,7 +3,7 @@ import { GetServerSidePropsContext, NextPage } from "next";
 import Head from "next/head";
 import Trends from "../../components/Trends";
 import TweetCard from "../../components/TweetCard";
-import { Post } from "../../types.frontend";
+import { Post } from "../lib/types.model";
 interface IData {
   posts: Post[];
   name: string;
@@ -21,7 +21,9 @@ const index: NextPage<{ data: IData }> = ({ data }) => {
         <title>{data.name || "Tweeter Clone"}</title>
       </Head>
       <div className="col-span-8 md:col-span-5">
-      <div className="flex p-2 justify-between"><span>#{data.name}</span> <span> {data.posts.length} Tweets</span> </div>
+        <div className="flex p-2 justify-between">
+          <span>#{data.name}</span> <span> {data.posts.length} Tweets</span>{" "}
+        </div>
         {data?.posts?.map((tweet) => (
           <TweetCard tweet={tweet} key={tweet._id} />
         ))}

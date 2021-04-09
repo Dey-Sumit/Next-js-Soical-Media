@@ -5,12 +5,15 @@ import Link from "next/link";
 import { useAuthDispatch, useAuthState } from "../context/auth.context";
 import { useRouter } from "next/router";
 import axios from "axios";
-import { LOG_OUT } from "../context/types";
+import { LOG_OUT, TOGGLE_NAVBAR } from "../context/types";
 import { AiOutlineUser } from "react-icons/ai";
 import { BsBookmark } from "react-icons/bs";
+import { useLayoutDispatch, useLayoutState } from "src/context/layout.context";
 const Sidebar = () => {
   const dispatch = useAuthDispatch();
+  const layoutDispatch = useLayoutDispatch();
   const { user } = useAuthState();
+  const { showNavbar } = useLayoutState();
 
   const router = useRouter();
 
@@ -21,61 +24,66 @@ const Sidebar = () => {
     dispatch({ type: LOG_OUT }); // ?NOT NEEDED I guess
   };
   return (
-    <div className=" flex flex-col py-8 px-6 justify-between pb-20 text-lg shadow-lg h-screen sticky top-0 left-0 bottom-0">
-      <div className="flex space-x-2 items-center font-medium justify-center">
+    <div
+      className={`bg-dark-700 absolute top-0 bottom-0 left-0 flex-col justify-between h-screen px-3 sm:px-6 py-8 pb-20 text-lg shadow-lg sm:flex z-10 sm:sticky  ${
+        showNavbar ? " flex" : " hidden"
+      }`}
+    >
+      <div className="flex items-center justify-center space-x-2 font-medium ">
         <Link href="/">
           <a>
-            <SiTwitter className="text-blue-600 cursor-pointer " size="28" />
+            <SiTwitter
+              className="text-blue-600 cursor-pointer "
+              size="28"
+              onClick={() => layoutDispatch({ type: TOGGLE_NAVBAR })}
+            />
             {/* <span>Twitter</span> */}
           </a>
         </Link>
       </div>
       <div className="flex flex-col space-y-5 ">
-        <div className="flex space-x-2 items-center cursor-pointer hover:bg-blue-light p-1 rounded-lg ">
+        <div className="navItem">
           <IoMdHome size="24" />
           <span className="hidden lg:block">Home</span>
         </div>
-        <div className="flex space-x-2 items-center cursor-pointer hover:bg-blue-light p-1 rounded-lg ">
+        <div className="navItem">
           <BsBookmark size="24" />
           <span className="hidden lg:block">Saved</span>
         </div>
         {user && (
           <div
-            className="flex space-x-2 items-center cursor-pointer hover:bg-blue-light p-1 rounded-lg "
+            className="navItem "
             onClick={() => router.push(`/user/${user._id}`)}
           >
             <AiOutlineUser size="24" />
             <span className="hidden lg:block">Profile</span>
           </div>
         )}
-        <div className="flex space-x-2 items-center cursor-pointer hover:bg-blue-light p-1 rounded-lg ">
+        <div className="navItem">
           <MdExplore size="24" />
           <span className="hidden lg:block">Explore</span>
         </div>
-        <div className="flex space-x-2 items-center cursor-pointer hover:bg-blue-light p-1 rounded-lg">
+        <div className="navItem">
           <MdNotifications size="24" />
           <span className="hidden lg:block">Notifications</span>
         </div>
         {user && (
-          <div
-            className="flex space-x-2 items-center text-red-600 cursor-pointer hover:bg-blue-light p-1 rounded-lg"
-            onClick={logout}
-          >
+          <div className="navItem" onClick={logout}>
             <IoMdLogOut size="24" />
             <span className="hidden lg:block">Log out</span>
           </div>
         )}
-        <div className="flex space-x-2 items-center cursor-pointer hover:bg-blue-400">
+        <div className="flex items-center justify-center space-x-2 cursor-pointer sm:justify-start hover:bg-blue-400">
           <MdMoreHoriz size="24" />
           <span className="hidden lg:block">More</span>
         </div>
       </div>
       <button
-        className=" text-white tracking-wider text-lg px-3 py-1 rounded-sm"
+        className="px-3 py-1 text-lg tracking-wider text-white rounded-sm "
         onClick={() => router.push("/")}
       >
         {user ? (
-          "Tweet"
+          "Tw"
         ) : (
           <SiTwitter className="text-white cursor-pointer " size="28" />
         )}

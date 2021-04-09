@@ -11,7 +11,7 @@ import { useAuthDispatch } from "../context/auth.context";
 import { AUTH_SUCCESS } from "../context/types";
 
 import Input from "./Input";
-import { loginSchema } from "../../lib/schemaValidation";
+import { loginSchema } from "lib/schemaValidation";
 
 // interface loginData {
 //   email?: string;
@@ -73,10 +73,10 @@ const Login: FunctionComponent<{
         onSubmit={handleSubmit(handleClick)}
       >
         <Input
-          label="Username"
+          label="Email"
           type="text"
-          name="username"
-          error={errors.username}
+          name="email"
+          error={errors.email}
           register={register}
         />
         <Input
@@ -106,3 +106,5 @@ const Login: FunctionComponent<{
   );
 };
 export default Login;
+
+// 7,6mb tra
