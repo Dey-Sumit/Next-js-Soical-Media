@@ -1,5 +1,5 @@
 import mongoose, { Document } from "mongoose";
-import { Post } from "../lib/types.model";
+import { Post } from "lib/types.model";
 
 const Schema = mongoose.Schema;
 

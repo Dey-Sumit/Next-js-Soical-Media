@@ -1,8 +1,8 @@
 // import { NextApiHandler, NextApiResponse } from "next";
 // import nextConnect from "next-connect";
-// import { ExtendedNextApiRequest } from "../../../../../lib/types.api";
-// import { all } from "../../../../../middlewares";
-// import Post from "../../../../../models/Post";
+// import { ExtendedNextApiRequest } from "../lib/types.api";
+// import { all } from "../middlewares";
+// import Post from "../models/Post";
 
 // const handler = nextConnect();
 // handler.use(all);

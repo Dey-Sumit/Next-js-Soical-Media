@@ -1,15 +1,14 @@
 import axios from "axios";
-import { ChangeEvent, FunctionComponent, useEffect, useState } from "react";
+import { ChangeEvent, FunctionComponent, useState } from "react";
 import { mutate } from "swr";
 import { useAuthState } from "../context/auth.context";
 import { MdCancel } from "react-icons/md";
-import { useForm } from "react-hook-form";
 import { BiImage } from "react-icons/bi";
 // import { WithContext as ReactTags } from "react-tag-input";
 
 const CreateTweet: FunctionComponent<{}> = () => {
   const [picture, setPicture] = useState("");
-  const [tags, setTags] = useState<string>([]);
+  const [tags, setTags] = useState<string[]>([]);
   const [tweet, setTweet] = useState("");
   const ENDPOINT = "/api/posts";
 
@@ -25,7 +24,8 @@ const CreateTweet: FunctionComponent<{}> = () => {
     if (!tweet) return;
     const formData = new FormData();
     formData.append("content", tweet);
-    if (tags.length > 0) formData.append("tags", tags.join(",").replaceAll("#",""));
+    if (tags.length > 0)
+      formData.append("tags", tags.join(",").replaceAll("#", ""));
     // if (data.attachment[0]) formData.append("attachment", data.attachment[0]);
 
     await axios(ENDPOINT, {

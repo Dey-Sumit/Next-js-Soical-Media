@@ -1,9 +1,9 @@
 import { NextApiResponse } from "next";
 import nc from "next-connect";
-import extractUser from "../../../../lib/extractUser";
-import { loginSchema } from "../../../../lib/schemaValidation";
-import { ExtendedNextApiRequest } from "../../../../lib/types.api";
-import { all, passport, schemaValidate } from "../../../../middlewares";
+import extractUser from "lib/extractUser";
+import { loginSchema } from "lib/schemaValidation";
+import { ExtendedNextApiRequest } from "lib/types.api";
+import { all, passport, schemaValidate } from "middlewares";
 
 const handler = nc();
 

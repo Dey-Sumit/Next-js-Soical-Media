@@ -1,9 +1,9 @@
 import { NextApiResponse } from "next";
 import nc from "next-connect";
 // use vs code tricks for path
-import { ExtendedNextApiRequest } from "../../../../../lib/types.api";
-import { all } from "../../../../../middlewares";
-import Tag from "../../../../../models/Tag";
+import { ExtendedNextApiRequest } from "../lib/types.api";
+import { all } from "../middlewares";
+import Tag from "../models/Tag";
 
 const handler = nc();
 

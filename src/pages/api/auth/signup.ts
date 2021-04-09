@@ -1,14 +1,14 @@
 import { NextApiResponse } from "next";
 import nextConnect from "next-connect";
 import isEmail from "validator/lib/isEmail";
-import extractUser from "../../../../lib/extractUser";
+import extractUser from "lib/extractUser";
 
 //TODO uninstall validator lib
-import { registrationSchema } from "../../../../lib/schemaValidation";
-import { ExtendedNextApiRequest } from "../../../../lib/types.api";
+import { registrationSchema } from "lib/schemaValidation";
+import { ExtendedNextApiRequest } from "lib/types.api";
 
-import { all, schemaValidate } from "../../../../middlewares";
-import User from "../../../../models/User";
+import { all, schemaValidate } from "middlewares";
+import User from "models/User";
 
 //? Ref : https://www.youtube.com/watch?v=ZG7sLbI8kL8&t=1163s | Bruno A.
 

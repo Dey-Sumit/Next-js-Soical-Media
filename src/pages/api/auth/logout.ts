@@ -1,7 +1,7 @@
 import { NextApiResponse } from "next";
 import nc from "next-connect";
-import { ExtendedNextApiRequest } from "../../../../lib/types.api";
-import { all } from "../../../../middlewares";
+import { ExtendedNextApiRequest } from "lib/types.api";
+import { all } from "middlewares";
 
 const handler = nc();
 

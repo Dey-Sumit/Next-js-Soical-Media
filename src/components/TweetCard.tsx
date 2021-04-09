@@ -63,10 +63,8 @@ const TweetCard: FunctionComponent<{ tweet: Post }> = ({
   };
 
   const handleTags = (e, tag: string) => {
-    console.log(e);
 
     e.stopPropagation();
-    console.log(`tags/${tag}`);
 
     push(`/tags/${tag}`);
   };

@@ -2,66 +2,14 @@ import { NextApiResponse } from "next";
 import nextConnect from "next-connect";
 import { v2 as cloudinary } from "cloudinary";
 
-import { ExtendedNextApiRequest } from "../../../../../lib/types.api";
-import { all } from "../../../../../middlewares";
-import User from "../../../../../models/User";
-import fileUpload from "@/middlewares/fileUpload";
-// @ route GET api/posts/:id
-// @ desc get  post by id
-// @ access private
+import { ExtendedNextApiRequest } from "lib/types.api";
+import { all } from "middlewares";
+import User from "models/User";
 
-import path from "path";
-import multer from "multer";
-import uploadMulter from "@/middlewares/fileUpload";
-// import { v2 as cloudinary } from "cloudinary";
-
-// cloudinary configuration
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
-const storage = multer.diskStorage({
-  destination(req, file, cb) {
-    cb(null, "/tmp");
-  },
-  filename(req, file, cb) {
-    cb(
-      null,
-      `${file.filename}-${Date.now()}${path.extname(file.originalname)}`
-    );
-  },
-});
-
-const upload = multer({
-  storage,
-  fileFilter: (req, file, cb) => {
-    checkFileType(file, cb);
-  },
-});
-
-// validation
-const checkFileType = (
-  file: Express.Multer.File,
-  cb: multer.FileFilterCallback
-) => {
-  const fileTypes = /jpg|jpeg|png/;
-
-  const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
-
-  const mimetype = fileTypes.test(file.mimetype);
-
-  if (extname && mimetype) {
-    return cb(null, true);
-  } else {
-    cb(new Error("Invalid File,accepts only images"));
-  }
-};
+import uploadMulter from "middlewares/fileUpload";
 
 const handler = nextConnect();
 handler.use(all);
-// handler.use(upload.single("profilePicture"));
 handler.use(uploadMulter().single("profilePicture"));
 handler
   // returns user by id
