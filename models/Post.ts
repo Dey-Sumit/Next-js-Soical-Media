@@ -1,5 +1,7 @@
 import mongoose, { Document } from "mongoose";
 import { Post } from "lib/types";
+import User from "./User";
+import Tag from "./Tag";
 
 const Schema = mongoose.Schema;
 
@@ -17,17 +19,17 @@ const PostSchema = new Schema(
     attachmentURL: {
       type: String,
     },
-    parentPost: {
-      type: Schema.Types.ObjectId,
-      ref: "Post",
-      default: null, // null means no parent post
-    },
+    // parentPost: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: "Post",
+    //   default: null, // null means no parent post
+    // },
     // array of user objects which only holds userid
     likes: [
       {
         user: {
           type: Schema.Types.ObjectId,
-          ref: "User",
+          ref: User,
         },
         // likes: [{ type: Schema.Types.ObjectId, ref: 'User' }],
         _id: false, //else mongoose will automatically add id; which is unnecessary
@@ -37,7 +39,7 @@ const PostSchema = new Schema(
       {
         user: {
           type: Schema.Types.ObjectId,
-          ref: "User",
+          ref: User,
         },
         content: {
           type: String,
@@ -51,7 +53,7 @@ const PostSchema = new Schema(
     ],
     tags: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "Tag",
       },
     ],

@@ -1,29 +1,30 @@
 import TweetCard from "../components/TweetCard";
-import CreateComment from "../components/CreateComment";
 import Trends from "../components/Trends";
 import { useRouter } from "next/router";
 // import { useAuthState } from "../context/auth.context";
 import axios from "axios";
 import useSWR from "swr";
-import { Post } from "lib/types";
+import { FPaginatedPosts, FPost, Post } from "lib/types";
 // import { useEffect } from "react";
 import Head from "next/head";
 import { GetServerSidePropsContext } from "next";
 import React from "react";
-import CreateTweet from "../components/CreateTweet";
+import CreateTweet from "components/CreateTweet";
 import People from "components/People";
 import Loader from "components/Loader";
-
+// TODO errir
 export default function Home({ user }) {
   const { push } = useRouter();
 
-  const { data }: { data?: { posts: Post[] } } = useSWR("/api/posts");
+  const { data }: { data?: { posts: FPaginatedPosts[] } } = useSWR(
+    "/api/posts"
+  );
 
   return (
     <div className="grid grid-cols-8 gap-x-8 ">
       {/* <div className="col-span-2">Sidebar</div> */}
       <Head>
-        <title>Twitter Clone</title>
+        <title>Twitty</title>
       </Head>
       <div className="col-span-8 md:col-span-5">
         {user ? (

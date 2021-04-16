@@ -3,7 +3,7 @@ import { ChangeEvent, FunctionComponent, useState } from "react";
 import { mutate } from "swr";
 import { useAuthState } from "../context/auth.context";
 import { MdCancel } from "react-icons/md";
-import { BiImage } from "react-icons/bi";
+import { BiImageAdd } from "react-icons/bi";
 // import { WithContext as ReactTags } from "react-tag-input";
 
 const CreateTweet: FunctionComponent<{}> = () => {
@@ -24,6 +24,8 @@ const CreateTweet: FunctionComponent<{}> = () => {
     if (!tweet) return;
     const formData = new FormData();
     formData.append("content", tweet);
+    console.log({ tags });
+
     if (tags.length > 0)
       formData.append("tags", tags.join(",").replaceAll("#", ""));
     // if (data.attachment[0]) formData.append("attachment", data.attachment[0]);
@@ -43,7 +45,7 @@ const CreateTweet: FunctionComponent<{}> = () => {
   const handleChange = (e) => {
     setTweet(e.target.value);
     const s = e.target.value;
-    setTags(s.match(/#[a-z]+/gi));
+    setTags(s.match(/#[a-z]+/gi) || []);
   };
   return (
     <div className="flex p-2 space-x-2">
@@ -64,7 +66,7 @@ const CreateTweet: FunctionComponent<{}> = () => {
           >
             <textarea
               // ref={register}
-              className="w-full h-24 p-2 bg-transparent  rounded-md resize-none focus:outline-none"
+              className="w-full h-24 p-2 bg-transparent rounded-md resize-none focus:outline-none"
               placeholder={`Hey ${user?.username}, what's going on?`}
               name="text"
               value={tweet}
@@ -72,7 +74,7 @@ const CreateTweet: FunctionComponent<{}> = () => {
             />
             <div className="my-1">
               {tags?.map((tag, i) => (
-                <span key={i} className="bg-blue-500 mx-1 p-1 rounded-sm">
+                <span key={i} className="p-1 mx-1 bg-blue-500 rounded-sm">
                   {tag}
                 </span>
               ))}
@@ -94,7 +96,7 @@ const CreateTweet: FunctionComponent<{}> = () => {
           <div className="flex p-1 ">
             <div>
               <label htmlFor="file-input">
-                <BiImage className="w-10 h-10 text-blue-700 cursor-pointer " />
+                <BiImageAdd className="w-10 h-10 text-blue-600 cursor-pointer " />
               </label>
               <input
                 id="file-input"
@@ -105,7 +107,7 @@ const CreateTweet: FunctionComponent<{}> = () => {
               />
             </div>
             <button
-              className="px-4 py-1 ml-auto font-bold tracking-wide bg-blue-700 rounded-md focus:outline-none"
+              className="px-4 py-1 ml-auto text-lg font-bold bg-blue-700 rounded-full focus:outline-none"
               type="submit"
             >
               Tweet

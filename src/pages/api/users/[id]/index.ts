@@ -19,7 +19,7 @@ handler
       const user = await User.findById(id);
       if (!user) return res.status(404).json({ msg: "User not found" });
 
-      return res.json({ user });
+      return res.json(user);
     } catch (error) {
       if (error.kind === "ObjectId")
         return res.status(404).json({ msg: "User not found" });
@@ -62,7 +62,7 @@ handler
 
       const user = await oldUser.save(); // TODO pass options if needed for updated doc
 
-      res.status(200).json({ user });
+      res.status(200).json(user);
     } catch (error) {
       console.log(error.message);
       return res.status(500).json({ msg: "server error :(" });

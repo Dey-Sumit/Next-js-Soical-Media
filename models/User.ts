@@ -50,6 +50,12 @@ const UserSchema = new Schema<UserDocument>(
         ref: "User",
       },
     ],
+    posts: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Post",
+      },
+    ],
   },
   {
     timestamps: true,
@@ -70,6 +76,9 @@ UserSchema.virtual("noOfFollowers").get(function (this: UserDocument) {
 });
 UserSchema.virtual("noOfFollowing").get(function (this: UserDocument) {
   return this.following.length;
+});
+UserSchema.virtual("noOfPosts").get(function (this: UserDocument) {
+  return this.posts.length;
 });
 
 // methods

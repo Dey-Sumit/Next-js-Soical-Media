@@ -2,7 +2,7 @@ import { NextApiResponse } from "next";
 import nc from "next-connect";
 import { ExtendedNextApiRequest } from "lib/types.api";
 import { all } from "middlewares";
-import Tag from "models/Tag";
+import User from "models/User";
 
 const handler = nc();
 
@@ -11,10 +11,10 @@ handler.use(all);
 // returns top 5 tags sorted by number of posts
 handler.get(async (req: ExtendedNextApiRequest, res: NextApiResponse) => {
   try {
-    const tags = await Tag.aggregate([
+    const users = await User.aggregate([
       {
         $project: {
-          length: { $size: "$posts" },
+          length: { $size: "$followers" },
           // posts: 1,
           name: 1,
         },
@@ -24,7 +24,7 @@ handler.get(async (req: ExtendedNextApiRequest, res: NextApiResponse) => {
     ]);
     // const tags = await Tag.find({}).sort({ totalPosts: -1 }).limit(5);
 
-    return res.status(200).json(tags);
+    return res.status(200).json(users);
   } catch (error) {
     console.log(error.message);
     return res.status(500).json({ message: error.message });

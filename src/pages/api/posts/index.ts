@@ -5,7 +5,7 @@ import { v2 as cloudinary } from "cloudinary";
 
 import { Post as IPost, Tag as ITag } from "lib/types";
 
-import { Post, Tag } from "models";
+import { Post, Tag, User } from "models";
 import { uploadMulter, all } from "middlewares";
 import { ExtendedNextApiRequest } from "lib/types.api";
 
@@ -39,11 +39,11 @@ handler
           .limit(pageSize)
           .skip(pageSize * (pageNumber - 1))
           .populate("user")
-          .populate("tags", "name")
+          .populate("tags")
           .sort("-createdAt");
         return res.json({
           posts,
-          page,
+          page: pageNumber,
           pages: Math.ceil(count / pageSize),
         });
       } catch (error) {
@@ -65,7 +65,7 @@ handler
       .sort("-createdAt");
     return res.json({
       posts,
-      page,
+      page: pageNumber,
       pages: Math.ceil(count / pageSize),
     });
   })
@@ -73,7 +73,8 @@ handler
   .post(async (req: ExtendedNextApiRequest, res: NextApiResponse) => {
     try {
       const { content, tags }: { content: string; tags?: string } = req.body;
-      const tagsArray = [...new Set(tags.split(","))]; // convert to an array and remove duplicates
+
+      const tagsArray = tags && [...new Set(tags.split(","))]; // convert to an array and remove duplicates if the tags are present
 
       if (!req.user) return res.status(401).json({ msg: "unauthorized" });
 
@@ -94,49 +95,58 @@ handler
       const postDoc: IPost = {
         user: req.user._id,
         content: req.body.content,
-        attachmentURL: attachmentURL,
+        attachmentURL,
       };
 
-      const post = await Post.create(postDoc);
-
-      let updated: IPost;
-
+      let post = await Post.create(postDoc);
+      await User.findByIdAndUpdate(
+        req.user._id,
+        {
+          $push: {
+            posts: post._id,
+          },
+        },
+        {
+          new: true,
+        }
+      );
       // add tag to post
       //Promise.all = stackoverflow.com/questions/40140149/use-async-await-with-array-map
 
       // tag0 (O), tag2(N)
-      await Promise.all(
-        tagsArray.map(async (tagName) => {
-          try {
-            // check if the tag is already created
-            const tag = await Tag.findOne({
-              name: tagName,
-            });
+      if (tags) {
+        await Promise.all(
+          tagsArray.map(async (tagName) => {
+            try {
+              // check if the tag is already created
+              const tag = await Tag.findOne({
+                name: tagName,
+              });
 
-            //stackoverflow.com/questions/11963684/how-to-push-an-array-of-objects-into-an-array-in-mongoose-with-one-call
-            // if created ->find the post and add the tag
-            if (tag) {
-              updated = await addTagToPost(post, tag);
+              //stackoverflow.com/questions/11963684/how-to-push-an-array-of-objects-into-an-array-in-mongoose-with-one-call
+              // if created ->find the post and add the tag
+              if (tag) {
+                post = await addTagToPost(post, tag);
 
-              // add the post under the tag
-              await addPostToTag(tag, post);
-            } else {
-              //  if the tag is new then create a new tag
-              const newTag = await Tag.create({ name: tagName });
+                // add the post under the tag
+                await addPostToTag(tag, post);
+              } else {
+                //  if the tag is new then create a new tag
+                const newTag = await Tag.create({ name: tagName });
 
-              // add the tag to the post
-              updated = await addTagToPost(post, newTag);
+                // add the tag to the post
+                post = await addTagToPost(post, newTag);
 
-              // add the post under the tag
-              await addPostToTag(newTag, post);
+                // add the post under the tag
+                await addPostToTag(newTag, post);
+              }
+            } catch (error) {
+              console.log(error.message);
             }
-
-            return res.status(200).json({ post: updated });
-          } catch (error) {
-            console.log(error.message);
-          }
-        })
-      );
+          })
+        );
+      }
+      return res.status(200).json(post);
     } catch (error) {
       console.log(error);
 

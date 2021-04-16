@@ -9,7 +9,7 @@ const People = () => {
 
   return (
     <div className="flex flex-col p-2 space-y-3 divide-y shadow-sm rounded-2xl bg-dark-600 divide-dark-500">
-      <h3 className="text-lg font-medium">People you may like</h3>
+      <h3 className="text-xl font-semibold">People you may like</h3>
       {/* {data?.users.map((tag) => (
         <div
           className="flex flex-col pt-2 cursor-pointer"

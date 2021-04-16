@@ -28,7 +28,6 @@ const Navbar = () => {
           q: e.target.value,
         },
       });
-      console.log(data);
       setSearchResults(data?.users);
     } catch (error) {
       console.log(error.message);
@@ -67,7 +66,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="sticky top-0 left-0 flex items-center justify-between p-3 space-x-4 bg-dark-600 text-dark-100 md:px-10 lg:px-16">
+    <div className="sticky top-0 left-0 z-10 flex items-center justify-between p-3 space-x-4 bg-dark-600 text-dark-100 md:px-10 lg:px-16">
       <SiTwitter
         className="text-blue-600 cursor-pointer sm:hidden"
         size="24"

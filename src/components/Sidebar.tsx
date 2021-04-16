@@ -1,4 +1,4 @@
-import { IoMdHome, IoMdLogOut, IoMdShareAlt } from "react-icons/io";
+import { IoMdHome, IoMdLogOut } from "react-icons/io";
 import { MdExplore, MdMoreHoriz, MdNotifications } from "react-icons/md";
 import { SiTwitter } from "react-icons/si";
 import Link from "next/link";
@@ -9,6 +9,22 @@ import { LOG_OUT, TOGGLE_NAVBAR } from "../context/types";
 import { AiOutlineUser } from "react-icons/ai";
 import { BsBookmark } from "react-icons/bs";
 import { useLayoutDispatch, useLayoutState } from "src/context/layout.context";
+import { FunctionComponent, MouseEventHandler } from "react";
+import { IconType } from "react-icons";
+
+const SidebarItem: FunctionComponent<{
+  Icon: IconType;
+  text: string;
+  handler?: MouseEventHandler<HTMLDivElement>;
+}> = ({ Icon, text, handler }) => {
+  return (
+    <div className="navItem" onClick={handler}>
+      <Icon size="24" />
+      <span className="hidden lg:block">{text}</span>
+    </div>
+  );
+};
+
 const Sidebar = () => {
   const dispatch = useAuthDispatch();
   const layoutDispatch = useLayoutDispatch();
@@ -18,14 +34,13 @@ const Sidebar = () => {
   const router = useRouter();
 
   const logout = async () => {
-    //TODO use swr
-    await axios.post("/api/auth/logout");
     router.push("/auth");
-    dispatch({ type: LOG_OUT }); // ?NOT NEEDED I guess
+    await axios.post("/api/auth/logout");
+    // dispatch({ type: LOG_OUT }); // ?NOT NEEDED I guess
   };
   return (
     <div
-      className={`bg-dark-700 absolute top-0 bottom-0 left-0 flex-col justify-between h-screen px-3 sm:px-6 py-8 pb-20 text-lg shadow-lg sm:flex z-10 sm:sticky  ${
+      className={`bg-dark-700 absolute top-0 bottom-0 left-0 flex-col justify-between h-screen px-3 sm:px-6 py-8 pb-20 text-lg shadow-lg sm:flex z-10 sm:sticky sm:w-40  ${
         showNavbar ? " flex" : " hidden"
       }`}
     >
@@ -37,57 +52,39 @@ const Sidebar = () => {
               size="28"
               onClick={() => layoutDispatch({ type: TOGGLE_NAVBAR })}
             />
-            {/* <span>Twitter</span> */}
           </a>
         </Link>
       </div>
-      <div className="flex flex-col space-y-5 ">
-        <div className="navItem">
-          <IoMdHome size="24" />
-          <span className="hidden lg:block">Home</span>
-        </div>
-        <div className="navItem">
-          <BsBookmark size="24" />
-          <span className="hidden lg:block">Saved</span>
-        </div>
-        {user && (
-          <div
-            className="navItem "
-            onClick={() => router.push(`/user/${user._id}`)}
-          >
-            <AiOutlineUser size="24" />
-            <span className="hidden lg:block">Profile</span>
-          </div>
-        )}
-        <div className="navItem">
-          <MdExplore size="24" />
-          <span className="hidden lg:block">Explore</span>
-        </div>
-        <div className="navItem">
-          <MdNotifications size="24" />
-          <span className="hidden lg:block">Notifications</span>
-        </div>
-        {user && (
-          <div className="navItem" onClick={logout}>
-            <IoMdLogOut size="24" />
-            <span className="hidden lg:block">Log out</span>
-          </div>
-        )}
-        <div className="flex items-center justify-center space-x-2 cursor-pointer sm:justify-start hover:bg-blue-400">
-          <MdMoreHoriz size="24" />
-          <span className="hidden lg:block">More</span>
-        </div>
-      </div>
-      <button
-        className="px-3 py-1 text-lg tracking-wider text-white rounded-sm "
-        onClick={() => router.push("/")}
+      <div
+        className="flex flex-col space-y-5 "
+        onClick={(e) => {
+          e.stopPropagation();
+          layoutDispatch({ type: TOGGLE_NAVBAR });
+        }}
       >
-        {user ? (
-          "Tw"
-        ) : (
-          <SiTwitter className="text-white cursor-pointer " size="28" />
+        <SidebarItem
+          Icon={IoMdHome}
+          text="Home"
+          handler={() => router.push("/")}
+        />
+        {/* <SidebarItem Icon={BsBookmark} text="Saved" /> */}
+
+        {user && (
+          <SidebarItem
+            Icon={AiOutlineUser}
+            text="Profile"
+            handler={() => router.push(`/user/${user._id}`)}
+          />
         )}
-      </button>
+        <SidebarItem Icon={MdExplore} text="Explore" />
+        {/* <SidebarItem Icon={MdNotifications} text="Notifications" /> */}
+
+        {user && (
+          <SidebarItem Icon={IoMdLogOut} text="LogOut" handler={logout} />
+        )}
+        <SidebarItem Icon={MdMoreHoriz} text="More" />
+      </div>
+      <div></div>
     </div>
   );
 };

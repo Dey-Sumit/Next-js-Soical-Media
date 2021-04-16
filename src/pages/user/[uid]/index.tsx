@@ -6,55 +6,51 @@ import { useEffect, useState } from "react";
 import { BsLockFill } from "react-icons/bs";
 import { MdDelete, MdSettings } from "react-icons/md";
 import useSWR, { mutate } from "swr";
-import TweetCard from "../../../components/TweetCard";
-import { useAuthState } from "../../../context/auth.context";
-import { FPost, FUser } from "lib/types";
+import TweetCard from "components/TweetCard";
+import { useAuthState } from "context/auth.context";
+import { FPaginatedPosts, FUser } from "lib/types";
 import Head from "next/head";
 import Loader from "components/Loader";
+
 const profile = ({ sameUser }) => {
   const { push, query } = useRouter();
   const { user: authUser } = useAuthState();
-  const { data, error }: { data?: { user: FUser }; error?: any } = useSWR(
+  const { data: profileData, error } = useSWR<FUser>(
     `/api/users/${query?.uid}`
   );
-  const {
-    data: posts,
-    error: postsError,
-  }: { data?: { posts: FPost[] }; error?: any } = useSWR(
+  const { data: paginatedPosts, error: postsError } = useSWR<FPaginatedPosts>(
     `/api/posts?uid=${query?.uid}`
   );
-  const profileData = data?.user;
-  const [isFollowing, setIsFollowing] = useState(
-    profileData?.followers.includes(authUser?._id)
-  );
+  // const {} = profileData ;
+  // const { data: paginatedPosts, error: postsError } = useSWR<FPaginatedPosts>(
+  //   `/api/posts?uid=${query?.uid}`
+  // );
+  // const { data: paginatedPosts, error: postsError } = usSWR<FPaginatedPosts>(
+  //   `/api/posts?uid=${query?.uid}`
+  // );
+  const [isFollowing, setIsFollowing] = useState<boolean>();
 
-  // useEffect(() => {
-  //   if (!authUser) {
-  //     push("/auth");
-  //   }
-  // }, [authUser]);
-  // console.log(query.uid);
-  //TODO refactor these function , make one 👇
-  const handleFollow = async () => {
-    setIsFollowing(true);
-    await axios.put(`api/users/${profileData._id}/follow`); //? make the request
-    mutate(`api/users/${profileData._id}/follow`); //? refetch the data and compare if everything is fine or anything goes wrong in the previous request
-    mutate(`/api/users/${query?.uid}`); // update the profile data
-  };
-  const handleUnFollow = async () => {
-    setIsFollowing(false);
-    await axios.put(`api/users/${profileData._id}/unfollow`); //? make the request
-    mutate(`api/users/${profileData._id}/unfollow`); //? refetch the data and compare if everything is fine or anything goes wrong in the previous request
+  useEffect(() => {
+    const temp = authUser && profileData?.followers.includes(authUser._id);
+
+    setIsFollowing(temp);
+  }, [profileData, authUser]);
+
+  const handleFollow = async (type: "follow" | "unfollow") => {
+    const ENDPOINT = `/api/users/${profileData._id}/${type}`;
+    setIsFollowing((value) => !value);
+    await axios.put(ENDPOINT); //? make the request
+    mutate(ENDPOINT); //? refetch the data and compare if everything is fine or anything goes wrong in the previous request
     mutate(`/api/users/${query?.uid}`); // update the profile data
   };
 
   // TODO looks like you don't have a profile :) show funny image ; don't redirect
   return (
-    <div className="grid grid-cols-8 gap-8 ">
+    <div className="grid gap-8 md:grid-cols-8 ">
       <Head>
         <title>{profileData ? profileData.username : "Profile"}</title>
       </Head>
-      <div className="col-span-8 md:col-span-3">
+      <div className="col-span-8 lg:col-span-3">
         {/* profile */}
         <div className="flex flex-col items-center p-3 space-y-2 rounded-sm shadow-md bg-dark-600">
           <img
@@ -62,37 +58,36 @@ const profile = ({ sameUser }) => {
             alt=""
             className="rounded-full w-28 h-28"
           />
-          <h3 className="text-lg font-medium">{profileData?.name}</h3>
+          <h3 className="text-lg font-semibold">{profileData?.name}</h3>
           <h4>@{profileData?.username}</h4>
-          <h5>Kolkata, India</h5>
           <div className="flex space-x-6 divide-x divide-dark-500">
             <div className="flex flex-col items-center pl-4">
-              <span>Tweets</span>
-              <span>45</span>
+              <span className="text-gray-400">Tweets</span>
+              <span>{profileData?.noOfPosts}</span>
             </div>
             <div className="flex flex-col items-center pl-4">
-              <span>Followers</span>
-              <span>{profileData?.followers.length}</span>
+              <span className="text-gray-400">Followers</span>
+              <span>{profileData?.noOfFollowers}</span>
             </div>
             <div className="flex flex-col items-center pl-4">
-              <span>Following</span>
-              <span>{profileData?.following.length}</span>
+              <span className="text-gray-400">Following</span>
+              <span>{profileData?.noOfFollowing}</span>
             </div>
           </div>
-          {!data && <Loader />}
+          {!profileData && <Loader />}
           {!sameUser && (
             <>
               {!isFollowing ? (
                 <button
                   className="p-1 space-x-2 bg-blue-600 border border-blue-600 rounded-sm cursor-pointer hover:bg-transparent hover:text-blue-600"
-                  onClick={handleFollow}
+                  onClick={() => handleFollow("follow")}
                 >
                   Follow
                 </button>
               ) : (
                 <button
                   className="p-1 space-x-2 bg-blue-500 border border-blue-500 rounded-sm cursor-pointer hover:bg-transparent hover:text-blue-500"
-                  onClick={handleUnFollow}
+                  onClick={() => handleFollow("unfollow")}
                 >
                   UnFollow
                 </button>
@@ -121,17 +116,20 @@ const profile = ({ sameUser }) => {
         )}
       </div>
       {/* <div className="col-span-2">Sidebar</div> */}
-      <div className="col-span-8 rounded-sm md:col-span-5 bg-dark-500">
+      <div className="col-span-8 rounded-sm lg:col-span-5 bg-dark-500">
         <div className="flex px-4 py-2 space-x-4 shadow-lg ">
           <span className="text-blue-600">Tweets</span>
-          <span>Followers</span>
-          <span>Followings</span>
+          <span className="cursor-pointer">Followers</span>
+          <span className="cursor-pointer">Followings</span>
         </div>
         <div className="p-2">
-          {!posts && <Loader />}
-          {posts?.posts.map((tweet) => (
-            <TweetCard tweet={tweet} key={tweet._id} />
-          ))}
+          {!paginatedPosts ? (
+            <Loader />
+          ) : (
+            paginatedPosts?.posts.map((tweet) => (
+              <TweetCard tweet={tweet} key={tweet._id} />
+            ))
+          )}
         </div>
       </div>
     </div>

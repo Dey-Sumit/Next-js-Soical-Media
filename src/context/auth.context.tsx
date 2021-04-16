@@ -1,18 +1,18 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useReducer } from "react";
-import { User } from "lib/types";
+import { FUser } from "lib/types";
 import { AUTH_FAIL, AUTH_SUCCESS, LOG_OUT } from "./types";
 // import { User } from '../types'
 
 interface State {
   //   authenticated: boolean;
-  user: User | undefined;
+  user: FUser | undefined;
   loading?: boolean;
 }
 
 interface Action {
   type: string;
-  payload: any;
+  payload?: any;
 }
 
 // create two context; one for the state and one for the dispatchs
@@ -59,15 +59,16 @@ export const AuthProvider = ({ children }) => {
       try {
         // use swr
         const res = await axios.get("/api/auth/me");
-        // dispatch("LOGIN", res.data);
-        // console.log(res.data);
 
         dispatch({
           type: AUTH_SUCCESS,
           payload: res.data.user,
         });
       } catch (error) {
-        console.log(error);
+        console.log(error.message);
+        dispatch({
+          type: AUTH_FAIL,
+        });
       }
     }
     loadUser();

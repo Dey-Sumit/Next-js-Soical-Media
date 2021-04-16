@@ -5,18 +5,19 @@ import { Tag } from "lib/types";
 const Trends = () => {
   const { push } = useRouter();
 
-  const { data }: { data?: { tags: Tag[] } } = useSWR("/api/tags");
+  const { data: tags } = useSWR<Tag[]>("/api/tags");
 
   return (
     <div className="flex flex-col p-2 space-y-3 divide-y shadow-sm rounded-2xl bg-dark-600 divide-dark-500">
-      <h3 className="text-lg font-medium">Trends For You</h3>
-      {data?.tags.map((tag) => (
+      <h3 className="text-xl font-semibold">Trends For You</h3>
+      {tags?.map((tag, i) => (
         <div
+          key={i}
           className="flex flex-col pt-2 cursor-pointer"
           onClick={() => push(`/tags/${tag.name.substring(1)}`)}
         >
           <span className="text-white">#{tag.name}</span>
-          <span>{data.tags.length} Tweets</span>
+          <span>{tag.length} Tweets</span>
         </div>
       ))}
     </div>

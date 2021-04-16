@@ -9,7 +9,7 @@ body {
 
 @layer components {
   .navItem {
-    @apply flex items-center justify-center p-1 space-x-2 rounded-lg cursor-pointer sm:justify-start hover:bg-blue-light;
+    @apply flex items-center justify-center px-3 py-2 space-x-2 rounded-full cursor-pointer hover:text-blue-600 sm:justify-start hover:bg-blue-light;
   }
 }
 

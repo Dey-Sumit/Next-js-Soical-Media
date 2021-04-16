@@ -1,8 +1,8 @@
 import axios from "axios";
 import { GetServerSidePropsContext, NextPage } from "next";
 import Head from "next/head";
-import Trends from "../../components/Trends";
-import TweetCard from "../../components/TweetCard";
+import Trends from "components/Trends";
+import TweetCard from "components/TweetCard";
 import { Post } from "../lib/types.model";
 interface IData {
   posts: Post[];

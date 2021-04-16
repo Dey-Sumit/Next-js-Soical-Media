@@ -34,7 +34,6 @@ POST MODEL
 - user (ref to User model , who post it)
 - vote up
 - vote down
--
 
 ## Mongo DB
 

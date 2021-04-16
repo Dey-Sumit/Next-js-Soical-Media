@@ -1,8 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import Login from "../components/Login";
-import Register from "../components/Register";
-import { useAuthState } from "../context/auth.context";
+import { Login, Register } from "components/index";
+import { useAuthState } from "context/auth.context";
 
 export default function Auth() {
   const router = useRouter();
@@ -21,7 +20,7 @@ export default function Auth() {
     <div className="grid h-screen grid-cols-8 text-white">
       {/* left part */}
       <div className="hidden col-span-3 p-4 bg-blue-700 md:grid place-items-center">
-        <h1 className="mb-5 text-xl font-semibold">
+        <h1 className="mb-5 text-3xl font-semibold">
           Tweety helps you connect and share with the people in your life.{" "}
         </h1>
         <img src="/image_3d.png" alt="" className="" />

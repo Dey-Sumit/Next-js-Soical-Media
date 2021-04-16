@@ -23,7 +23,7 @@ handler
         .populate("tags", "name");
 
       if (!post) return res.status(404).json({ msg: "Post not found" });
-      res.json({ post });
+      return res.status(200).json(post);
     } catch (error) {
       console.log(error.message);
 

@@ -13,21 +13,34 @@ export interface User {
   // virtual fields
   noOfFollowers: number;
   noOfFollowing: number;
+  posts: mongoose_id[];
+  noOfPosts: number;
 }
 
 export interface FUser extends Omit<User, "_id"> {
   _id: string;
 }
-export interface FPost extends Omit<Post, "_id"> {
+export interface FPost extends Omit<Post, "_id" | "user" | "likes" | "tags"> {
   _id: string;
+  user: FUser;
+  likes?: [
+    {
+      user: string;
+    }
+  ];
+  tags: FTag[];
+}
+export interface FTag extends Omit<Tag, "_id" | "posts"> {
+  _id: string;
+  posts: FPost[];
 }
 // frontend backend different interface
 export interface Post {
   _id?: mongoose_id;
   user: mongoose_id;
   content: string;
-  parentPost?: Post;
   attachmentURL?: string;
+  createdAt?: Date;
   likes?: [
     {
       user: mongoose.Types.ObjectId | string;
@@ -51,4 +64,11 @@ export interface Tag {
   _id?: mongoose.Types.ObjectId;
   name: string;
   posts: [Post];
+  length?: number;
+}
+
+export interface FPaginatedPosts {
+  posts: FPost[];
+  pages: number;
+  page: number;
 }

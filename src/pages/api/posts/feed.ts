@@ -29,7 +29,7 @@ handler.get(async (req: ExtendedNextApiRequest, res: NextApiResponse) => {
   //   .populate({ path: "user", select: "name username" })
   //   .sort("-createdAt");
 
-  res.status(200).json({ posts });
+  res.status(200).json(posts);
 });
 
 export default handler;

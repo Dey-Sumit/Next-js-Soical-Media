@@ -1,30 +1,26 @@
 import axios from "axios";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { BsImageFill } from "react-icons/bs";
 import useSWR, { mutate } from "swr";
-// import { BsLockFill } from "react-icons/bs";
-// import { MdDelete, MdSettings } from "react-icons/md";
-// import useSWR from "swr";
-import Input from "../../components/Input";
-import { useAuthState } from "../../context/auth.context";
-// import { User } from "../lib/types.model";
+
+import Input from "components/Input";
+import { useAuthState } from "context/auth.context";
+import { FUser } from "lib/types";
 
 const profile = () => {
-  const { push, query } = useRouter();
+  const { push } = useRouter();
   const { user: authUser } = useAuthState();
   const [picture, setPicture] = useState("");
 
   const { register, handleSubmit, errors } = useForm();
   const [isUpdating, setIsUpdating] = useState(false);
   const ENDPOINT = authUser && `/api/users/${authUser._id}`;
-  const { data: profileData } = useSWR(ENDPOINT);
-  console.log(profileData);
+  const { data: profileData } = useSWR<FUser>(ENDPOINT);
 
-  const onChangePicture = (e) => {
-    // console.log('picture: ', picture);
+  const onChangePicture = (e: any) => {
     setPicture(URL.createObjectURL(e.target.files[0]));
   };
 
@@ -52,13 +48,12 @@ const profile = () => {
     mutate(ENDPOINT);
 
     setIsUpdating(false);
-    console.log(profileData);
   };
-  useEffect(() => {
-    if (!authUser) {
-      push("/auth");
-    }
-  }, [authUser]);
+  // useEffect(() => {
+  //   if (!authUser) {
+  //     push("/auth");
+  //   }
+  // }, [authUser]);
 
   // useEffect(() => {
   //   setPicture(picture || profileData?.user.profilePicture);
@@ -72,9 +67,9 @@ const profile = () => {
   // TODO looks like you don't have a profile :) show funny image ; don't redirect
   return (
     <div className="grid grid-cols-8 gap-8 ">
-      <div className="col-span-12">
+      <div className="col-span-12 p-2">
         <form
-          className="flex flex-col w-6/12 mx-auto mt-5 space-y-3"
+          className="flex flex-col w-full mx-auto mt-5 space-y-3 md:w-6/12"
           onSubmit={handleSubmit(onSubmit)}
         >
           <h1 className="text-lg font-semibold ">Edit Profile</h1>
@@ -82,7 +77,7 @@ const profile = () => {
             <>
               <div className="relative">
                 <img
-                  src={picture || profileData?.user.profilePicture}
+                  src={picture || profileData?.profilePicture}
                   alt="profile picture"
                   className="w-40 h-40 mx-auto border rounded-full border-3 inset-1/2 "
                 />
@@ -108,20 +103,28 @@ const profile = () => {
                   className="hidden"
                 />
               </div>
-              <div className="flex space-x-3">
+              <div className="flex flex-col space-y-3 ">
                 <Input
                   register={register}
                   name="name"
                   label="Name"
-                  defaultValue={profileData?.user.name}
+                  defaultValue={profileData?.name}
                   placeholder="name"
+                  error={errors.name}
+                />
+                <Input
+                  register={register}
+                  name="bio"
+                  label="Bio"
+                  defaultValue={profileData?.bio}
+                  placeholder="bio"
                   error={errors.name}
                 />
                 <Input
                   register={register}
                   name="username"
                   label="Username"
-                  defaultValue={profileData?.user.username}
+                  defaultValue={profileData?.username}
                   placeholder="username"
                   error={errors.username}
                 />
@@ -147,17 +150,20 @@ const profile = () => {
 export default profile;
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  // const cookie = context.req.headers?.cookie;
-  // console.log("inside");
   try {
+    console.log("ex");
+
     const cookie = context.req.headers.cookie;
     if (!cookie) throw new Error("Missing auth token cookie");
 
     // it returns 401 if the user is not authenticated
     await axios.get("/api/auth/me", { headers: { cookie } });
+    console.log("alright");
 
     return { props: {} };
   } catch (error) {
+    console.log({ E: error.message });
+
     return {
       redirect: {
         destination: "/auth",

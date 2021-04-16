@@ -3,21 +3,29 @@ import { AiOutlineRetweet } from "react-icons/ai";
 import { FaCommentAlt, FaHeart } from "react-icons/fa";
 import { IoMdShareAlt } from "react-icons/io";
 import { FunctionComponent, useState } from "react";
-import { Post } from "lib/types";
+import { FPost } from "lib/types";
 import { useRouter } from "next/router";
 import axios from "axios";
-import { useAuthState } from "../context/auth.context";
-import timeSince from "../../lib/timeSince";
-import { useLayoutDispatch } from "../context/layout.context";
-import { SHOW_MODAL } from "../context/types";
+import { useAuthState } from "context/auth.context";
+import timeSince from "lib/timeSince";
+import { useLayoutDispatch } from "context/layout.context";
+import { SHOW_MODAL } from "context/types";
 import { MdDelete } from "react-icons/md";
 import { mutate } from "swr";
 // import Heart from "react-animated-heart";
 
-const TweetCard: FunctionComponent<{ tweet: Post }> = ({
+const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
   tweet: {
     content,
-    user: { _id: uid, name, username, profilePicture },
+    user: {
+      _id: uid,
+      name,
+      username,
+      profilePicture,
+      noOfFollowers,
+      noOfFollowing,
+      bio,
+    },
     likes,
     comments,
     attachmentURL,
@@ -28,6 +36,7 @@ const TweetCard: FunctionComponent<{ tweet: Post }> = ({
 }) => {
   const { user } = useAuthState();
   const dispatch = useLayoutDispatch();
+
   const extractedTags = tags.map((tag) => tag.name);
   const { push } = useRouter();
   const [likesCount, setLikesCount] = useState<number>(likes.length);
@@ -95,16 +104,13 @@ const TweetCard: FunctionComponent<{ tweet: Post }> = ({
               onClick={() => push(`/user/${uid}`)}
               className="w-10 h-10 rounded-full cursor-pointer"
             />
-            <p>
+            <p className="">
               {name} | @{username}
             </p>
-            <p>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugiat,
-              modi!
-            </p>
+            {bio && <p>{bio}</p>}
             <div className="flex p-1 space-x-2 ">
-              <span>Followers : 13</span>
-              <span>Followings : 56</span>
+              <span>Followers : {noOfFollowers}</span>
+              <span>Followings : {noOfFollowing}</span>
             </div>
           </div>
         )}
@@ -159,13 +165,13 @@ const TweetCard: FunctionComponent<{ tweet: Post }> = ({
             <FaHeart className={likedByMe ? "text-red-600" : ""} />
             <span>{likesCount}</span>
           </div>
-          <div className="flex items-center space-x-2 cursor-pointer">
+          {/* <div className="flex items-center space-x-2 cursor-pointer">
             <AiOutlineRetweet size={21} />
             <span>34</span>
-          </div>
-          <div className="flex items-center space-x-2 cursor-pointer">
+          </div> */}
+          {/* <div className="flex items-center space-x-2 cursor-pointer">
             <IoMdShareAlt size={22} />
-          </div>
+          </div> */}
           {user?._id == uid && (
             <MdDelete
               size={22}
