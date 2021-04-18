@@ -1,24 +1,20 @@
 import TweetCard from "../components/TweetCard";
 import Trends from "../components/Trends";
 import { useRouter } from "next/router";
-// import { useAuthState } from "../context/auth.context";
 import axios from "axios";
 import useSWR from "swr";
-import { FPaginatedPosts, FPost, Post } from "lib/types";
-// import { useEffect } from "react";
+import { FPaginatedPosts } from "lib/types";
 import Head from "next/head";
 import { GetServerSidePropsContext } from "next";
 import React from "react";
 import CreateTweet from "components/CreateTweet";
 import People from "components/People";
 import Loader from "components/Loader";
-// TODO errir
+// TODO error
 export default function Home({ user }) {
   const { push } = useRouter();
 
-  const { data }: { data?: { posts: FPaginatedPosts[] } } = useSWR(
-    "/api/posts"
-  );
+  const { data, error } = useSWR<FPaginatedPosts>("/api/posts");
 
   return (
     <div className="grid grid-cols-8 gap-x-8 ">
@@ -41,7 +37,9 @@ export default function Home({ user }) {
             </button>
           </div>
         )}
-        {!data && <Loader />}
+        {!error && !data && <Loader />}
+        {error && <span>Opps! Try again</span>}
+
         {data?.posts.map((tweet) => (
           <TweetCard tweet={tweet} key={tweet._id.toString()} />
         ))}

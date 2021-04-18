@@ -3,15 +3,15 @@ import { GetServerSidePropsContext, NextPage } from "next";
 import Head from "next/head";
 import Trends from "components/Trends";
 import TweetCard from "components/TweetCard";
-import { Post } from "../lib/types.model";
+import { FPost } from "lib/types";
 interface IData {
-  posts: Post[];
+  posts: FPost[];
   name: string;
 }
 const index: NextPage<{ data: IData }> = ({ data }) => {
-  console.log(data);
+  // console.log(data);
 
-  if (!data.posts) {
+  if (!data.posts.length) {
     return <h1>{`There are no posts under ${data.name}`}</h1>;
   }
   return (
@@ -21,7 +21,7 @@ const index: NextPage<{ data: IData }> = ({ data }) => {
         <title>{data.name || "Tweeter Clone"}</title>
       </Head>
       <div className="col-span-8 md:col-span-5">
-        <div className="flex p-2 justify-between">
+        <div className="flex justify-between p-2">
           <span>#{data.name}</span> <span> {data.posts.length} Tweets</span>{" "}
         </div>
         {data?.posts?.map((tweet) => (
@@ -46,21 +46,19 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     );
 
     posts = data.posts;
+    console.log(posts);
+
     if (!posts) {
-      posts = {
-        name: tag,
-      };
+      posts = [];
     }
     posts = JSON.parse(JSON.stringify(posts));
   } catch (error) {
-    posts = {
-      name: tag,
-    };
+    posts = [];
   }
 
   return {
     props: {
-      data: posts,
+      data: { posts, name: tag },
     },
   };
 };

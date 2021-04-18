@@ -124,9 +124,12 @@ const Navbar = () => {
           className="flex items-center p-2 space-x-3 rounded-md cursor-pointer hover:bg-dark-700"
           onClick={() => push(`/user/${user._id}`)}
         >
-          {<span className="hidden sm:block">Hey {user.name}!</span>}
+          {<span className="hidden sm:block">Hey {user.username}!</span>}
           <img
-            src="https://images.vexels.com/media/users/3/145908/preview2/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
+            src={
+              user?.profilePicture ||
+              "https://images.vexels.com/media/users/3/145908/preview2/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
+            }
             alt=""
             className="w-8 h-8 rounded-full "
           />

@@ -18,7 +18,7 @@ handler.get(async (req: ExtendedNextApiRequest, res: NextApiResponse) => {
 
     if (data.length == 0)
       return res.status(404).json({ msg: "Tag does not exist" });
-    return res.status(200).json({ data: data[0] });
+    return res.status(200).json(data[0]);
   } catch (error) {
     console.log(error.message);
     res.status(500).json({ msg: "Server Error" });

@@ -9,6 +9,7 @@ import useSWR, { mutate } from "swr";
 import Input from "components/Input";
 import { useAuthState } from "context/auth.context";
 import { FUser } from "lib/types";
+import Loader from "components/Loader";
 
 const profile = () => {
   const { push } = useRouter();
@@ -32,6 +33,7 @@ const profile = () => {
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("username", data.username);
+    formData.append("bio", data.bio);
     if (data.profilePicture[0]) {
       formData.append("profilePicture", data.profilePicture[0]);
     }
@@ -41,10 +43,11 @@ const profile = () => {
     //   console.log(value);
     // }
     await axios(ENDPOINT, {
-      method: "POST",
+      method: "PUT",
       data: formData,
       // "content-type": "multipart/form-data",
     });
+
     mutate(ENDPOINT);
 
     setIsUpdating(false);
@@ -72,7 +75,7 @@ const profile = () => {
           className="flex flex-col w-full mx-auto mt-5 space-y-3 md:w-6/12"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <h1 className="text-lg font-semibold ">Edit Profile</h1>
+          <h1 className="text-2xl">Edit Profile</h1>
           {profileData ? (
             <>
               <div className="relative">
@@ -139,7 +142,7 @@ const profile = () => {
               </button>
             </>
           ) : (
-            <div>Loading....</div>
+            <Loader />
           )}
         </form>
       </div>
@@ -151,8 +154,6 @@ export default profile;
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
-    console.log("ex");
-
     const cookie = context.req.headers.cookie;
     if (!cookie) throw new Error("Missing auth token cookie");
 

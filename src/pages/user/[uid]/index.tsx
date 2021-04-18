@@ -54,12 +54,13 @@ const profile = ({ sameUser }) => {
         {/* profile */}
         <div className="flex flex-col items-center p-3 space-y-2 rounded-sm shadow-md bg-dark-600">
           <img
-            src="https://images.vexels.com/media/users/3/145908/preview2/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
+            src={profileData?.profilePicture}
             alt=""
             className="rounded-full w-28 h-28"
           />
           <h3 className="text-lg font-semibold">{profileData?.name}</h3>
           <h4>@{profileData?.username}</h4>
+          <h4>{profileData?.bio}</h4>
           <div className="flex space-x-6 divide-x divide-dark-500">
             <div className="flex flex-col items-center pl-4">
               <span className="text-gray-400">Tweets</span>

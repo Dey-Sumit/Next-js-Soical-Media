@@ -94,7 +94,7 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
         />
         {/* //TODO separate component */}
         {showCard && (
-          <div className="absolute z-10 flex flex-col p-2 space-y-3 border rounded-lg shadow-lg top-10 left-10 bg-dark-700 w-60">
+          <div className="absolute z-10 flex flex-col flex-shrink-0 p-2 space-y-3 border rounded-lg shadow-lg top-10 left-10 bg-dark-700 w-60">
             <img
               src={
                 profilePicture ||
@@ -102,7 +102,7 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
               }
               alt=""
               onClick={() => push(`/user/${uid}`)}
-              className="w-10 h-10 rounded-full cursor-pointer"
+              className="w-10 h-10 rounded-full cursor-pointer "
             />
             <p className="">
               {name} | @{username}
@@ -131,7 +131,7 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
             <span>{timeSince(new Date(createdAt))}</span>
           </div>
         </div>
-        <div>{content}</div>
+        <div className="whitespace-pre-wrap">{content}</div>
         <div className="flex space-x-3">
           {extractedTags.map((tag) => (
             <span
