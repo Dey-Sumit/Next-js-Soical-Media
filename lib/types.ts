@@ -20,7 +20,8 @@ export interface User {
 export interface FUser extends Omit<User, "_id"> {
   _id: string;
 }
-export interface FPost extends Omit<Post, "_id" | "user" | "likes" | "tags"> {
+export interface FPost
+  extends Omit<Post, "_id" | "user" | "likes" | "tags" | "comments"> {
   _id: string;
   user: FUser;
   likes?: [
@@ -29,6 +30,7 @@ export interface FPost extends Omit<Post, "_id" | "user" | "likes" | "tags"> {
     }
   ];
   tags: FTag[];
+  comments: FComment[];
 }
 export interface FTag extends Omit<Tag, "_id" | "posts"> {
   _id: string;
@@ -55,6 +57,12 @@ export interface Post {
 }
 export interface Comment {
   user: mongoose.Types.ObjectId;
+  content: string;
+  date?: Date;
+  _id?: string;
+}
+export interface FComment {
+  user: FUser;
   content: string;
   date?: Date;
   _id: string;

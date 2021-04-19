@@ -1,9 +1,9 @@
 import { BsClockHistory } from "react-icons/bs";
 import { FunctionComponent } from "react";
-import { Comment } from "lib/types";
+import { FComment } from "lib/types";
 import { useRouter } from "next/router";
 
-const CommentCard: FunctionComponent<{ data: Comment }> = ({
+const CommentCard: FunctionComponent<{ data: FComment }> = ({
   data: {
     content,
     user: { name, username },
@@ -21,14 +21,14 @@ const CommentCard: FunctionComponent<{ data: Comment }> = ({
         onClick={() => push(`/user/${username}`)}
       />
 
-      <div className="flex-col shadow-sm space-y-3 bg-dark-600 rounded-md p-3 px-4 w-full cursor-pointer">
+      <div className="flex-col w-full p-3 px-4 space-y-3 rounded-md shadow-sm cursor-pointer bg-dark-600">
         {/* top */}
         <div className="flex">
           <span className="text-white">{name}</span>
           <span className="ml-2 text-gray-400 cursor-pointer hover:text-blue-700">
             @{username}
           </span>
-          <div className="ml-auto flex space-x-1 items-center">
+          <div className="flex items-center ml-auto space-x-1">
             <BsClockHistory size="14" /> <span>5 hours</span>
           </div>
         </div>

@@ -28,7 +28,7 @@ handler.put(async (req: ExtendedNextApiRequest, res: NextApiResponse) => {
       // check if the post has already been liked
       if (
         post.likes.filter(
-          (like) => like.user.toHexString() === authUserId.toHexString()
+          (like) => like.user.toString() === authUserId.toHexString()
         ).length > 0
       )
         return res.status(400).json({ msg: "Post already liked by the user" });
@@ -37,7 +37,7 @@ handler.put(async (req: ExtendedNextApiRequest, res: NextApiResponse) => {
     } else {
       if (
         post.likes.filter(
-          (like) => like.user.toHexString() === authUserId.toHexString()
+          (like) => like.user.toString() === authUserId.toHexString()
         ).length === 0
       ) {
         return res
