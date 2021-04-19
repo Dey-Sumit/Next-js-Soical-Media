@@ -16,6 +16,7 @@
     "cloudinary": "^1.25.1",
     "colors": "^1.4.0",
     "connect-mongo": "^4.3.1",
+    "express-async-handler": "^1.1.4",
     "express-session": "^1.17.1",
     "formidable": "^1.2.2",
     "mongoose": "^5.11.18",
