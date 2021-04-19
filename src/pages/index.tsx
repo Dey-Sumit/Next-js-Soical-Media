@@ -17,7 +17,7 @@ export default function Home({ user }) {
 
   // const { data, error } = useSWR<FPaginatedPosts>("/api/posts");
   const { error, posts, page, setPage, isReachingEnd } = usePaginatedPosts(
-    !user ? "/acpi/posts" : "/api/posts/feed"
+    !user ? "/api/posts" : "/api/posts/feed"
   );
   return (
     <div className="grid grid-cols-8 gap-x-8 ">

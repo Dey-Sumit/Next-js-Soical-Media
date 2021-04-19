@@ -12,6 +12,8 @@ export default function Auth() {
 
   useEffect(() => {
     if (user) {
+      console.log(user);
+
       router.back(); // redirect to the prev page(route)
     }
   }, [user]);

@@ -67,11 +67,11 @@ const Login: FunctionComponent<{
         "w-10/12 md:w-6/12": large,
       })}
     >
-      <h1 className="text-2xl font-bold text-white">Sign in to Twitter</h1>
-      <div className="flex items-center justify-center p-2 space-x-2 text-white bg-blue-700 rounded-md">
+      <h1 className="text-2xl font-bold text-white">Sign in to Twitty</h1>
+      {/* <div className="flex items-center justify-center p-2 space-x-2 text-white bg-blue-700 rounded-md">
         <AiFillGoogleCircle />
         <span>Sign up with Google</span>
-      </div>
+      </div> */}
       <form
         className="flex flex-col space-y-3"
         onSubmit={handleSubmit(handleClick)}

@@ -34,9 +34,9 @@ const Sidebar = () => {
   const router = useRouter();
 
   const logout = async () => {
+    dispatch({ type: LOG_OUT }); // ?NOT NEEDED I guess
     router.push("/auth");
     await axios.post("/api/auth/logout");
-    dispatch({ type: LOG_OUT }); // ?NOT NEEDED I guess
   };
   return (
     <div
