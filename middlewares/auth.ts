@@ -7,8 +7,10 @@ export default async function (
   res: NextApiResponse,
   next: NextHandler
 ) {
+  console.log("USER", req.user);
+
   if (!req.user) {
-    return res.status(301).json({ msg: "Unauthenticated" });
+    return res.status(401).json({ messsage: "Unauthenticated" });
   }
 
   next();

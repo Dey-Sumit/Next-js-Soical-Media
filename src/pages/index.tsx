@@ -2,20 +2,23 @@ import TweetCard from "../components/TweetCard";
 import Trends from "../components/Trends";
 import { useRouter } from "next/router";
 import axios from "axios";
-import useSWR from "swr";
-import { FPaginatedPosts } from "lib/types";
 import Head from "next/head";
 import { GetServerSidePropsContext } from "next";
 import React from "react";
 import CreateTweet from "components/CreateTweet";
 import People from "components/People";
 import Loader from "components/Loader";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { usePaginatedPosts } from "lib/hooks";
 // TODO error
+
 export default function Home({ user }) {
   const { push } = useRouter();
 
-  const { data, error } = useSWR<FPaginatedPosts>("/api/posts");
-
+  // const { data, error } = useSWR<FPaginatedPosts>("/api/posts");
+  const { error, posts, page, setPage, isReachingEnd } = usePaginatedPosts(
+    !user ? "/api/posts" : "/api/posts/feed"
+  );
   return (
     <div className="grid grid-cols-8 gap-x-8 ">
       {/* <div className="col-span-2">Sidebar</div> */}
@@ -37,12 +40,24 @@ export default function Home({ user }) {
             </button>
           </div>
         )}
-        {!error && !data && <Loader />}
+        {/* {!error && !data && <Loader />} */}
         {error && <span>Opps! Try again</span>}
-
-        {data?.posts.map((tweet) => (
-          <TweetCard tweet={tweet} key={tweet._id.toString()} />
-        ))}
+        <InfiniteScroll
+          dataLength={posts.length} //This is important field to render the next data
+          next={() => setPage(page + 1)}
+          hasMore={!isReachingEnd}
+          loader={<Loader />}
+          endMessage={
+            <p style={{ textAlign: "center" }}>
+              <b>No more posts</b>
+            </p>
+          }
+        >
+          {posts?.map((tweet, i) => (
+            <TweetCard tweet={tweet} key={i} />
+          ))}
+          {/* key={tweet._id.toString()}  */}
+        </InfiniteScroll>
       </div>
       <div className="col-span-8 space-y-4 md:col-span-3">
         <Trends />
@@ -60,7 +75,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     if (!cookie) throw new Error("Missing auth token cookie");
     // await axios.get("/api/auth/me/");
 
-    // it returns 401 if the user is not authenticated
+    // it returns 301 if the user is not authenticated
     const res = await axios.get("/api/auth/me", { headers: { cookie } });
 
     return { props: { user: res.data.user } };

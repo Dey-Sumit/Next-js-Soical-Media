@@ -124,13 +124,13 @@ const profile = ({ sameUser }) => {
           <span className="cursor-pointer">Followings</span>
         </div>
         <div className="p-2">
-          {!paginatedPosts ? (
+          {/* {!paginatedPosts ? (
             <Loader />
           ) : (
             paginatedPosts?.posts.map((tweet) => (
               <TweetCard tweet={tweet} key={tweet._id} />
             ))
-          )}
+          )} */}
         </div>
       </div>
     </div>

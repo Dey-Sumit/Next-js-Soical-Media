@@ -50,7 +50,11 @@ const Login: FunctionComponent<{
       // 3. redirect to home page
       router.push("/");
     } catch (error) {
-      console.log(error.response.data);
+      console.log(error.response.status === 401);
+      if (error.response.status == 401) {
+        setErrorMessage("Invalid credentials");
+        return;
+      }
       setErrorMessage(error.response.data.message);
     } finally {
       setLoading(false);
@@ -97,8 +101,9 @@ const Login: FunctionComponent<{
           )}
         </button>
       </form>
+      {/* // TODO show error message if credentials not valid */}
       {errorMessage && (
-        <div className="p-1 text-center text-red-600 border border-red-600">
+        <div className="p-1 text-lg tracking-wide text-center text-red-600 border border-red-600">
           {errorMessage}
         </div>
       )}

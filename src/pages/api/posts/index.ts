@@ -21,8 +21,8 @@ handler
   .get(async (req: ExtendedNextApiRequest, res: NextApiResponse) => {
     const { uid, page } = req.query;
 
-    const pageSize = 10;
-    const pageNumber = Number(page) || 1;
+    const pageSize = 4;
+    const pageNumber = Number(page) || 0;
 
     let posts: IPost[];
 
@@ -37,15 +37,16 @@ handler
 
         posts = await Post.find({ user: uid.toString() })
           .limit(pageSize)
-          .skip(pageSize * (pageNumber - 1))
+          .skip(pageSize * pageNumber)
           .populate("user")
           .populate("tags")
           .sort("-createdAt");
         return res.json({
           posts,
           page: pageNumber,
-          pages: Math.ceil(count / pageSize),
+          pages: Math.ceil(count / pageSize) - 1,
         });
+        // return res.json(posts);
       } catch (error) {
         if (error.kind === "ObjectId")
           return res.status(404).json({ msg: "User not found" });
@@ -59,15 +60,16 @@ handler
 
     posts = await Post.find({})
       .limit(pageSize)
-      .skip(pageSize * (pageNumber - 1))
-      .populate("user")
+      .skip(pageSize * pageNumber)
       .populate("tags", "name")
+      .populate("user")
       .sort("-createdAt");
     return res.json({
       posts,
       page: pageNumber,
-      pages: Math.ceil(count / pageSize),
+      pages: Math.ceil(count / pageSize) - 1,
     });
+    // return res.json(posts);
   })
   // create a post
   .post(async (req: ExtendedNextApiRequest, res: NextApiResponse) => {
