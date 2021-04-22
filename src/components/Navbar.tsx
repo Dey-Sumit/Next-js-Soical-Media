@@ -7,6 +7,7 @@ import { FUser } from "lib/types";
 import { SiTwitter } from "react-icons/si";
 import { useLayoutDispatch, useLayoutState } from "src/context/layout.context";
 import { TOGGLE_NAVBAR } from "src/context/types";
+import Loader from "./Loader";
 
 const Navbar = () => {
   const { push } = useRouter();
@@ -15,27 +16,12 @@ const Navbar = () => {
   // const [showResultsDiv, setShowResultsDiv] = useState(false);
   const [query, setQuery] = useState("");
   const [timer, setTimer] = useState(null);
+  const [loading, setLoading] = useState(null);
   const [searchResults, setSearchResults] = useState<FUser[]>([]);
-  const fetchResults = async (e: any) => {
-    setQuery(e.target.value);
-    if (e.target.value == "") {
-      setSearchResults([]);
-      return;
-    }
-    try {
-      const { data } = await axios.get("/api/users/search", {
-        params: {
-          q: e.target.value,
-        },
-      });
-      setSearchResults(data?.users);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-  //TODO add de duplication
+
   const goToUser = (uid: string) => {
     setQuery("");
+    // setSearchResults([]);
     push(`/user/${uid}`);
   };
   useEffect(() => {
@@ -43,14 +29,15 @@ const Navbar = () => {
       setSearchResults([]);
       return;
     }
-    searchSubs();
+    searchUsers();
   }, [query]);
 
-  const searchSubs = async () => {
+  const searchUsers = async () => {
     clearTimeout(timer);
     setTimer(
       setTimeout(async () => {
         try {
+          setLoading(true);
           const { data } = await axios.get("/api/users/search", {
             params: {
               q: query,
@@ -60,6 +47,8 @@ const Navbar = () => {
           // console.log(data);
         } catch (err) {
           console.log(err);
+        } finally {
+          setLoading(false);
         }
       }, 250)
     );
@@ -79,8 +68,7 @@ const Navbar = () => {
           type="text"
           placeholder="Search"
           className="w-full bg-transparent text-dark-100 focus:outline-none"
-          onClick={(e: any) => setQuery(e.target.value)}
-          onChange={fetchResults}
+          onChange={(e) => setQuery(e.target.value)}
           value={query}
         />
         {/* {showResultsDiv && ( */}
@@ -88,25 +76,27 @@ const Navbar = () => {
           className="absolute left-0 flex flex-col w-full space-y-1 rounded-sm top-8 bg-dark-600 "
           style={{ marginLeft: 0 }}
         >
-          {searchResults?.map((user: FUser) => (
-            <div
-              className="flex items-center px-4 py-1 space-x-6 cursor-pointer bg-dark-700"
-              onClick={() => goToUser(user._id)}
-            >
-              <img
-                src={
-                  user?.profilePicture ||
-                  "https://images.vexels.com/media/users/3/145908/preview2/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
-                }
-                alt=""
-                className="rounded-full w-7 h-7 "
-              />
-              <div>
-                <p>{user.name}</p>
-                <p className="text-blue-700">{user.username}</p>
+          <div className="mt-2">{loading && <Loader />}</div>
+          {!loading &&
+            searchResults?.map((user: FUser) => (
+              <div
+                className="flex items-center px-4 py-1 space-x-6 cursor-pointer bg-dark-700"
+                onClick={() => goToUser(user._id)}
+              >
+                <img
+                  src={
+                    user?.profilePicture ||
+                    "https://images.vexels.com/media/users/3/145908/preview2/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
+                  }
+                  alt=""
+                  className="rounded-full w-7 h-7 "
+                />
+                <div>
+                  <p>{user.name}</p>
+                  <p className="text-blue-700">{user.username}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
 

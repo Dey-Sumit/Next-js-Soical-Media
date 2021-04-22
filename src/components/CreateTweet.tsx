@@ -7,7 +7,8 @@ import { BiImageAdd } from "react-icons/bi";
 // import { WithContext as ReactTags } from "react-tag-input";
 
 const CreateTweet: FunctionComponent<{}> = () => {
-  const [picture, setPicture] = useState("");
+  // const [previewPicture, setPreviewPicture] = useState("");
+  const [file, setFile] = useState(null);
   const [tags, setTags] = useState<string[]>([]);
   const [tweet, setTweet] = useState("");
   const ENDPOINT = "/api/posts";
@@ -16,19 +17,19 @@ const CreateTweet: FunctionComponent<{}> = () => {
 
   // const { register, handleSubmit, reset, getValues } = useForm();
 
-  const onChangePicture = (e: ChangeEvent<HTMLInputElement>) =>
-    setPicture(URL.createObjectURL(e.target.files[0]));
-
+  const onChangePicture = (e: ChangeEvent<HTMLInputElement>) => {
+    // setPreviewPicture(URL.createObjectURL(e.target.files[0]));
+    setFile(e.target.files[0]);
+  };
   const handleTweet = async (e) => {
     e.preventDefault();
     if (!tweet) return;
     const formData = new FormData();
     formData.append("content", tweet);
-    console.log({ tags });
 
     if (tags.length > 0)
       formData.append("tags", tags.join(",").replaceAll("#", ""));
-    // if (data.attachment[0]) formData.append("attachment", data.attachment[0]);
+    if (file) formData.append("attachment", file);
 
     await axios(ENDPOINT, {
       method: "POST",
@@ -39,7 +40,7 @@ const CreateTweet: FunctionComponent<{}> = () => {
 
     setTweet("");
     setTags([]); // reset the form
-    setPicture("");
+    setFile(null);
   };
 
   const handleChange = (e) => {
@@ -80,16 +81,16 @@ const CreateTweet: FunctionComponent<{}> = () => {
               ))}
             </div>
           </div>
-          {picture && (
-            <div className="relative">
+          {file && (
+            <div className="relative mt-2">
               <img
-                src={picture}
+                src={URL.createObjectURL(file)}
                 alt=" attachment"
                 className="h-48 mx-auto border rounded-xl"
               />
               <MdCancel
                 className="absolute w-8 h-8 text-gray-600 transform -translate-x-1/2 cursor-pointer inset-x-1/2 bottom-3"
-                onClick={() => setPicture("")}
+                onClick={() => setFile(null)}
               />
             </div>
           )}
@@ -104,6 +105,7 @@ const CreateTweet: FunctionComponent<{}> = () => {
                 type="file"
                 name="attachment"
                 className="hidden"
+                accept="image/*"
               />
             </div>
             <button

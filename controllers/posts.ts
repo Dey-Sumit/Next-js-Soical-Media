@@ -135,7 +135,7 @@ export const createPost = async (
   }
 };
 
-// @desc get all posts | :uid-> get all posts by user id (PAGLINATED)
+// @desc get all posts | :uid-> get all posts by user id (PAGINATED)
 // @route POST /api/posts
 // @access public
 export const getPosts = async (

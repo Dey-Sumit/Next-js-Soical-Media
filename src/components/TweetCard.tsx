@@ -90,7 +90,7 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
           onClick={() => push(`/user/${uid}`)}
           onMouseEnter={() => setShowCard(true)}
           onMouseLeave={() => setShowCard(false)}
-          className="w-10 h-10 rounded-full cursor-pointer"
+          className="w-10 h-10 rounded-full cursor-pointer "
         />
         {/* //TODO separate component */}
         {showCard && (
