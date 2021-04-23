@@ -84,7 +84,7 @@ console.log({axios});
     console.log(`${process.env.VERCEL_URL}/api/auth/me`);
     console.log(`${process.env.VERCEL_URL_TEST}/api/auth/me`);
     
-    const res = await axios.get(`${process.env.VERCEL_URL}/api/auth/me`, { headers: { cookie } });
+    const res = await axios.get(`${process.env.VERCEL_URL_TEST}/api/auth/me`, { headers: { cookie } });
 console.log("RES-------",res.data.user);
 // console.log("RES1-------",res1.data.user);
 
