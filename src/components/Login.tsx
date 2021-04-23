@@ -26,6 +26,8 @@ const Login: FunctionComponent<{
     mode: "onTouched", // when to execute the validation first time
     resolver: yupResolver(loginSchema),
   });
+  const {push} = useRouter()
+
 
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -91,7 +93,7 @@ const Login: FunctionComponent<{
           error={errors.password}
           register={register}
         />
-        <button className="flex items-center justify-center p-2 text-lg font-bold text-white bg-blue-700 rounded-md focus:outline-none">
+        <button className="button">
           {!loading ? (
             "Sign In"
           ) : (
@@ -101,6 +103,7 @@ const Login: FunctionComponent<{
           )}
         </button>
       </form>
+
       {/* // TODO show error message if credentials not valid */}
       {errorMessage && (
         <div className="p-1 text-lg tracking-wide text-center text-red-600 border border-red-600">

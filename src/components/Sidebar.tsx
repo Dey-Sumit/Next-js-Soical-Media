@@ -36,13 +36,13 @@ const Sidebar = () => {
   const logout = async () => {
     dispatch({ type: LOG_OUT }); // ?NOT NEEDED I guess
     router.push("/auth");
-    await axios.post("/api/auth/logout");
+     await axios.post("/api/auth/logout");
   };
   return (
     <div
-      className={`bg-dark-700 absolute top-0 bottom-0 left-0 flex-col justify-between h-screen px-3 sm:px-6 py-8 pb-20 text-lg shadow-lg sm:flex z-10 sm:sticky sm:w-40  ${
-        showNavbar ? " flex" : " hidden"
-      }`}
+    className={`bg-dark-700 fixed flex-col justify-between h-screen px-3 sm:px-6 py-8 pb-20 text-lg shadow-lg sm:flex z-10 sm:sticky sm:w-40  max-w-max ${
+      showNavbar ? " flex" : " hidden"
+    }`}
     >
       <div className="flex items-center justify-center space-x-2 font-medium ">
         <Link href="/">

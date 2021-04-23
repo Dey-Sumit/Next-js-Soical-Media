@@ -43,16 +43,17 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
   const [likedByMe, setLikedByMe] = useState<boolean>(
     likes?.map((like) => like.user).includes(user?._id)
   );
+// console.log({likedByMe,likes,user});
 
   const [showCard, setShowCard] = useState(false);
   const handleLike = async (e: any) => {
+    e.stopPropagation();
     if (!user) {
       dispatch({
         type: SHOW_MODAL,
       });
       return;
     }
-    e.stopPropagation();
     setLikedByMe((value) => !value);
     if (!likedByMe) {
       setLikesCount(likesCount + 1);

@@ -1,22 +1,21 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Login, Register } from "components/index";
-import { useAuthState } from "context/auth.context";
+// import { useAuthState } from "context/auth.context";
 
 export default function Auth() {
-  const router = useRouter();
+  // const router = useRouter();
 
   const [isLogin, setIsLogin] = useState(true);
+const {push} = useRouter()
+  // const { user } = useAuthState();
 
-  const { user } = useAuthState();
+  // useEffect(() => {
+  //   if (user) {
 
-  useEffect(() => {
-    if (user) {
-      console.log(user);
-
-      router.back(); // redirect to the prev page(route)
-    }
-  }, [user]);
+  //     router.back(); // redirect to the prev page(route)
+  //   }
+  // }, [user]);
 
   return (
     <div className="grid h-screen grid-cols-8 text-white">
@@ -31,6 +30,8 @@ export default function Auth() {
       {/* right part */}
       <div className="grid col-span-8 p-4 bg-dark-700 md:col-span-5 place-items-center">
         {isLogin ? <Login large /> : <Register />}
+        <div>
+
         <p className="text-lg tracking-wide text-center text-white">
           {!isLogin ? "Already a member?" : " Don't have an account yet?"}
           <span
@@ -40,7 +41,11 @@ export default function Auth() {
             {!isLogin ? " Sign In" : " Sign Up"}
           </span>
         </p>
+
+        <p className="p-1 text-lg tracking-wide text-center text-white border-2 border-blue-500 cursor-pointer" onClick={()=>push("/")}>Skip Auth for now</p>
       </div>
+      </div>
+
     </div>
   );
 }

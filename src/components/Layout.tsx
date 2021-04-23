@@ -1,10 +1,17 @@
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import Modal from "./Modal";
-
+import NextNprogress from "nextjs-progressbar";
 const Layout = ({ children }) => {
   return (
     <div className="flex text-dark-100">
+      <NextNprogress
+        color="#29D"
+        startPosition={0.3}
+        stopDelayMs={200}
+        height={3}
+        options={{ showSpinner: false }}
+      />
       {/* // wrapper 👆 */}
       <Modal />
       {/* modal absolute position 👆 */}

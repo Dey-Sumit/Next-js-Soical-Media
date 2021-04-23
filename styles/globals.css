@@ -11,6 +11,12 @@ body {
   .navItem {
     @apply flex items-center justify-center px-3 py-2 space-x-2 rounded-full cursor-pointer hover:text-white sm:justify-start hover:bg-blue-light;
   }
+  .button{
+    @apply flex items-center justify-center p-2 text-lg font-bold text-white bg-blue-700 rounded-md focus:outline-none;
+  }
+
+
+
 }
 
 .loader {
@@ -36,3 +42,5 @@ body {
     transform: rotate(360deg);
   }
 }
+
+/* // TODO more components  */

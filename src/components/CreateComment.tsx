@@ -42,13 +42,13 @@ const CreateComment: FunctionComponent<{
     <div className="flex p-2 space-x-2">
       <img
         src={
-          user?.profilePicture ||
-          "https://images.vexels.com/media/users/3/145908/preview2/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
-        }
+          user?.profilePicture 
+                }
         alt=""
         className="w-10 h-10 rounded-full "
       />
       <div className="flex-1">
+        
         <form onSubmit={handleSubmit(handleTweet)}>
           <textarea
             ref={register}

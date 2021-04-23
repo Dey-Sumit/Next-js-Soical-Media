@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import { NextApiRequest } from "next";
 import { User } from "./types";
 

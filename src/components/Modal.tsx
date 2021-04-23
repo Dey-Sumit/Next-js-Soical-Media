@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useAuthState } from "context/auth.context";
+import { useEffect, useState } from "react";
 import { useLayoutDispatch, useLayoutState } from "../context/layout.context";
 import { HIDE_MODAL } from "../context/types";
 import Login from "./Login";
@@ -9,6 +10,15 @@ const Modal = () => {
 
   const { showModal } = useLayoutState();
   const dispatch = useLayoutDispatch();
+  const {user} = useAuthState()
+  // hide the modal automatically if the user logged in
+  useEffect(()=>{
+    if(user)
+    dispatch({
+      type: HIDE_MODAL,
+    })
+  },[user])
+  
   {
     /* //  TODO use DRY , create separate component:(  */
   }

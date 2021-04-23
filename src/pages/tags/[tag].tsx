@@ -21,7 +21,7 @@ const index: NextPage<{ data: IData }> = ({ data }) => {
         <title>{data.name || "Tweeter Clone"}</title>
       </Head>
       <div className="col-span-8 md:col-span-5">
-        <div className="flex justify-between p-2">
+        <div className="flex justify-between p-2 text-2xl font-semibold">
           <span>#{data.name}</span> <span> {data.posts.length} Tweets</span>{" "}
         </div>
         {data?.posts?.map((tweet) => (

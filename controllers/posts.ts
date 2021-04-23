@@ -1,4 +1,3 @@
-import asyncHandler from "express-async-handler"; // TOD FIX or uninstall
 import { Post as IPost, Tag as ITag } from "lib/types";
 
 import { ExtendedNextApiRequest } from "lib/types.api";
@@ -208,7 +207,7 @@ export const getPostById = async (
   try {
     const post = await Post.findById(id)
       .populate("user")
-      .populate("likes.user")
+      // .populate("likes.user") // if you want to show the users who liked the post
       .populate("comments.user")
       .populate("tags", "name");
 

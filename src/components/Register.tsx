@@ -20,6 +20,8 @@ export default function Register() {
     resolver: yupResolver(registrationSchema),
   });
 
+  const {push} = useRouter()
+
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
@@ -47,10 +49,7 @@ export default function Register() {
   return (
     <div className="flex flex-col space-y-4">
       <h1 className="text-2xl font-bold text-white">Sign up to Twitter</h1>
-      <div className="flex items-center justify-center p-2 space-x-2 text-white bg-blue-700 rounded-md">
-        <AiFillGoogleCircle />
-        <span>Sign up with Google</span>
-      </div>
+    
       <form
         className="flex flex-col space-y-3"
         onSubmit={handleSubmit(handleClick)}
@@ -98,6 +97,7 @@ export default function Register() {
           )}
         </button>
       </form>
+
       {errorMessage && (
         <div className="p-1 text-center text-red-600 border border-red-600">
           {errorMessage}
