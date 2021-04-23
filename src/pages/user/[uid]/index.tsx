@@ -146,7 +146,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     const cookie = context.req.headers.cookie;
     if (!cookie) throw new Error("Missing auth token cookie");
     // const res = await axios.get("/api/auth/me/");
-
+//TODO change VERCEL_URL_TEST to sometging appt name
     // it returns 401 if the user is not authenticated
     const { data } = await axios.get(`${process.env.VERCEL_URL_TEST}/api/auth/me`, { headers: { cookie } });
 
