@@ -13,6 +13,8 @@ import { usePaginatedPosts } from "lib/hooks";
 // TODO error
 
 export default function Home({ user }) {
+  console.log({user});
+  
   const { push } = useRouter();
 
   // const { data, error } = useSWR<FPaginatedPosts>("/api/posts");
