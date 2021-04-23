@@ -44,6 +44,7 @@ export const getPostsByTag = async (
       path: "posts",
       populate: [{ path: "tags", select: "name" }, { path: "user" }],
     });
+console.log(data);
 
     if (data.length == 0)
       return res.status(404).json({ msg: "Tag does not exist" });
