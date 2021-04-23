@@ -13,6 +13,8 @@ export const logout = (req: ExtendedNextApiRequest, res: NextApiResponse) => {
 
 //? /api/auth/me
 export const me = (req: ExtendedNextApiRequest, res: NextApiResponse) => {
+  console.log("got request , auth me ",req.user);
+  
   if (!req.user) return res.status(401).json({ user: null });
   return res.json({ user: extractUser(req.user) });
 };
