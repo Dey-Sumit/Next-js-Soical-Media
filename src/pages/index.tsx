@@ -82,6 +82,7 @@ console.log({axios});
     // it returns 301 if the user is not authenticated
     // const res = await axios.get("/api/auth/me", { headers: { cookie } });
     console.log(`${process.env.VERCEL_URL}/api/auth/me`);
+    console.log(`${process.env.VERCEL_URL_TEST}/api/auth/me`);
     
     const res = await axios.get(`${process.env.VERCEL_URL}/api/auth/me`, { headers: { cookie } });
 console.log("RES-------",res.data.user);
