@@ -59,12 +59,15 @@ export const AuthProvider = ({ children }) => {
       try {
         // use swr
         const res = await axios.get("/api/auth/me");
+        console.log("in useEffect load user",res.data.user);
 
         dispatch({
           type: AUTH_SUCCESS,
           payload: res.data.user,
         });
       } catch (error) {
+        console.log("error in useEffect load user");
+        
         console.log(error.message);
         dispatch({
           type: AUTH_FAIL,
