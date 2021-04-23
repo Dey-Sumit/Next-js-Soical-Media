@@ -80,8 +80,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 console.log({axios});
 
     // it returns 301 if the user is not authenticated
-    const res = await axios.get("/api/auth/me", { headers: { cookie } });
-    // const res1 = await axios.get(`${process.env.VERCEL_URL}/api/auth/me`, { headers: { cookie } });
+    // const res = await axios.get("/api/auth/me", { headers: { cookie } });
+    const res = await axios.get(`${process.env.VERCEL_URL}/api/auth/me`, { headers: { cookie } });
 console.log("RES-------",res.data.user);
 // console.log("RES1-------",res1.data.user);
 
