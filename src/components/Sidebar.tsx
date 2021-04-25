@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { LOG_OUT, TOGGLE_NAVBAR } from "../context/types";
 import { AiOutlineUser } from "react-icons/ai";
+import { BsBookmark } from "react-icons/bs";
 import { useLayoutDispatch, useLayoutState } from "src/context/layout.context";
 import { FunctionComponent, MouseEventHandler } from "react";
 import { IconType } from "react-icons";
@@ -54,13 +55,14 @@ const Sidebar = () => {
   };
   return (
     <AnimatePresence>
-      <motion.div
-        variants={variants}
-        initial="initial"
-        animate="animate"
-        exit="exit"
-        className={`bg-dark-700 fixed flex-col justify-between h-screen px-3 sm:px-6 py-8 pb-20 text-lg shadow-lg sm:flex z-10 sm:sticky sm:w-40  max-w-max ${
-          showNavbar ? " flex" : " hidden"
+      <div
+        // showNavbar
+        // ? " flex  translate-x-0"
+        // : " hidden  "
+        className={`bg-dark-700 fixed flex-col justify-between h-screen px-3 sm:px-6 py-8 pb-20 text-lg shadow-lg flex z-10 sm:sticky sm:w-40  max-w-max transform transition-all duration-300 ${
+          showNavbar
+            ? "  translate-x-0"
+            : "  -translate-x-full sm:translate-x-0"
         }`}
       >
         <div className="flex items-center justify-center space-x-2 font-medium ">
@@ -104,7 +106,7 @@ const Sidebar = () => {
           <SidebarItem Icon={MdMoreHoriz} text="More" />
         </div>
         <div></div>
-      </motion.div>
+      </div>
     </AnimatePresence>
   );
 };

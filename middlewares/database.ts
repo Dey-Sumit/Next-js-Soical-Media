@@ -8,7 +8,7 @@ export default async function (
   next: NextHandler
 ) {
   try {
-    await dbConnect(); // TODO revert
+    // await dbConnect(); // TODO revert
   } catch (error) {
     console.log("Database Error", error.message);
   }
