@@ -12,12 +12,14 @@ export const getTopUsersByFollowers = async (
     const users = await User.aggregate([
       {
         $project: {
-          length: { $size: "$followers" },
+          // TODO refactor coz I have a virtual field
+          noOfFollowers: { $size: "$followers" },
           // posts: 1,
-          name: 1,
+          username: 1,
+          profilePicture: 1,
         },
       },
-      { $sort: { length: -1 } },
+      { $sort: { noOfFollowers: -1 } },
       { $limit: 5 },
     ]);
     // const tags = await Tag.find({}).sort({ totalPosts: -1 }).limit(5);

@@ -1,22 +1,22 @@
+/* @import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400&display=swap"); */
+@import url("https://fonts.googleapis.com/css2?family=Source+Serif+Pro:ital,wght@0,200;0,300;0,400;0,600;1,400&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-  font-family: serif;
-  /* font-family: "Inter", sans-serif; */
+  /* font-family: "Lato", sans-serif; */
+  font-family: "Source Serif Pro", serif;
 }
 
 @layer components {
   .navItem {
-    @apply flex items-center justify-center px-3 py-2 space-x-2 rounded-full cursor-pointer hover:text-white sm:justify-start hover:bg-blue-light;
+    @apply flex items-center justify-center px-3 py-2 space-x-2 font-semibold rounded-full cursor-pointer hover:text-white sm:justify-start hover:bg-blue-light;
   }
-  .button{
+  .button {
     @apply flex items-center justify-center p-2 text-lg font-bold text-white bg-blue-700 rounded-md focus:outline-none;
   }
-
-
-
 }
 
 .loader {

@@ -1,7 +1,8 @@
 import { BsClockHistory } from "react-icons/bs";
-import { AiOutlineRetweet } from "react-icons/ai";
-import { FaCommentAlt, FaHeart } from "react-icons/fa";
+import { AiOutlineHeart, AiOutlineRetweet } from "react-icons/ai";
+import { FaCommentAlt, FaHeart, FaRegComment } from "react-icons/fa";
 import { IoMdShareAlt } from "react-icons/io";
+import { GoComment } from "react-icons/go";
 import { FunctionComponent, useState } from "react";
 import { FPost } from "lib/types";
 import { useRouter } from "next/router";
@@ -13,6 +14,19 @@ import { SHOW_MODAL } from "context/types";
 import { MdDelete } from "react-icons/md";
 import { mutate } from "swr";
 // import Heart from "react-animated-heart";
+
+const Hash: FunctionComponent<{ children: string }> = ({ children }) => {
+  const { push } = useRouter();
+
+  return (
+    <span
+      className="text-blue-600"
+      onClick={() => push(`/tags/${children.slice(1)}`)}
+    >
+      {children}{" "}
+    </span>
+  );
+};
 
 const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
   tweet: {
@@ -43,7 +57,7 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
   const [likedByMe, setLikedByMe] = useState<boolean>(
     likes?.map((like) => like.user).includes(user?._id)
   );
-// console.log({likedByMe,likes,user});
+  // console.log({likedByMe,likes,user});
 
   const [showCard, setShowCard] = useState(false);
   const handleLike = async (e: any) => {
@@ -83,10 +97,7 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
     <div className="flex p-2 space-x-3 ">
       <div className="relative">
         <img
-          src={
-            profilePicture ||
-            "https://images.vexels.com/media/users/3/145908/preview2/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
-          }
+          src={profilePicture}
           alt=""
           onClick={() => push(`/user/${uid}`)}
           onMouseEnter={() => setShowCard(true)}
@@ -97,10 +108,7 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
         {showCard && (
           <div className="absolute z-10 flex flex-col flex-shrink-0 p-2 space-y-3 border rounded-lg shadow-lg top-10 left-10 bg-dark-700 w-60">
             <img
-              src={
-                profilePicture ||
-                "https://images.vexels.com/media/users/3/145908/preview2/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
-              }
+              src={profilePicture}
               alt=""
               onClick={() => push(`/user/${uid}`)}
               className="w-10 h-10 rounded-full cursor-pointer "
@@ -132,8 +140,12 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
             <span>{timeSince(new Date(createdAt))}</span>
           </div>
         </div>
-        <div className="whitespace-pre-wrap">{content}</div>
-        <div className="flex space-x-3">
+        <div className="text-lg whitespace-pre-wrap">
+          {content.split(" ").map((word) => {
+            return word[0] !== "#" ? <span>{word} </span> : <Hash>{word}</Hash>;
+          })}
+        </div>
+        {/* <div className="flex space-x-3">
           {extractedTags.map((tag) => (
             <span
               className="p-1 bg-blue-500 rounded-sm"
@@ -143,7 +155,7 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
               #{tag}
             </span>
           ))}
-        </div>
+        </div> */}
         <div>
           {attachmentURL && (
             <img
@@ -155,7 +167,10 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
         </div>
         <div className="flex justify-around ">
           <div className="flex items-center space-x-2 cursor-pointer">
-            <FaCommentAlt />
+            <FaRegComment
+              size={34}
+              className="p-2 rounded-full hover:bg-blue-600 hover:bg-opacity-30 hover:text-blue-600"
+            />
             <span>{comments.length}</span>
           </div>
           <div
@@ -163,7 +178,15 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
             onClick={handleLike}
           >
             {/* <Heart isClick={likedByMe}  /> */}
-            <FaHeart className={likedByMe ? "text-red-600" : ""} />
+            {!likedByMe ? (
+              <AiOutlineHeart
+                className="p-2 rounded-full hover:bg-red-700 hover:bg-opacity-30 hover:text-red-600"
+                size={35}
+              />
+            ) : (
+              <FaHeart size={35} className="p-2 text-red-600" />
+            )}
+
             <span>{likesCount}</span>
           </div>
           {/* <div className="flex items-center space-x-2 cursor-pointer">

@@ -7,7 +7,7 @@ export default function Auth() {
   // const router = useRouter();
 
   const [isLogin, setIsLogin] = useState(true);
-const {push} = useRouter()
+  const { push } = useRouter();
   // const { user } = useAuthState();
 
   // useEffect(() => {
@@ -31,21 +31,24 @@ const {push} = useRouter()
       <div className="grid col-span-8 p-4 bg-dark-700 md:col-span-5 place-items-center">
         {isLogin ? <Login large /> : <Register />}
         <div>
+          <p className="text-lg tracking-wide text-center text-white">
+            {!isLogin ? "Already a member?" : " Don't have an account yet?"}
+            <span
+              className="text-blue-700 cursor-pointer"
+              onClick={() => setIsLogin((value) => !value)}
+            >
+              {!isLogin ? " Sign In" : " Sign Up"}
+            </span>
+          </p>
 
-        <p className="text-lg tracking-wide text-center text-white">
-          {!isLogin ? "Already a member?" : " Don't have an account yet?"}
-          <span
-            className="text-blue-700 cursor-pointer"
-            onClick={() => setIsLogin((value) => !value)}
+          <p
+            className="p-1 text-base tracking-wide text-center text-white border-2 border-blue-500 cursor-pointer"
+            onClick={() => push("/")}
           >
-            {!isLogin ? " Sign In" : " Sign Up"}
-          </span>
-        </p>
-
-        <p className="p-1 text-lg tracking-wide text-center text-white border-2 border-blue-500 cursor-pointer" onClick={()=>push("/")}>Skip Auth for now</p>
+            Skip Auth for now
+          </p>
+        </div>
       </div>
-      </div>
-
     </div>
   );
 }

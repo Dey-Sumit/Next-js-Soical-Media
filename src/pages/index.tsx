@@ -13,8 +13,6 @@ import { usePaginatedPosts } from "lib/hooks";
 // TODO error
 
 export default function Home({ user }) {
-  console.log({user});
-  
   const { push } = useRouter();
 
   // const { data, error } = useSWR<FPaginatedPosts>("/api/posts");
@@ -43,7 +41,7 @@ export default function Home({ user }) {
           </div>
         )}
         {/* {!error && !data && <Loader />} */}
-        {error && <span>Opps! Try again</span>}
+        {error && <span>Could not load the post</span>}
         <InfiniteScroll
           dataLength={posts.length} //This is important field to render the next data
           next={() => setPage(page + 1)}
@@ -71,27 +69,22 @@ export default function Home({ user }) {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   // const cookie = context.req.headers?.cookie;
-  console.log("inside-------------");
   try {
     const cookie = context.req.headers.cookie;
     if (!cookie) throw new Error("Missing auth token cookie");
-    console.clear()
     // await axios.get("/api/auth/me/");
-console.log({axios});
 
     // it returns 301 if the user is not authenticated
     // const res = await axios.get("/api/auth/me", { headers: { cookie } });
-    console.log(`${process.env.VERCEL_URL}/api/auth/me`);
-    console.log(`${process.env.VERCEL_URL_TEST}/api/auth/me`);
-    
-    const res = await axios.get(`${process.env.VERCEL_URL_TEST}/api/auth/me`, { headers: { cookie } });
-console.log("RES-------",res.data.user);
-// console.log("RES1-------",res1.data.user);
+
+    const res = await axios.get(`${process.env.VERCEL_URL_TEST}/api/auth/me`, {
+      headers: { cookie },
+    });
 
     return { props: { user: res.data.user } };
   } catch (error) {
-    console.log("got error in api/auth/me",error.message);
-    
+    console.log(error.message);
+
     return { props: { user: null } };
   }
 }
