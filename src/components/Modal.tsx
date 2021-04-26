@@ -49,7 +49,7 @@ const Modal = () => {
             })
           }
         >
-          // TODO remove framer motion, replace with css animation
+          {/* // TODO remove framer motion, replace with css animation */}
           <motion.div
             className="px-6 py-4 rounded-lg shadow-2xl bg-dark-700"
             variants={variants}
