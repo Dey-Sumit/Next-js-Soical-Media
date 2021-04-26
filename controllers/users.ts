@@ -20,7 +20,7 @@ export const getTopUsersByFollowers = async (
         },
       },
       { $sort: { noOfFollowers: -1 } },
-      { $limit: 5 },
+      { $limit: 10 },
     ]);
     // const tags = await Tag.find({}).sort({ totalPosts: -1 }).limit(5);
 

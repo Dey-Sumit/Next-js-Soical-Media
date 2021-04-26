@@ -20,7 +20,7 @@ export const getTopTags = async (
         },
       },
       { $sort: { length: -1 } },
-      { $limit: 5 },
+      { $limit: 10 },
     ]);
     // const tags = await Tag.find({}).sort({ totalPosts: -1 }).limit(5);
 
@@ -44,7 +44,7 @@ export const getPostsByTag = async (
       path: "posts",
       populate: [{ path: "tags", select: "name" }, { path: "user" }],
     });
-console.log(data);
+    console.log(data);
 
     if (data.length == 0)
       return res.status(404).json({ msg: "Tag does not exist" });

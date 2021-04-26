@@ -97,7 +97,11 @@ const Sidebar = () => {
               handler={() => router.push(`/user/${user._id}`)}
             />
           )}
-          <SidebarItem Icon={MdExplore} text="Explore" />
+          <SidebarItem
+            Icon={MdExplore}
+            text="Explore"
+            handler={() => router.push("/explore")}
+          />
           {/* <SidebarItem Icon={MdNotifications} text="Notifications" /> */}
 
           {user && (
