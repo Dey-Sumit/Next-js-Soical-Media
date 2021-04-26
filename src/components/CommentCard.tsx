@@ -2,12 +2,15 @@ import { BsClockHistory } from "react-icons/bs";
 import { FunctionComponent } from "react";
 import { FComment } from "lib/types";
 import { useRouter } from "next/router";
+import timeSince from "lib/timeSince";
 
 const CommentCard: FunctionComponent<{ data: FComment }> = ({
   data: {
+    date,
     content,
     user: { name, username },
     _id,
+    clientOnly,
   },
 }) => {
   const { push } = useRouter();
@@ -23,13 +26,17 @@ const CommentCard: FunctionComponent<{ data: FComment }> = ({
 
       <div className="flex-col w-full p-3 px-4 space-y-3 rounded-md shadow-sm cursor-pointer bg-dark-600">
         {/* top */}
-        <div className="flex">
+        <div className="flex items-center">
           <span className="text-white">{name}</span>
           <span className="ml-2 text-gray-400 cursor-pointer hover:text-blue-700">
             @{username}
           </span>
-          <div className="flex items-center ml-auto space-x-1">
-            <BsClockHistory size="14" /> <span>5 hours</span>
+          {clientOnly && (
+            <span className="w-3 h-3 ml-3 bg-blue-700 rounded-full animate-pulse"></span>
+          )}
+          <div className="flex items-center ml-auto space-x-2">
+            <BsClockHistory size="14" />{" "}
+            {!clientOnly && <span>{timeSince(new Date(date))}</span>}
           </div>
         </div>
         <div>{content}</div>

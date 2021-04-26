@@ -3,6 +3,7 @@ import { FunctionComponent, useState } from "react";
 import { mutate } from "swr";
 import { useAuthState } from "../context/auth.context";
 import { useForm } from "react-hook-form";
+import { FComment } from "lib/types";
 const CreateComment: FunctionComponent<{
   tid: string;
 }> = ({ tid }) => {
@@ -10,45 +11,43 @@ const CreateComment: FunctionComponent<{
   const { register, handleSubmit, reset } = useForm();
   const handleTweet = async (data: { content: string }) => {
     if (data.content.length === 0) return;
-    //use swr
-    // mutate (change the data immediately -> optimistic UI)
-    // mutate(endpoint, [...data, { content: text, user: {} }], false); //? OPTIMISTIC UI ; update the client side data immediately , revalidation false
 
-    // mutate(
-    //   endpoint,
-    //   {
-    //     ...data,
-    //     comments: [...comments, { content: text, user: {} }],
-    //   },
-    //   false
-    // ); //? OPTIMISTIC UI ; update the client side data immediately , revalidation false
+    const FAKE_COMMENT: FComment = {
+      user,
+      _id: Math.floor(Math.random()).toString(),
+      content: data.content,
+      clientOnly: true,
+    };
+    mutate(
+      `/api/posts/${tid}`,
+      (existingData) => {
+        console.log({ existingData });
+        const existingComments = existingData.comments;
+        const newComments = {
+          ...existingData,
+          comments: [FAKE_COMMENT, ...existingComments],
+        };
 
-    // console.log(data);
-
-    // await axios.post(endpoint, { content: text }); //? make the request
-    // mutate(mutationEndpoint); //? refetch the data and compare if everything is fine or anything goes wrong in the previous request
-    // console.log("triggered");
-    // mutate("/api/posts/",{content:tweet},axios.post())
+        return newComments;
+      },
+      false
+    );
+    reset();
 
     await axios(`/api/posts/${tid}/comments`, {
       method: "POST",
       data,
     });
     mutate(`/api/posts/${tid}`);
-
-    reset();
   };
   return (
     <div className="flex p-2 space-x-2">
       <img
-        src={
-          user?.profilePicture 
-                }
+        src={user?.profilePicture}
         alt=""
         className="w-10 h-10 rounded-full "
       />
       <div className="flex-1">
-        
         <form onSubmit={handleSubmit(handleTweet)}>
           <textarea
             ref={register}

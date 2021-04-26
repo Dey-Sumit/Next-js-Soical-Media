@@ -30,7 +30,8 @@ export interface FPost
     }
   ];
   tags: FTag[];
-  comments: FComment[];
+  comments?: FComment[];
+  clientOnly?: boolean; // for optimistic UI
 }
 export interface FTag extends Omit<Tag, "_id" | "posts"> {
   _id: string;
@@ -66,6 +67,7 @@ export interface FComment {
   content: string;
   date?: Date;
   _id: string;
+  clientOnly?: boolean;
 }
 
 export interface Tag {

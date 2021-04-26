@@ -46,14 +46,17 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
     _id,
     createdAt,
     tags,
+    clientOnly,
   },
 }) => {
   const { user } = useAuthState();
   const dispatch = useLayoutDispatch();
 
-  const extractedTags = tags.map((tag) => tag.name);
+  // const extractedTags = tags.map((tag) => tag.name);
   const { push } = useRouter();
-  const [likesCount, setLikesCount] = useState<number>(likes.length);
+  const [likesCount, setLikesCount] = useState<number>(
+    likes ? likes.length : 0
+  );
   const [likedByMe, setLikedByMe] = useState<boolean>(
     likes?.map((like) => like.user).includes(user?._id)
   );
@@ -127,15 +130,18 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
 
       <div
         className="flex-col w-full p-3 px-4 space-y-3 rounded-md shadow-sm cursor-pointer bg-dark-600"
-        onClick={() => push(`/tweet/${_id}`)}
+        onClick={() => !clientOnly && push(`/tweet/${_id}`)}
       >
         {/* top */}
-        <div className="flex">
+        <div className="flex items-center">
           <span className="text-white">{name}</span>
           <span className="ml-2 text-gray-400 cursor-pointer hover:text-blue-700">
             @{username}
           </span>
-          <div className="flex items-center ml-auto space-x-1">
+          {clientOnly && (
+            <span className="w-3 h-3 ml-3 bg-blue-700 rounded-full animate-pulse"></span>
+          )}
+          <div className="flex items-center ml-auto space-x-2">
             <BsClockHistory size="14" />{" "}
             <span>{timeSince(new Date(createdAt))}</span>
           </div>
@@ -171,7 +177,8 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
               size={34}
               className="p-2 rounded-full hover:bg-blue-600 hover:bg-opacity-30 hover:text-blue-600"
             />
-            <span>{comments.length}</span>
+            {/*// for optimistic UI 👇 */}
+            <span>{comments ? comments.length : 0}</span>
           </div>
           <div
             className="flex items-center space-x-2 cursor-pointer"
@@ -198,8 +205,8 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
           </div> */}
           {user?._id == uid && (
             <MdDelete
-              size={22}
-              className="text-red-500"
+              size={35}
+              className="p-2 text-red-500 rounded-full hover:bg-red-600 hover:bg-opacity-30 hover:text-red-600"
               onClick={handleDelete}
             />
           )}

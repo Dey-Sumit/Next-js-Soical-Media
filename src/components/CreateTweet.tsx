@@ -1,17 +1,22 @@
 import axios from "axios";
 import { ChangeEvent, FunctionComponent, useState } from "react";
-import { mutate } from "swr";
+import useSWR, { mutate, useSWRInfinite } from "swr";
 import { useAuthState } from "../context/auth.context";
 import { MdCancel } from "react-icons/md";
 import { BiImageAdd } from "react-icons/bi";
+import { FPost } from "lib/types";
+import { usePaginatedPosts } from "lib/hooks";
+import { log } from "node:console";
 // import { WithContext as ReactTags } from "react-tag-input";
 
 const CreateTweet: FunctionComponent<{}> = () => {
   // const [previewPicture, setPreviewPicture] = useState("");
   const [file, setFile] = useState(null);
   const [tags, setTags] = useState<string[]>([]);
-  const [tweet, setTweet] = useState("");
-  const ENDPOINT = "/api/posts";
+  const [content, setContent] = useState("");
+  // const ENDPOINT = "/api/posts/feed";
+  const { mutate: paginatedPostsMutate } = usePaginatedPosts("/api/posts/feed");
+  // console.log({ posts });
 
   const { user } = useAuthState();
 
@@ -21,40 +26,63 @@ const CreateTweet: FunctionComponent<{}> = () => {
     // setPreviewPicture(URL.createObjectURL(e.target.files[0]));
     setFile(e.target.files[0]);
   };
+
   const handleTweet = async (e) => {
     e.preventDefault();
-    if (!tweet) return;
+    if (!content) return;
+
+    // Optimistic UI
+    const FAKE_POST: FPost = {
+      _id: Math.floor(Math.random()).toString(),
+      content,
+      tags: [], // refactor we don't need tags in frontend anymore
+      user,
+      attachmentURL: file && URL.createObjectURL(file),
+      createdAt: new Date(),
+      clientOnly: true,
+    };
+
+    paginatedPostsMutate((existingData) => {
+      const existingPosts = existingData[0].posts;
+      const newPaginatedData = [
+        {
+          ...existingData[0],
+          posts: [FAKE_POST, ...existingPosts],
+        },
+      ];
+
+      return newPaginatedData;
+    }, false);
+
+    setContent("");
+    setTags([]); // reset the form
+    setFile(null);
+
     const formData = new FormData();
-    formData.append("content", tweet);
+    formData.append("content", content);
 
     if (tags.length > 0)
       formData.append("tags", tags.join(",").replaceAll("#", ""));
     if (file) formData.append("attachment", file);
 
-    await axios(ENDPOINT, {
+    await axios("/api/posts", {
       method: "POST",
       data: formData,
     });
 
-    mutate(ENDPOINT);
-
-    setTweet("");
-    setTags([]); // reset the form
-    setFile(null);
+    paginatedPostsMutate();
+    mutate("/api/tags");
   };
 
   const handleChange = (e) => {
-    setTweet(e.target.value);
+    setContent(e.target.value);
     const s = e.target.value;
     setTags(s.match(/#[a-z]+/gi) || []);
   };
   return (
     <div className="flex p-2 space-x-2">
       <img
-        src={
-          user?.profilePicture ||
-          "https://images.vexels.com/media/users/3/145908/preview2/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
-        }
+        src={user?.profilePicture}
         alt="avatar"
         className="w-10 h-10 rounded-full "
       />
@@ -62,7 +90,7 @@ const CreateTweet: FunctionComponent<{}> = () => {
         <form onSubmit={handleTweet}>
           <div
             className={`border ${
-              tweet.length < 100 ? "border-dark-100" : "border-red-500"
+              content.length < 100 ? "border-dark-100" : "border-red-500"
             }`}
           >
             <textarea
@@ -70,7 +98,7 @@ const CreateTweet: FunctionComponent<{}> = () => {
               className="w-full h-24 p-2 bg-transparent rounded-md resize-none focus:outline-none"
               placeholder={`Hey ${user?.username}, what's going on?`}
               name="text"
-              value={tweet}
+              value={content}
               onChange={handleChange}
             />
             <div className="my-1">
@@ -94,7 +122,7 @@ const CreateTweet: FunctionComponent<{}> = () => {
               />
             </div>
           )}
-          <div className="flex p-1 ">
+          <div className="flex py-2 ">
             <div>
               <label htmlFor="file-input">
                 <BiImageAdd className="w-10 h-10 text-blue-600 cursor-pointer " />

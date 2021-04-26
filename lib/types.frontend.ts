@@ -8,6 +8,7 @@ export interface User {
   username: string;
   profilePicture: string;
   followers: string[];
+  T;
   following: string[];
   // company: Types.ObjectId | Record<string, unknown>;
 }

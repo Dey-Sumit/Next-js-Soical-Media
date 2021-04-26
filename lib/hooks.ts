@@ -23,5 +23,6 @@ export const usePaginatedPosts = (URL: string) => {
     page,
     setPage,
     isReachingEnd,
+    mutate,
   };
 };

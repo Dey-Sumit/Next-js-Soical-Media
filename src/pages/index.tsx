@@ -19,6 +19,8 @@ export default function Home({ user }) {
   const { error, posts, page, setPage, isReachingEnd } = usePaginatedPosts(
     !user ? "/api/posts" : "/api/posts/feed"
   );
+  console.log("from index", { posts });
+
   return (
     <div className="grid grid-cols-8 gap-x-8 ">
       {/* <div className="col-span-2">Sidebar</div> */}
