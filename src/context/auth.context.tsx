@@ -1,7 +1,15 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useReducer } from "react";
 import { FUser } from "lib/types";
-import { AUTH_FAIL, AUTH_SUCCESS, LOG_OUT } from "./types";
+import {
+  AUTH_FAIL,
+  AUTH_SUCCESS,
+  LOG_OUT,
+  STOP_LOADING,
+  SET_USER_DUMMY,
+} from "./types";
+import { parseCookies } from "nookies";
+import useSWR from "swr";
 // import { User } from '../types'
 
 interface State {
@@ -15,7 +23,7 @@ interface Action {
   payload?: any;
 }
 
-// create two context; one for the state and one for the dispatchs
+// create two context; one for the state and one for the dispatch
 const StateContext = createContext<State>({
   user: null,
 });
@@ -29,27 +37,48 @@ const reducer = (state: State, { type, payload }: Action) => {
         ...state,
         user: payload,
       };
+    case SET_USER_DUMMY:
+      return {
+        ...state,
+        user: payload,
+      };
     case AUTH_FAIL:
     case LOG_OUT:
       return {
         ...state,
         user: null,
       };
-    // case "STOP_LOADING":
-    //   return {
-    //     ...state,
-    //     loading: false,
-    //   };
+    case STOP_LOADING:
+      return {
+        ...state,
+        loading: false,
+      };
     default:
       throw new Error(`Unknown action type"${type}`);
   }
 };
+function getCookie(cname: string) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(";");
+  for (var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == " ") {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
 
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, {
+    // user: null,
     user: null,
     // authenticated: false,
-    // loading: true,
+    loading: true,
   });
   //   const dispatch = (type: string, payload?: any) =>
   //     defaultDispatch({ type, payload });
@@ -57,7 +86,15 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     async function loadUser() {
       try {
-        // use swr
+        // const { data } = useSWR("/api/auth/me");
+        // console.log({ data });
+        const user = parseCookies()?.user
+          ? JSON.parse(parseCookies().user)
+          : null;
+        dispatch({
+          type: AUTH_SUCCESS,
+          payload: user,
+        });
         const res = await axios.get("/api/auth/me");
 
         dispatch({
@@ -68,6 +105,10 @@ export const AuthProvider = ({ children }) => {
         console.log(error.message);
         dispatch({
           type: AUTH_FAIL,
+        });
+      } finally {
+        dispatch({
+          type: "STOP_LOADING",
         });
       }
     }

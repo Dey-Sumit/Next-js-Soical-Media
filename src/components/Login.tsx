@@ -12,7 +12,7 @@ import { AUTH_SUCCESS } from "../context/types";
 
 import Input from "./Input";
 import { loginSchema } from "lib/schemaValidation";
-
+import cookie from "js-cookie";
 // interface loginData {
 //   email?: string;
 //   username?: string;
@@ -26,8 +26,7 @@ const Login: FunctionComponent<{
     mode: "onTouched", // when to execute the validation first time
     resolver: yupResolver(loginSchema),
   });
-  const {push} = useRouter()
-
+  const { push } = useRouter();
 
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -49,6 +48,7 @@ const Login: FunctionComponent<{
         type: AUTH_SUCCESS,
         payload: res.data.user,
       });
+      cookie.set("user", res.data.user);
       // 3. redirect to home page
       router.push("/");
     } catch (error) {

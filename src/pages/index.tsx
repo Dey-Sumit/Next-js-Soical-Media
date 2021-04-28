@@ -5,11 +5,11 @@ import axios from "axios";
 import Head from "next/head";
 import { GetServerSidePropsContext } from "next";
 import React from "react";
-import CreateTweet from "components/CreateTweet";
 import People from "components/People";
 import Loader from "components/Loader";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { usePaginatedPosts } from "lib/hooks";
+import CreateTweet from "components/CreateTweet";
 // TODO error
 
 export default function Home({ user }) {
@@ -61,8 +61,8 @@ export default function Home({ user }) {
         </InfiniteScroll>
       </div>
       <div className="hidden col-span-8 space-y-4 md:col-span-3 md:block">
-        <Trends noOfElements={5} />
-        <People noOfElements={5} />
+        {/* <Trends noOfElements={5} />
+        <People noOfElements={5} /> */}
       </div>
     </div>
   );
@@ -71,12 +71,13 @@ export default function Home({ user }) {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   // const cookie = context.req.headers?.cookie;
   try {
+    // Parse
     const cookie = context.req.headers.cookie;
+
     if (!cookie) throw new Error("Missing auth token cookie");
     // await axios.get("/api/auth/me/");
 
     // it returns 301 if the user is not authenticated
-    // const res = await axios.get("/api/auth/me", { headers: { cookie } });
 
     const res = await axios.get(
       `${process.env.API_BASE_ENDPOINT}/api/auth/me`,

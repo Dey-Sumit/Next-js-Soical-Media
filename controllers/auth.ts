@@ -8,7 +8,20 @@ export const login = (req: ExtendedNextApiRequest, res: NextApiResponse) => {
 };
 export const logout = (req: ExtendedNextApiRequest, res: NextApiResponse) => {
   req.logOut();
+
   res.status(204).end();
+  //   serialize('mytoken1', '', {
+  //     maxAge: -1,
+  //     path: '/',
+  //   })),
+  // res.destroy()
+  // res.clearCookie('', {path: '/'}).status(200).send('Ok.');
+
+  // req.session.destroy(function (err) {
+
+  //   console.log(err);
+  //   res.status(204).redirect("/"); //Inside a callback… bulletproof!
+  // });
 };
 
 //? /api/auth/me

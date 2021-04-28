@@ -42,7 +42,7 @@ export default function Auth() {
           </p>
 
           <p
-            className="p-1 text-base tracking-wide text-center text-white border-2 border-blue-500 cursor-pointer"
+            className="p-1 text-sm tracking-wide text-center text-white border-2 border-blue-500 cursor-pointer"
             onClick={() => push("/")}
           >
             Skip Auth for now

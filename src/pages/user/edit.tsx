@@ -155,6 +155,7 @@ export default profile;
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
     const cookie = context.req.headers.cookie;
+
     if (!cookie) throw new Error("Missing auth token cookie");
 
     // it returns 401 if the user is not authenticated

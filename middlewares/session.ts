@@ -16,7 +16,7 @@ export default function sessionMiddleware(
     secret: "123456", //process.env.SESSION_SECRET
     resave: false,
     saveUninitialized: false,
-    name: "twittyCookie",
+    // name: "twittyCookie",
     cookie: {
       maxAge: 3600000, // TODO make this 2 days
     },

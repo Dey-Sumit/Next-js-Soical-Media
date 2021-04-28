@@ -6,7 +6,6 @@ import { MdCancel } from "react-icons/md";
 import { BiImageAdd } from "react-icons/bi";
 import { FPost } from "lib/types";
 import { usePaginatedPosts } from "lib/hooks";
-import { log } from "node:console";
 // import { WithContext as ReactTags } from "react-tag-input";
 
 const CreateTweet: FunctionComponent<{}> = () => {
@@ -18,7 +17,7 @@ const CreateTweet: FunctionComponent<{}> = () => {
   const { mutate: paginatedPostsMutate } = usePaginatedPosts("/api/posts/feed");
   // console.log({ posts });
 
-  const { user } = useAuthState();
+  const { user, loading } = useAuthState();
 
   // const { register, handleSubmit, reset, getValues } = useForm();
 
@@ -81,11 +80,13 @@ const CreateTweet: FunctionComponent<{}> = () => {
   };
   return (
     <div className="flex p-2 space-x-2">
-      <img
-        src={user?.profilePicture}
-        alt="avatar"
-        className="w-10 h-10 rounded-full "
-      />
+      {user && (
+        <img
+          src={user?.profilePicture}
+          alt="avatar"
+          className="w-10 h-10 rounded-full "
+        />
+      )}
       <div className="flex-1">
         <form onSubmit={handleTweet}>
           <div
@@ -96,11 +97,12 @@ const CreateTweet: FunctionComponent<{}> = () => {
             <textarea
               // ref={register}
               className="w-full h-24 p-2 bg-transparent rounded-md resize-none focus:outline-none"
-              placeholder={`Hey ${user?.username}, what's going on?`}
+              placeholder={user && `Hey ${user?.username}, what's going on?`}
               name="text"
               value={content}
               onChange={handleChange}
             />
+
             <div className="my-1">
               {tags?.map((tag, i) => (
                 <span key={i} className="p-1 mx-1 bg-blue-500 rounded-sm">

@@ -11,7 +11,8 @@ import Loader from "./Loader";
 
 const Navbar = () => {
   const { push } = useRouter();
-  const { user } = useAuthState();
+  const { user, loading: userLoading } = useAuthState();
+
   const dispatch = useLayoutDispatch();
   // const [showResultsDiv, setShowResultsDiv] = useState(false);
   const [query, setQuery] = useState("");
@@ -84,10 +85,7 @@ const Navbar = () => {
                 onClick={() => goToUser(user._id)}
               >
                 <img
-                  src={
-                    user?.profilePicture ||
-                    "https://images.vexels.com/media/users/3/145908/preview2/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
-                  }
+                  src={user?.profilePicture}
                   alt=""
                   className="rounded-full w-7 h-7 "
                 />
@@ -99,7 +97,6 @@ const Navbar = () => {
             ))}
         </div>
       </div>
-
       {!user ? (
         // <div className="flex space-x-3">
         <button
@@ -114,7 +111,7 @@ const Navbar = () => {
           className="flex items-center p-2 space-x-3 rounded-md cursor-pointer hover:bg-dark-700"
           onClick={() => push(`/user/${user._id}`)}
         >
-          {<span className="hidden sm:block">Hey {user.username}!</span>}
+          {<span className="hidden sm:block">Hey {user?.username}!</span>}
           <img
             src={user?.profilePicture}
             alt=""
