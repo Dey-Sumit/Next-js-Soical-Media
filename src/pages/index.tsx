@@ -19,7 +19,6 @@ export default function Home({ user }) {
   const { error, posts, page, setPage, isReachingEnd } = usePaginatedPosts(
     !user ? "/api/posts" : "/api/posts/feed"
   );
-  console.log("from index", { posts });
 
   return (
     <div className="grid grid-cols-8 gap-x-8 ">
@@ -79,9 +78,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     // it returns 301 if the user is not authenticated
     // const res = await axios.get("/api/auth/me", { headers: { cookie } });
 
-    const res = await axios.get(`${process.env.VERCEL_URL_TEST}/api/auth/me`, {
-      headers: { cookie },
-    });
+    const res = await axios.get(
+      `${process.env.API_BASE_ENDPOINT}/api/auth/me`,
+      {
+        headers: { cookie },
+      }
+    );
 
     return { props: { user: res.data.user } };
   } catch (error) {

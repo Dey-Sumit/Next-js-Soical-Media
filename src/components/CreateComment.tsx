@@ -8,7 +8,9 @@ const CreateComment: FunctionComponent<{
   tid: string;
 }> = ({ tid }) => {
   const { user } = useAuthState();
+
   const { register, handleSubmit, reset } = useForm();
+
   const handleTweet = async (data: { content: string }) => {
     if (data.content.length === 0) return;
 
@@ -21,7 +23,8 @@ const CreateComment: FunctionComponent<{
     mutate(
       `/api/posts/${tid}`,
       (existingData) => {
-        console.log({ existingData });
+        // [1,2,3].map()
+        // console.log({ existingData });
         const existingComments = existingData.comments;
         const newComments = {
           ...existingData,
@@ -32,13 +35,17 @@ const CreateComment: FunctionComponent<{
       },
       false
     );
-    reset();
+  reset();
+
 
     await axios(`/api/posts/${tid}/comments`, {
       method: "POST",
       data,
     });
+    
     mutate(`/api/posts/${tid}`);
+      
+
   };
   return (
     <div className="flex p-2 space-x-2">

@@ -19,6 +19,9 @@ const index = () => {
   const { tid } = router.query;
   const { data, error } = useSWR<FPost>(tid ? `/api/posts/${tid}` : null);
 
+
+
+
   if (error) {
     return <h3>Opps Error!!!</h3>;
   }

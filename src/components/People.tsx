@@ -22,6 +22,7 @@ const People: FunctionComponent<{ noOfElements?: number }> = ({
           <div
             className="flex items-center px-3 pt-2 space-x-3 cursor-pointer"
             onClick={() => push(`/user/${user._id}`)}
+            key={user._id}
           >
             <img
               src={user.profilePicture}

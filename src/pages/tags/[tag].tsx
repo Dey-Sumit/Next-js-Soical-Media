@@ -39,14 +39,14 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const { tag } = ctx.query;
 
   // TODO check if relative URL works or not in axios server side
+  // TODO make this client side, no point of making this server side
   let posts;
   try {
     const { data } = await axios.get(
-      `${process.env.VERCEL_URL}/api/tags/${tag}`
+      `${process.env.API_BASE_ENDPOINT}/api/tags/${tag}`
     );
 
     posts = data.posts;
-    console.log(posts);
 
     if (!posts) {
       posts = [];

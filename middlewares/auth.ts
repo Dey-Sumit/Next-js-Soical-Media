@@ -8,7 +8,7 @@ export default async function (
   next: NextHandler
 ) {
   if (!req.user) {
-    return res.status(401).json({ messsage: "Unauthenticated" });
+    return res.status(401).json({ message: "Unauthenticated" });
   }
 
   next();

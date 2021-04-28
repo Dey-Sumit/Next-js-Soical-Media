@@ -148,7 +148,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     // const res = await axios.get("/api/auth/me/");
 
     // it returns 401 if the user is not authenticated
-    const { data } = await axios.get(`${process.env.VERCEL_URL_TEST}/api/auth/me`, { headers: { cookie } });
+    const {
+      data,
+    } = await axios.get(`${process.env.API_BASE_ENDPOINT}/api/auth/me`, {
+      headers: { cookie },
+    });
 
     return {
       props: {

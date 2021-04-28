@@ -71,7 +71,7 @@ const CreateTweet: FunctionComponent<{}> = () => {
     });
 
     paginatedPostsMutate();
-    mutate("/api/tags");
+    // mutate("/api/tags");
   };
 
   const handleChange = (e) => {

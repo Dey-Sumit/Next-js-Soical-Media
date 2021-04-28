@@ -147,8 +147,12 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
           </div>
         </div>
         <div className="text-lg whitespace-pre-wrap">
-          {content.split(" ").map((word) => {
-            return word[0] !== "#" ? <span>{word} </span> : <Hash>{word}</Hash>;
+          {content.split(" ").map((word, i) => {
+            return word[0] !== "#" ? (
+              <span key={i}>{word} </span>
+            ) : (
+              <Hash key={i}>{word}</Hash>
+            );
           })}
         </div>
         {/* <div className="flex space-x-3">

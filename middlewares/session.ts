@@ -1,9 +1,6 @@
 import connectMongo from "connect-mongo";
 
 import session from "express-session";
-// import { NextApiRequest, NextApiResponse } from "next";
-// import { NextHandler } from "next-connect";
-// import { ExtendedNextApiRequest } from "../lib/types.api";
 
 export default function sessionMiddleware(
   //!TODO set types
@@ -11,22 +8,20 @@ export default function sessionMiddleware(
   res: any,
   next: any
 ) {
-  //   const mongoStore = new MongoStore({
-  //     client: process.env.MONGODB_URI,
-  //     stringify: false,
-  //   });
   const options = {
     mongoUrl: process.env.MONGODB_URI,
   };
-  // console.log("inside session middlware");
-  // console.log(req.body);
 
   return session({
-    secret: "123456",
+    secret: "123456", //process.env.SESSION_SECRET
     resave: false,
     saveUninitialized: false,
+    name: "twittyCookie",
+    cookie: {
+      maxAge: 3600000, // TODO make this 2 days
+    },
     // age
-    // cookie: { secure: true, maxAge: 20 * 20 * 5, httpOnly: false }, //! dont know wtf is going on here :(
+    // cookie: { secure: true, maxAge: 20 * 20 * 5, httpOnly: false }, //! don't know wtf is going on here :(
     store: connectMongo.create(options),
   })(req, res, next);
 }
