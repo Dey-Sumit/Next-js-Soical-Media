@@ -3,12 +3,11 @@ import { useRouter } from "next/router";
 import { FunctionComponent } from "react";
 import useSWR from "swr";
 import Loader from "./Loader";
+import UserCard from "./UserCard";
 
 const People: FunctionComponent<{ noOfElements?: number }> = ({
   noOfElements,
 }) => {
-  const { push } = useRouter();
-
   const { data: users, error } = useSWR<FUser[]>("/api/users");
 
   return (
@@ -18,23 +17,9 @@ const People: FunctionComponent<{ noOfElements?: number }> = ({
       </h3>
       {error && <h4 className="text-lg ">Could not load</h4>}
       {users ? (
-        users.slice(0, noOfElements).map((user) => (
-          <div
-            className="flex items-center px-3 pt-2 space-x-3 cursor-pointer"
-            onClick={() => push(`/user/${user._id}`)}
-            key={user._id}
-          >
-            <img
-              src={user.profilePicture}
-              alt=""
-              className="w-12 h-12 rounded-full"
-            />
-            <div className="flex flex-col space-y-1">
-              <span className="text-lg text-white">{user.username}</span>
-              <span className="">Followers : {user.noOfFollowers}</span>
-            </div>
-          </div>
-        ))
+        users
+          .slice(0, noOfElements)
+          .map((user) => <UserCard user={user} showFollowButton={false} />)
       ) : (
         <div>
           <Loader />

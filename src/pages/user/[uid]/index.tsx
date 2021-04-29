@@ -8,27 +8,39 @@ import { MdDelete, MdSettings } from "react-icons/md";
 import useSWR, { mutate } from "swr";
 import TweetCard from "components/TweetCard";
 import { useAuthState } from "context/auth.context";
-import { FPaginatedPosts, FUser } from "lib/types";
+import { FUser } from "lib/types";
 import Head from "next/head";
 import Loader from "components/Loader";
+import Followers from "components/Followers";
+import { usePaginatedPosts } from "lib/hooks";
+import InfiniteScroll from "react-infinite-scroll-component";
+import UserCard from "components/UserCard";
 
 const profile = ({ sameUser }) => {
   const { push, query } = useRouter();
   const { user: authUser } = useAuthState();
+
   const { data: profileData, error } = useSWR<FUser>(
     `/api/users/${query?.uid}`
   );
-  const { data: paginatedPosts, error: postsError } = useSWR<FPaginatedPosts>(
-    `/api/posts?uid=${query?.uid}`
+  const {
+    error: getPostsError,
+    posts,
+    page,
+    setPage,
+    isReachingEnd,
+  } = usePaginatedPosts(`/api/posts?${query?.uid}`);
+
+  const { data: following, error: getFollowingsError } = useSWR<FUser[]>(
+    `/api/users/${query?.uid}/following`
   );
-  // const {} = profileData ;
-  // const { data: paginatedPosts, error: postsError } = useSWR<FPaginatedPosts>(
-  //   `/api/posts?uid=${query?.uid}`
-  // );
-  // const { data: paginatedPosts, error: postsError } = usSWR<FPaginatedPosts>(
-  //   `/api/posts?uid=${query?.uid}`
-  // );
+
+  const { data: followers, error: getFollowersError } = useSWR<FUser[]>(
+    `/api/users/${query?.uid}/followers`
+  );
+
   const [isFollowing, setIsFollowing] = useState<boolean>();
+  const [currentTab, setCurrentTab] = useState<string>("posts");
 
   useEffect(() => {
     const temp = authUser && profileData?.followers.includes(authUser._id);
@@ -37,11 +49,13 @@ const profile = ({ sameUser }) => {
   }, [profileData, authUser]);
 
   const handleFollow = async (type: "follow" | "unfollow") => {
+    // TODO fix this
     const ENDPOINT = `/api/users/${profileData._id}/${type}`;
-    setIsFollowing((value) => !value);
     await axios.put(ENDPOINT); //? make the request
+    setIsFollowing((value) => !value);
     mutate(ENDPOINT); //? refetch the data and compare if everything is fine or anything goes wrong in the previous request
     mutate(`/api/users/${query?.uid}`); // update the profile data
+    mutate(`/api/users/${profileData._id}/followers`);
   };
 
   // TODO looks like you don't have a profile :) show funny image ; don't redirect
@@ -106,31 +120,81 @@ const profile = ({ sameUser }) => {
               </a>
             </Link>
 
-            <div className="flex items-center justify-center p-2 space-x-2 text-red-600 border border-red-600 rounded-sm cursor-pointer">
+            {/* <div className="flex items-center justify-center p-2 space-x-2 text-red-600 border border-red-600 rounded-sm cursor-pointer">
               <BsLockFill /> <span>Change Password </span>
-            </div>
+            </div> */}
 
-            <div className="flex items-center justify-center p-2 space-x-2 text-white bg-red-600 rounded-sm cursor-pointer">
+            <button className="flex items-center justify-center p-2 space-x-2 text-white bg-red-600 rounded-sm cursor-pointer">
               <MdDelete /> <span> Delete Account </span>
-            </div>
+            </button>
           </div>
         )}
       </div>
       {/* <div className="col-span-2">Sidebar</div> */}
       <div className="col-span-8 rounded-sm lg:col-span-5 bg-dark-500">
         <div className="flex px-4 py-2 space-x-4 shadow-lg ">
-          <span className="text-blue-600">Tweets</span>
-          <span className="cursor-pointer">Followers</span>
-          <span className="cursor-pointer">Followings</span>
+          <span
+            className={`${
+              currentTab === "posts" ? "text-blue-600 " : ""
+            } cursor-pointer`}
+            onClick={() => setCurrentTab("posts")}
+          >
+            Tweets
+          </span>
+          <span
+            className={`${
+              currentTab === "followers" ? "text-blue-600 " : ""
+            } cursor-pointer`}
+            onClick={() => setCurrentTab("followers")}
+          >
+            Followers
+          </span>
+          <span
+            className={`${
+              currentTab === "following" ? "text-blue-600 " : ""
+            } cursor-pointer`}
+            onClick={() => setCurrentTab("following")}
+          >
+            Followings
+          </span>
         </div>
-        <div className="p-2">
-          {/* {!paginatedPosts ? (
-            <Loader />
-          ) : (
-            paginatedPosts?.posts.map((tweet) => (
-              <TweetCard tweet={tweet} key={tweet._id} />
-            ))
-          )} */}
+        <div className="max-h-screen p-2 overflow-y-auto">
+          {currentTab === "posts" && (
+            <InfiniteScroll
+              dataLength={posts.length} //This is important field to render the next data
+              next={() => setPage(page + 1)}
+              hasMore={!isReachingEnd}
+              loader={<Loader />}
+              endMessage={
+                <p style={{ textAlign: "center" }}>
+                  <b>No more posts</b>
+                </p>
+              }
+            >
+              {posts?.map((tweet, i) => (
+                <TweetCard tweet={tweet} key={i} />
+              ))}
+              {/* key={tweet._id.toString()}  */}
+            </InfiniteScroll>
+          )}
+
+          {currentTab === "followers" &&
+            (!followers ? (
+              <Loader />
+            ) : (
+              followers.map((user) => (
+                <UserCard user={user} showFollowButton={true} />
+              ))
+            ))}
+
+          {currentTab === "following" &&
+            (!following ? (
+              <Loader />
+            ) : (
+              following.map((user) => (
+                <UserCard user={user} showFollowButton={true} />
+              ))
+            ))}
         </div>
       </div>
     </div>
@@ -148,11 +212,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     // const res = await axios.get("/api/auth/me/");
 
     // it returns 401 if the user is not authenticated
-    const {
-      data,
-    } = await axios.get(`${process.env.API_BASE_ENDPOINT}/api/auth/me`, {
-      headers: { cookie },
-    });
+    const { data } = await axios.get(
+      `${process.env.API_BASE_ENDPOINT}/api/auth/me`,
+      {
+        headers: { cookie },
+      }
+    );
 
     return {
       props: {

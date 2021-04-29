@@ -2,25 +2,19 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { AiFillGoogleCircle } from "react-icons/ai";
 import { BiLoaderAlt } from "react-icons/bi";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import { registrationSchema } from "../../lib/schemaValidation";
+import { registrationSchema } from "lib/schemaValidation";
 import { useAuthDispatch } from "../context/auth.context";
 import { AUTH_SUCCESS } from "../context/types";
-// import axiosInstance from "../util/axiosInstance";
-
 import Input from "./Input";
 
-//TODO use yup for the validation, re use server side code
 export default function Register() {
   const { register, errors, handleSubmit } = useForm({
     mode: "onTouched",
     resolver: yupResolver(registrationSchema),
   });
-
-  const {push} = useRouter()
 
   const [loading, setLoading] = useState(false);
 
@@ -40,22 +34,21 @@ export default function Register() {
       dispatch({ type: AUTH_SUCCESS, payload: res.data.user });
       router.push("/");
     } catch (error) {
-      console.log(error.response.data);
       setErrorMessage(error.response.data.message);
     } finally {
       setLoading(false);
     }
   };
   return (
-    <div className="flex flex-col space-y-4">
-      <h1 className="text-2xl font-bold text-white">Sign up to Twitter</h1>
-    
+    <div className="w-full p-2 space-y-4 md:max-w-max">
+      <h1 className="text-2xl font-bold text-white">Sign up to Twitty</h1>
+
       <form
         className="flex flex-col space-y-3"
         onSubmit={handleSubmit(handleClick)}
       >
         {/* // wrapper of the form 👆*/}
-        <div className="flex space-x-4">
+        <div className="space-y-3 md:space-y-0 md:flex md:space-x-4 md:items-center">
           <Input
             label="Name"
             type="text"
@@ -88,13 +81,7 @@ export default function Register() {
         />
 
         <button className="flex items-center justify-center p-2 text-lg font-bold text-white bg-blue-700 rounded-md focus:outline-none">
-          {!loading ? (
-            "Sign Up"
-          ) : (
-            <>
-              <BiLoaderAlt className="mr-2 animate-spin" /> Processing
-            </>
-          )}
+          {!loading ? "Sign Up" : <BiLoaderAlt className="mr-2 animate-spin" />}
         </button>
       </form>
 

@@ -253,3 +253,34 @@ export const unfollowUser = async (
     res.status(500).json({ msg: "server error" });
   }
 };
+
+// @ return followers of an user
+// @ api/users/:id/followers
+// @ public
+
+export const getFollowers = async (
+  req: ExtendedNextApiRequest,
+  res: NextApiResponse
+) => {
+  const { id }: { id?: string } = req.query;
+  const user = await User.findById(id).populate("followers");
+  if (!user) return res.status(404).json({ msg: " user not found" });
+  const followers = user.followers;
+  return res.json(followers);
+};
+
+// @ return followers of an user
+// @ api/users/:id/followers
+// @ public
+
+export const getFollowing = async (
+  req: ExtendedNextApiRequest,
+  res: NextApiResponse
+) => {
+  // add try catch
+  const { id }: { id?: string } = req.query;
+  const user = await User.findById(id).populate("following");
+  if (!user) return res.status(404).json({ msg: " user not found" });
+  const following = user.following;
+  return res.json(following);
+};

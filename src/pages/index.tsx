@@ -22,7 +22,6 @@ export default function Home({ user }) {
 
   return (
     <div className="grid grid-cols-8 gap-x-8 ">
-      {/* <div className="col-span-2">Sidebar</div> */}
       <Head>
         <title>Twitty</title>
       </Head>
@@ -54,22 +53,20 @@ export default function Home({ user }) {
             </p>
           }
         >
-          {posts?.map((tweet, i) => (
-            <TweetCard tweet={tweet} key={i} />
+          {posts?.map((tweet) => (
+            <TweetCard tweet={tweet} key={tweet._id.toString()} />
           ))}
-          {/* key={tweet._id.toString()}  */}
         </InfiniteScroll>
       </div>
       <div className="hidden col-span-8 space-y-4 md:col-span-3 md:block">
-        {/* <Trends noOfElements={5} />
-        <People noOfElements={5} /> */}
+        <Trends noOfElements={5} />
+        <People noOfElements={5} />
       </div>
     </div>
   );
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  // const cookie = context.req.headers?.cookie;
   try {
     // Parse
     const cookie = context.req.headers.cookie;

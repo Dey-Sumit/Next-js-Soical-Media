@@ -1,28 +1,20 @@
 import axios from "axios";
 import { ChangeEvent, FunctionComponent, useState } from "react";
-import useSWR, { mutate, useSWRInfinite } from "swr";
 import { useAuthState } from "../context/auth.context";
 import { MdCancel } from "react-icons/md";
 import { BiImageAdd } from "react-icons/bi";
 import { FPost } from "lib/types";
 import { usePaginatedPosts } from "lib/hooks";
-// import { WithContext as ReactTags } from "react-tag-input";
 
 const CreateTweet: FunctionComponent<{}> = () => {
-  // const [previewPicture, setPreviewPicture] = useState("");
   const [file, setFile] = useState(null);
   const [tags, setTags] = useState<string[]>([]);
   const [content, setContent] = useState("");
-  // const ENDPOINT = "/api/posts/feed";
   const { mutate: paginatedPostsMutate } = usePaginatedPosts("/api/posts/feed");
-  // console.log({ posts });
 
   const { user, loading } = useAuthState();
 
-  // const { register, handleSubmit, reset, getValues } = useForm();
-
   const onChangePicture = (e: ChangeEvent<HTMLInputElement>) => {
-    // setPreviewPicture(URL.createObjectURL(e.target.files[0]));
     setFile(e.target.files[0]);
   };
 
@@ -96,7 +88,7 @@ const CreateTweet: FunctionComponent<{}> = () => {
           >
             <textarea
               // ref={register}
-              className="w-full h-24 p-2 bg-transparent rounded-md resize-none focus:outline-none"
+              className="w-full h-24 p-2 text-lg bg-transparent rounded-md focus:outline-none"
               placeholder={user && `Hey ${user?.username}, what's going on?`}
               name="text"
               value={content}

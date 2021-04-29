@@ -1,22 +1,10 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Login, Register } from "components/index";
-// import { useAuthState } from "context/auth.context";
 
 export default function Auth() {
-  // const router = useRouter();
-
   const [isLogin, setIsLogin] = useState(true);
   const { push } = useRouter();
-  // const { user } = useAuthState();
-
-  // useEffect(() => {
-  //   if (user) {
-
-  //     router.back(); // redirect to the prev page(route)
-  //   }
-  // }, [user]);
-
   return (
     <div className="grid h-screen grid-cols-8 text-white">
       {/* left part */}
@@ -28,13 +16,13 @@ export default function Auth() {
       </div>
 
       {/* right part */}
-      <div className="grid col-span-8 p-4 bg-dark-700 md:col-span-5 place-items-center">
+      <div className="grid col-span-8 p-2 bg-dark-700 md:col-span-5 place-items-center">
         {isLogin ? <Login large /> : <Register />}
         <div>
           <p className="text-lg tracking-wide text-center text-white">
             {!isLogin ? "Already a member?" : " Don't have an account yet?"}
             <span
-              className="text-blue-700 cursor-pointer"
+              className="font-semibold text-white cursor-pointer"
               onClick={() => setIsLogin((value) => !value)}
             >
               {!isLogin ? " Sign In" : " Sign Up"}
@@ -42,7 +30,7 @@ export default function Auth() {
           </p>
 
           <p
-            className="p-1 text-sm tracking-wide text-center text-white border-2 border-blue-500 cursor-pointer"
+            className="p-1 mt-2 text-sm tracking-wide text-center text-white border-2 border-blue-500 cursor-pointer md:text-base"
             onClick={() => push("/")}
           >
             Skip Auth for now

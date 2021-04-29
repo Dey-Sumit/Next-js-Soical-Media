@@ -35,7 +35,7 @@ export const getFeed = async (
       .populate("user")
       .sort("-createdAt");
     return res.json({
-      posts:posts,
+      posts: posts,
       page: pageNumber,
       pages: Math.ceil(count / pageSize) - 1,
     });

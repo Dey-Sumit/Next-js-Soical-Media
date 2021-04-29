@@ -1,5 +1,5 @@
 import { IoMdHome, IoMdLogOut } from "react-icons/io";
-import { MdExplore, MdMoreHoriz, MdNotifications } from "react-icons/md";
+import { MdExplore } from "react-icons/md";
 import { SiTwitter } from "react-icons/si";
 import Link from "next/link";
 import { useAuthDispatch, useAuthState } from "../context/auth.context";
@@ -10,10 +10,7 @@ import { AiOutlineUser } from "react-icons/ai";
 import { useLayoutDispatch, useLayoutState } from "src/context/layout.context";
 import { FunctionComponent, MouseEventHandler } from "react";
 import { IconType } from "react-icons";
-import { AnimatePresence } from "framer-motion";
-import { destroyCookie, parseCookies } from "nookies";
 import cookie from "js-cookie";
-import { FaUser } from "react-icons/fa";
 
 const SidebarItem: FunctionComponent<{
   Icon: IconType;
@@ -32,10 +29,7 @@ const Sidebar = () => {
   const dispatch = useAuthDispatch();
   const layoutDispatch = useLayoutDispatch();
   const { user } = useAuthState();
-  // const user = parseCookies()?.user ? JSON.parse(parseCookies().user) : null;
   const { showNavbar } = useLayoutState();
-
-  // console.log(cookie.get());
 
   const router = useRouter();
 
@@ -48,10 +42,7 @@ const Sidebar = () => {
 
   return (
     <div
-      // showNavbar
-      // ? " flex  translate-x-0"
-      // : " hidden  "
-      className={`bg-dark-700 fixed flex-col justify-between h-screen px-3 sm:px-6 py-8 pb-20 text-lg shadow-lg flex z-10 sm:sticky sm:w-40  max-w-max transform transition-all duration-300 ${
+      className={`bg-dark-700 fixed flex-col justify-between h-screen px-3 sm:px-6 py-8 pb-20 text-lg shadow-lg flex z-10 sm:sticky top-0 sm:w-40  max-w-max transform transition-all duration-300 ${
         showNavbar ? "  translate-x-0" : "  -translate-x-full sm:translate-x-0"
       }`}
     >

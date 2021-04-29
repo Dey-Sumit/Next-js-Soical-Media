@@ -2,7 +2,6 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { FunctionComponent, useState } from "react";
 import { useForm } from "react-hook-form";
-import { AiFillGoogleCircle } from "react-icons/ai";
 import { BiLoaderAlt } from "react-icons/bi";
 import classNames from "classnames";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -31,8 +30,6 @@ const Login: FunctionComponent<{
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const router = useRouter();
-
   const dispatch = useAuthDispatch();
 
   const handleClick = async (data: any) => {
@@ -50,10 +47,9 @@ const Login: FunctionComponent<{
       });
       cookie.set("user", res.data.user);
       // 3. redirect to home page
-      router.push("/");
+      push("/");
     } catch (error) {
-      console.log(error.response.status === 401);
-      if (error.response.status == 401) {
+      if (error.response.status === 401) {
         setErrorMessage("Invalid credentials");
         return;
       }
@@ -70,10 +66,6 @@ const Login: FunctionComponent<{
       })}
     >
       <h1 className="text-2xl font-bold text-white">Sign in to Twitty</h1>
-      {/* <div className="flex items-center justify-center p-2 space-x-2 text-white bg-blue-700 rounded-md">
-        <AiFillGoogleCircle />
-        <span>Sign up with Google</span>
-      </div> */}
       <form
         className="flex flex-col space-y-3"
         onSubmit={handleSubmit(handleClick)}
@@ -94,17 +86,10 @@ const Login: FunctionComponent<{
           register={register}
         />
         <button className="button">
-          {!loading ? (
-            "Sign In"
-          ) : (
-            <>
-              <BiLoaderAlt className="mr-2 animate-spin" /> Processing
-            </>
-          )}
+          {!loading ? "Sign In" : <BiLoaderAlt className="mr-2 animate-spin" />}
         </button>
       </form>
 
-      {/* // TODO show error message if credentials not valid */}
       {errorMessage && (
         <div className="p-1 text-lg tracking-wide text-center text-red-600 border border-red-600">
           {errorMessage}

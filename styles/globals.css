@@ -44,3 +44,6 @@ body {
 }
 
 /* // TODO more components  */
+button:focus {
+  outline: none;
+}

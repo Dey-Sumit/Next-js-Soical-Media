@@ -6,7 +6,7 @@ import { SWRConfig } from "swr";
 import { LayoutProvider } from "../context/layout.context";
 import Layout from "src/components/Layout";
 
-axios.defaults.baseURL = process.env.VERCEL_URL; // the prefix of the URL
+axios.defaults.baseURL = process.env.VERCEL_URL; // the prefix of the URL only for the client side
 
 function MyApp({ Component, pageProps }) {
   const { pathname } = useRouter();

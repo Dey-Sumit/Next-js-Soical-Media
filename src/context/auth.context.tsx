@@ -8,10 +8,8 @@ import {
   STOP_LOADING,
   SET_USER_DUMMY,
 } from "./types";
-import { parseCookies } from "nookies";
-import useSWR from "swr";
-// import { User } from '../types'
 
+import cookie from "js-cookie";
 interface State {
   //   authenticated: boolean;
   user: FUser | undefined;
@@ -22,10 +20,10 @@ interface Action {
   type: string;
   payload?: any;
 }
-
+// TODO learn what the fuck is going on here
 // create two context; one for the state and one for the dispatch
 const StateContext = createContext<State>({
-  user: null,
+  user: null, // what is this ; if this is initial state the wtf is inside useReducer
 });
 
 const DispatchContext = createContext(null);
@@ -57,43 +55,21 @@ const reducer = (state: State, { type, payload }: Action) => {
       throw new Error(`Unknown action type"${type}`);
   }
 };
-function getCookie(cname: string) {
-  var name = cname + "=";
-  var decodedCookie = decodeURIComponent(document.cookie);
-  var ca = decodedCookie.split(";");
-  for (var i = 0; i < ca.length; i++) {
-    var c = ca[i];
-    while (c.charAt(0) == " ") {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
-}
 
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, {
-    // user: null,
     user: null,
-    // authenticated: false,
     loading: true,
+    // authenticated: false,
   });
-  //   const dispatch = (type: string, payload?: any) =>
-  //     defaultDispatch({ type, payload });
 
   useEffect(() => {
     async function loadUser() {
       try {
-        // const { data } = useSWR("/api/auth/me");
-        // console.log({ data });
-        const user = parseCookies()?.user
-          ? JSON.parse(parseCookies().user)
-          : null;
+        // set initially from cookie
         dispatch({
-          type: AUTH_SUCCESS,
-          payload: user,
+          type: SET_USER_DUMMY,
+          payload: cookie.get("user") ? JSON.parse(cookie.get("user")) : null,
         });
         const res = await axios.get("/api/auth/me");
 
