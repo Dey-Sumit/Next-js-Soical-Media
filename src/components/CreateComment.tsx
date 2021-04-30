@@ -35,21 +35,18 @@ const CreateComment: FunctionComponent<{
       },
       false
     );
-  reset();
-
+    reset();
 
     await axios(`/api/posts/${tid}/comments`, {
       method: "POST",
       data,
     });
-    
-    mutate(`/api/posts/${tid}`);
-      
 
+    mutate(`/api/posts/${tid}`);
   };
   return (
     <div className="flex p-2 space-x-2">
-      <img
+      <Image
         src={user?.profilePicture}
         alt=""
         className="w-10 h-10 rounded-full "

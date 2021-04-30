@@ -3,12 +3,12 @@ import { FunctionComponent } from "react";
 import { FComment } from "lib/types";
 import { useRouter } from "next/router";
 import timeSince from "lib/timeSince";
-
+import Image from "next/image";
 const CommentCard: FunctionComponent<{ data: FComment }> = ({
   data: {
     date,
     content,
-    user: { name, username },
+    user: { name, username, profilePicture },
     _id,
     clientOnly,
   },
@@ -17,10 +17,12 @@ const CommentCard: FunctionComponent<{ data: FComment }> = ({
 
   return (
     <div className="flex p-2 space-x-3 ">
-      <img
-        src="https://images.vexels.com/media/users/3/145908/preview2/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
+      <Image
+        src={profilePicture}
         alt=""
-        className="w-10 h-10 rounded-full cursor-pointer"
+        width={10}
+        height={10}
+        className="rounded-full cursor-pointer"
         onClick={() => push(`/user/${username}`)}
       />
 

@@ -15,6 +15,7 @@ import Followers from "components/Followers";
 import { usePaginatedPosts } from "lib/hooks";
 import InfiniteScroll from "react-infinite-scroll-component";
 import UserCard from "components/UserCard";
+import Image from "next/image";
 
 const profile = ({ sameUser }) => {
   const { push, query } = useRouter();
@@ -67,8 +68,11 @@ const profile = ({ sameUser }) => {
       <div className="col-span-8 lg:col-span-3">
         {/* profile */}
         <div className="flex flex-col items-center p-3 space-y-2 rounded-sm shadow-md bg-dark-600">
-          <img
-            src={profileData?.profilePicture}
+          <Image
+            width={112}
+            height={112}
+            // src={profileData?.profilePicture}
+            src="https://images.vexels.com/media/users/3/145908/preview2/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
             alt=""
             className="rounded-full w-28 h-28"
           />

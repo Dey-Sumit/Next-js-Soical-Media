@@ -27,6 +27,8 @@ export default function uploadMulter(): multer.Multer {
     file: Express.Multer.File,
     cb: multer.FileFilterCallback
   ) => {
+    console.log(file);
+
     const fileTypes = /jpg|jpeg|png/;
 
     const extname = fileTypes.test(
@@ -44,6 +46,8 @@ export default function uploadMulter(): multer.Multer {
   return multer({
     storage,
     fileFilter: (req, file, cb) => {
+      console.log(file);
+
       checkFileType(file, cb);
     },
   });

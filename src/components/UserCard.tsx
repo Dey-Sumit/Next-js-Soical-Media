@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useAuthState } from "context/auth.context";
 import { FUser } from "lib/types";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { FunctionComponent, MouseEvent, useEffect, useState } from "react";
 import { mutate } from "swr";
@@ -48,10 +49,14 @@ const UserCard: FunctionComponent<{
       onClick={() => push(`/user/${user._id}`)}
       key={user._id}
     >
-      <img
+      <Image
+        width={48}
+        height={48}
+        objectFit="cover"
+        quality={100}
         src={user.profilePicture}
         alt=""
-        className="w-12 h-12 rounded-full"
+        className="rounded-full "
       />
       <div className="flex flex-col ml-3 space-y-1">
         <span className="text-lg text-white">{user.username}</span>

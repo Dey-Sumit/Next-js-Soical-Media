@@ -19,7 +19,13 @@ const People: FunctionComponent<{ noOfElements?: number }> = ({
       {users ? (
         users
           .slice(0, noOfElements)
-          .map((user) => <UserCard user={user} showFollowButton={false} />)
+          .map((user) => (
+            <UserCard
+              user={user}
+              showFollowButton={false}
+              key={user._id.toString()}
+            />
+          ))
       ) : (
         <div>
           <Loader />

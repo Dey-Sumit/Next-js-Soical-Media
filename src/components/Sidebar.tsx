@@ -69,13 +69,13 @@ const Sidebar = () => {
           text="Home"
           handler={() => router.push("/")}
         />
-
-        <SidebarItem
-          Icon={AiOutlineUser}
-          text="Profile"
-          handler={() => router.push(`/user/${user._id}`)}
-        />
-
+        {user && (
+          <SidebarItem
+            Icon={AiOutlineUser}
+            text="Profile"
+            handler={() => router.push(`/user/${user._id}`)}
+          />
+        )}
         <SidebarItem
           Icon={MdExplore}
           text="Explore"

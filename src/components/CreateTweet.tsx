@@ -5,6 +5,7 @@ import { MdCancel } from "react-icons/md";
 import { BiImageAdd } from "react-icons/bi";
 import { FPost } from "lib/types";
 import { usePaginatedPosts } from "lib/hooks";
+import Image from "next/image";
 
 const CreateTweet: FunctionComponent<{}> = () => {
   const [file, setFile] = useState(null);
@@ -73,10 +74,14 @@ const CreateTweet: FunctionComponent<{}> = () => {
   return (
     <div className="flex p-2 space-x-2">
       {user && (
-        <img
+        <Image
+          width={48}
+          height={48}
+          objectFit="contain"
+          quality={100}
           src={user?.profilePicture}
           alt="avatar"
-          className="w-10 h-10 rounded-full "
+          className="rounded-full"
         />
       )}
       <div className="flex-1">
@@ -108,7 +113,7 @@ const CreateTweet: FunctionComponent<{}> = () => {
               <img
                 src={URL.createObjectURL(file)}
                 alt=" attachment"
-                className="h-48 mx-auto border rounded-xl"
+                className="h-auto mx-auto border rounded-xl"
               />
               <MdCancel
                 className="absolute w-8 h-8 text-gray-600 transform -translate-x-1/2 cursor-pointer inset-x-1/2 bottom-3"

@@ -1,8 +1,6 @@
 import { BsClockHistory } from "react-icons/bs";
-import { AiOutlineHeart, AiOutlineRetweet } from "react-icons/ai";
-import { FaCommentAlt, FaHeart, FaRegComment } from "react-icons/fa";
-import { IoMdShareAlt } from "react-icons/io";
-import { GoComment } from "react-icons/go";
+import { AiOutlineHeart } from "react-icons/ai";
+import { FaHeart, FaRegComment } from "react-icons/fa";
 import { FunctionComponent, useState } from "react";
 import { FPost } from "lib/types";
 import { useRouter } from "next/router";
@@ -13,6 +11,7 @@ import { useLayoutDispatch } from "context/layout.context";
 import { SHOW_MODAL } from "context/types";
 import { MdDelete } from "react-icons/md";
 import { mutate } from "swr";
+import Image from "next/image";
 // import Heart from "react-animated-heart";
 
 const Hash: FunctionComponent<{ children: string }> = ({ children }) => {
@@ -99,18 +98,24 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
   return (
     <div className="flex p-2 space-x-3 ">
       <div className="relative">
-        <img
+        <Image
+          width={48}
+          height={48}
+          objectFit="cover"
+          quality={100}
           src={profilePicture}
           alt=""
           onClick={() => push(`/user/${uid}`)}
           onMouseEnter={() => setShowCard(true)}
           onMouseLeave={() => setShowCard(false)}
-          className="w-10 h-10 rounded-full cursor-pointer "
+          className="rounded-full cursor-pointer "
         />
-        {/* //TODO separate component */}
+        {/* //TODO separate component, remove this feature ; don't need this in the course */}
         {showCard && (
           <div className="absolute z-10 flex flex-col flex-shrink-0 p-2 space-y-3 border rounded-lg shadow-lg top-10 left-10 bg-dark-700 w-60">
-            <img
+            <Image
+              width={10}
+              height={10}
               src={profilePicture}
               alt=""
               onClick={() => push(`/user/${uid}`)}
@@ -166,15 +171,20 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
             </span>
           ))}
         </div> */}
-        <div>
-          {attachmentURL && (
+
+        {attachmentURL && (
+          <div className="relative w-9/12 h-64 mx-auto">
             <img
+              // layout="fill"
+              // quality={100}
+              // objectFit="cover"
               src={attachmentURL}
               alt="attachment"
-              className="object-contain w-full border rounded-xl h-72"
+              className="border rounded-xl"
             />
-          )}
-        </div>
+          </div>
+        )}
+
         <div className="flex justify-around ">
           <div className="flex items-center space-x-2 cursor-pointer">
             <FaRegComment

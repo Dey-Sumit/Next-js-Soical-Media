@@ -8,6 +8,7 @@ import { SiTwitter } from "react-icons/si";
 import { useLayoutDispatch, useLayoutState } from "src/context/layout.context";
 import { TOGGLE_NAVBAR } from "src/context/types";
 import Loader from "./Loader";
+import Image from "next/image";
 
 const Navbar = () => {
   const { push } = useRouter();
@@ -84,7 +85,9 @@ const Navbar = () => {
                 className="flex items-center px-4 py-1 space-x-6 cursor-pointer bg-dark-700"
                 onClick={() => goToUser(user._id)}
               >
-                <img
+                <Image
+                  width={28}
+                  height={28}
                   src={user?.profilePicture}
                   alt=""
                   className="rounded-full w-7 h-7 "
@@ -112,10 +115,12 @@ const Navbar = () => {
           onClick={() => push(`/user/${user._id}`)}
         >
           {<span className="hidden sm:block">Hey {user?.username}!</span>}
-          <img
+          <Image
+            width={28}
+            height={28}
             src={user?.profilePicture}
             alt=""
-            className="w-8 h-8 rounded-full "
+            className="rounded-full "
           />
         </div>
       )}

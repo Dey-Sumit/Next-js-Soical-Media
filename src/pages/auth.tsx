@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { Login, Register } from "components/index";
+import Image from "next/image";
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -12,7 +13,14 @@ export default function Auth() {
         <h1 className="mb-5 text-3xl font-semibold">
           Tweety helps you connect and share with the people in your life.{" "}
         </h1>
-        <img src="/image_3d.png" alt="" className="" />
+        <div className="w-full h-full ">
+          <Image
+            width={200}
+            height={200}
+            layout="responsive"
+            src="/image_3d.png"
+          />
+        </div>
       </div>
 
       {/* right part */}
