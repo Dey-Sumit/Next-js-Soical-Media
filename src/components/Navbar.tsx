@@ -114,10 +114,11 @@ const Navbar = () => {
           className="flex items-center p-2 space-x-3 rounded-md cursor-pointer hover:bg-dark-700"
           onClick={() => push(`/user/${user._id}`)}
         >
-          {<span className="hidden sm:block">Hey {user?.username}!</span>}
+          {<span className="hidden mr-2 sm:block">Hey {user?.username}!</span>}
           <Image
-            width={28}
-            height={28}
+            width={30}
+            height={30}
+            layout="fixed"
             src={user?.profilePicture}
             alt=""
             className="rounded-full "

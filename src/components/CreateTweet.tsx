@@ -75,9 +75,10 @@ const CreateTweet: FunctionComponent<{}> = () => {
     <div className="flex p-2 space-x-2">
       {user && (
         <Image
-          width={48}
-          height={48}
-          objectFit="contain"
+          width={44}
+          height={44}
+          layout="fixed"
+          objectFit="cover"
           quality={100}
           src={user?.profilePicture}
           alt="avatar"
@@ -87,7 +88,7 @@ const CreateTweet: FunctionComponent<{}> = () => {
       <div className="flex-1">
         <form onSubmit={handleTweet}>
           <div
-            className={`border ${
+            className={`border-2 ${
               content.length < 100 ? "border-dark-100" : "border-red-500"
             }`}
           >

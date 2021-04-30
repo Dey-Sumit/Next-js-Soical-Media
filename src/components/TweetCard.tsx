@@ -97,21 +97,20 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
 
   return (
     <div className="flex p-2 space-x-3 ">
-      <div className="relative">
-        <Image
-          width={48}
-          height={48}
-          objectFit="cover"
-          quality={100}
-          src={profilePicture}
-          alt=""
-          onClick={() => push(`/user/${uid}`)}
-          onMouseEnter={() => setShowCard(true)}
-          onMouseLeave={() => setShowCard(false)}
-          className="rounded-full cursor-pointer "
-        />
-        {/* //TODO separate component, remove this feature ; don't need this in the course */}
-        {showCard && (
+      {/* <div className="relative"> */}
+      <Image
+        width={48}
+        height={48}
+        layout="fixed"
+        objectFit="cover"
+        quality={100}
+        src={profilePicture}
+        alt=""
+        onClick={() => push(`/user/${uid}`)}
+        className="rounded-full cursor-pointer "
+      />
+      {/* //TODO separate component, remove this feature ; don't need this in the course */}
+      {/* {showCard && (
           <div className="absolute z-10 flex flex-col flex-shrink-0 p-2 space-y-3 border rounded-lg shadow-lg top-10 left-10 bg-dark-700 w-60">
             <Image
               width={10}
@@ -130,8 +129,8 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
               <span>Followings : {noOfFollowing}</span>
             </div>
           </div>
-        )}
-      </div>
+        )} */}
+      {/* </div> */}
 
       <div
         className="flex-col w-full p-3 px-4 space-y-3 rounded-md shadow-sm cursor-pointer bg-dark-600"
@@ -173,15 +172,25 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
         </div> */}
 
         {attachmentURL && (
-          <div className="relative w-9/12 h-64 mx-auto">
-            <img
-              // layout="fill"
-              // quality={100}
-              // objectFit="cover"
-              src={attachmentURL}
-              alt="attachment"
-              className="border rounded-xl"
-            />
+          // TODO image sizing, rounded border
+          <div className="relative w-9/12 h-32 mx-auto md:h-64">
+            {/* //! Next image does not support blob */}
+            {clientOnly ? (
+              <img
+                src={attachmentURL}
+                alt="attachment"
+                className="object-cover w-full h-full border rounded-xl"
+              />
+            ) : (
+              <Image
+                layout="fill"
+                quality={100}
+                objectFit="contain"
+                src={attachmentURL}
+                alt="attachment"
+                className="rounded-xl"
+              />
+            )}
           </div>
         )}
 

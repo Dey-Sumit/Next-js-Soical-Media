@@ -68,14 +68,16 @@ const profile = ({ sameUser }) => {
       <div className="col-span-8 lg:col-span-3">
         {/* profile */}
         <div className="flex flex-col items-center p-3 space-y-2 rounded-sm shadow-md bg-dark-600">
-          <Image
-            width={112}
-            height={112}
-            // src={profileData?.profilePicture}
-            src="https://images.vexels.com/media/users/3/145908/preview2/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
-            alt=""
-            className="rounded-full w-28 h-28"
-          />
+          {profileData && (
+            <Image
+              width={112}
+              height={112}
+              src={profileData.profilePicture}
+              // src="https://images.vexels.com/media/users/3/145908/preview2/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
+              alt=""
+              className="rounded-full w-28 h-28"
+            />
+          )}
           <h3 className="text-lg font-semibold">{profileData?.name}</h3>
           <h4>@{profileData?.username}</h4>
           <h4>{profileData?.bio}</h4>
@@ -185,6 +187,10 @@ const profile = ({ sameUser }) => {
           {currentTab === "followers" &&
             (!followers ? (
               <Loader />
+            ) : followers.length === 0 ? (
+              <h1 className="text-xl font-semibold text-center mt -3">
+                You don't have any followers
+              </h1>
             ) : (
               followers.map((user) => (
                 <UserCard user={user} showFollowButton={true} />
@@ -194,6 +200,10 @@ const profile = ({ sameUser }) => {
           {currentTab === "following" &&
             (!following ? (
               <Loader />
+            ) : following.length === 0 ? (
+              <h1 className="text-xl font-semibold text-center mt -3">
+                You are not following anyone
+              </h1>
             ) : (
               following.map((user) => (
                 <UserCard user={user} showFollowButton={true} />

@@ -7,13 +7,17 @@ import { BsImageFill } from "react-icons/bs";
 import useSWR, { mutate } from "swr";
 
 import Input from "components/Input";
-import { useAuthState } from "context/auth.context";
+import { useAuthDispatch, useAuthState } from "context/auth.context";
 import { FUser } from "lib/types";
 import Loader from "components/Loader";
+import { SET_USER_DUMMY } from "context/types";
+import Cookies from "js-cookie";
+import { BiLoaderAlt } from "react-icons/bi";
 
 const profile = () => {
   const { push } = useRouter();
   const { user: authUser } = useAuthState();
+  const dispatch = useAuthDispatch();
   const [picture, setPicture] = useState("");
 
   const { register, handleSubmit, errors } = useForm();
@@ -29,6 +33,7 @@ const profile = () => {
   const onSubmit = async (data) => {
     // TODO show loader for is updating
     if (isUpdating) return;
+    setIsUpdating(true);
 
     const formData = new FormData();
     formData.append("name", data.name);
@@ -37,20 +42,23 @@ const profile = () => {
     if (data.profilePicture[0]) {
       formData.append("profilePicture", data.profilePicture[0]);
     }
-    setIsUpdating(true);
-    // Display the values
-    // for (var value of formData.values()) {
-    //   console.log(value);
-    // }
-    await axios(ENDPOINT, {
+
+    const { data: user } = await axios(ENDPOINT, {
       method: "PUT",
       data: formData,
-      // "content-type": "multipart/form-data",
     });
 
     mutate(ENDPOINT);
 
     setIsUpdating(false);
+
+    // update the user and the cookie
+    dispatch({
+      type: SET_USER_DUMMY, // change name of the type
+      payload: user,
+    });
+    Cookies.set("user", user);
+    push(`/user/${authUser._id}`);
   };
   // useEffect(() => {
   //   if (!authUser) {
@@ -82,7 +90,7 @@ const profile = () => {
                 <img
                   src={picture || profileData?.profilePicture}
                   alt="profile picture"
-                  className="w-40 h-40 mx-auto border rounded-full border-3 inset-1/2 "
+                  className="w-40 h-40 mx-auto border rounded-full cursor-pointer border-3 inset-1/2"
                 />
                 {/* <Input
                 register={register}
@@ -136,9 +144,15 @@ const profile = () => {
 
               <button
                 type="submit"
-                className="p-2 space-x-2 bg-blue-600 border border-blue-700 rounded-sm cursor-pointer hover:bg-transparent hover:text-blue-600"
+                className="p-2 bg-blue-600 border border-blue-700 rounded-sm cursor-pointer hover:bg-transparent hover:text-blue-600"
               >
-                Update Profile{" "}
+                {!isUpdating ? (
+                  <>
+                    <BiLoaderAlt className="mr-2 animate-spin" /> Updating
+                  </>
+                ) : (
+                  "Update Profile"
+                )}
               </button>
             </>
           ) : (

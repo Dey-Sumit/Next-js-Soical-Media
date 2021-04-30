@@ -10,25 +10,13 @@ export default function uploadMulter(): multer.Multer {
     api_secret: process.env.CLOUDINARY_API_SECRET,
   });
 
-  const storage = multer.diskStorage({
-    destination(req, file, cb) {
-      cb(null, "/tmp");
-    },
-    filename(req, file, cb) {
-      cb(
-        null,
-        `${file.filename}-${Date.now()}${path.extname(file.originalname)}`
-      );
-    },
-  });
+  const storage = multer.diskStorage({});
 
   // validation
   const checkFileType = (
     file: Express.Multer.File,
     cb: multer.FileFilterCallback
   ) => {
-    console.log(file);
-
     const fileTypes = /jpg|jpeg|png/;
 
     const extname = fileTypes.test(
@@ -52,26 +40,3 @@ export default function uploadMulter(): multer.Multer {
     },
   });
 }
-
-// export default function fileUpload(filename: string) {
-//   return async (
-//     req: ExtendedNextApiRequest,
-//     res: NextApiResponse,
-//     next: NextHandler
-//   ) => {
-//     console.log("here");
-
-//     // do the validation here :)
-//     if (["POST", "PUT"].includes(req.method)) {
-//       try {
-//         upload.single(filename);
-//         console.log("uploaded");
-//         console.log(req.file, req.body);
-//       } catch (error) {
-//         return res.status(400).json({ message: error.errors });
-//       }
-//     }
-
-//     next();
-//   };
-// }

@@ -4,6 +4,7 @@ import { mutate } from "swr";
 import { useAuthState } from "../context/auth.context";
 import { useForm } from "react-hook-form";
 import { FComment } from "lib/types";
+import Image from "next/image";
 const CreateComment: FunctionComponent<{
   tid: string;
 }> = ({ tid }) => {
@@ -47,9 +48,12 @@ const CreateComment: FunctionComponent<{
   return (
     <div className="flex p-2 space-x-2">
       <Image
+        width={40}
+        height={40}
+        layout="fixed"
         src={user?.profilePicture}
         alt=""
-        className="w-10 h-10 rounded-full "
+        className="rounded-full "
       />
       <div className="flex-1">
         <form onSubmit={handleSubmit(handleTweet)}>

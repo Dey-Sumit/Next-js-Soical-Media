@@ -20,8 +20,10 @@ const CommentCard: FunctionComponent<{ data: FComment }> = ({
       <Image
         src={profilePicture}
         alt=""
-        width={10}
-        height={10}
+        width={40}
+        height={40}
+        layout="fixed"
+        quality={100}
         className="rounded-full cursor-pointer"
         onClick={() => push(`/user/${username}`)}
       />

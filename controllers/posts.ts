@@ -52,8 +52,6 @@ export const createPost = async (
   req: ExtendedNextApiRequest,
   res: NextApiResponse
 ) => {
-  console.log("here");
-
   try {
     const { content, tags }: { content: string; tags?: string } = req.body;
 
@@ -64,14 +62,9 @@ export const createPost = async (
     if (!content) return res.status(400).json({ msg: "content is required" });
 
     // insert post
-    console.log(req.file);
     let attachmentURL: string;
     if (req.file) {
-      const image = await cloudinary.uploader.upload(req.file.path, {
-        width: 250,
-        height: 250,
-        crop: "fill",
-      });
+      const image = await cloudinary.uploader.upload(req.file.path);
       attachmentURL = image.secure_url;
     }
 
