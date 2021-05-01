@@ -173,8 +173,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     if (!cookie) throw new Error("Missing auth token cookie");
 
     // it returns 401 if the user is not authenticated
-    await axios.get("/api/auth/me", { headers: { cookie } });
-    console.log("alright");
+    await axios.get(`${process.env.API_BASE_ENDPOINT}/api/auth/me`, {
+      headers: { cookie },
+    });
 
     return { props: {} };
   } catch (error) {
