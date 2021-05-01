@@ -15,7 +15,9 @@ const Followers: FunctionComponent<{ userId: string }> = ({ userId }) => {
       {!followers ? (
         <Loader />
       ) : (
-        followers.map((user) => <UserCard user={user} />)
+        followers.map((user) => (
+          <UserCard user={user} showFollowButton={true} />
+        ))
       )}
     </div>
   );
