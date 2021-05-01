@@ -2,6 +2,8 @@ import mongoose, { Schema, Document } from "mongoose";
 import bcrypt from "bcryptjs";
 
 import { User } from "../lib/types";
+import Post from "./Post";
+import { log } from "node:console";
 
 const UserSchema = new Schema<UserDocument>(
   {
@@ -91,7 +93,7 @@ UserSchema.methods.matchPassword = async function (
 
 // middleware before saving the data
 // hash the password during registration
-UserSchema.pre("save", async function (this: UserDocument, next: Function) {
+UserSchema.pre("save", async function (this, next: Function) {
   // run oly if the password field is modified (ex: during update profile)
   if (!this.isModified("password")) {
     next();
@@ -102,6 +104,21 @@ UserSchema.pre("save", async function (this: UserDocument, next: Function) {
 
 type UserDocument = User & Document;
 
+// UserSchema.pre("deleteOne", async function (next) {
+//   console.log("removing");
+
+//   mongoose
+//     .model("Post")
+//     .deleteMany(
+//       {
+//         user: this._id,
+//       },
+//       (err) => console.log(err)
+//     )
+//     .exec();
+//   next();
+// });
 //? Fix this type
 export default (mongoose.models.User as mongoose.Model<UserDocument>) ||
   mongoose.model<UserDocument>("User", UserSchema);
+// cascading

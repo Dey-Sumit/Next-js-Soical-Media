@@ -4,11 +4,16 @@ import NextNprogress from "nextjs-progressbar";
 import { useLayoutState } from "context/layout.context";
 import Overlay from "./Overlay";
 import ConfirmationModal from "./modals/ConfirmationModal";
+import AuthModal from "./modals/AuthModal";
+import Head from "next/head";
 const Layout = ({ children }) => {
   const { showAuthModal, showConfirmationModal } = useLayoutState();
 
   return (
     <div className="flex text-dark-100">
+      <Head>
+        <title>Twitty : Social Life</title>
+      </Head>
       <NextNprogress
         color="#29D"
         startPosition={0.3}
@@ -16,11 +21,11 @@ const Layout = ({ children }) => {
         height={3}
         options={{ showSpinner: false }}
       />
-      {/* <AuthModal />  */}
 
       {(showAuthModal || showConfirmationModal) && <Overlay />}
+      <AuthModal />
 
-      {<ConfirmationModal />}
+      <ConfirmationModal />
       <Sidebar />
       <div className="flex-1">
         <Navbar />

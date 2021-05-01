@@ -3,6 +3,7 @@ import { ExtendedNextApiRequest } from "lib/types.api";
 import User from "models/User";
 import { v2 as cloudinary } from "cloudinary";
 import mongoose from "mongoose";
+import Post from "models/Post";
 
 export const getTopUsersByFollowers = async (
   req: ExtendedNextApiRequest,
@@ -79,17 +80,19 @@ export const deleteUserById = async (
   res: NextApiResponse
 ) => {
   try {
-    const user = await User.findById(req.query.id);
-
-    if (!user) return res.status(404).json({ msg: "User not found" });
-
     if (req.query.id !== req.user._id.toString()) {
       return res.status(401).json({ msg: " It's not your profile :(" });
     }
+    const user = await User.findById(req.query.id);
+
+    if (!user) return res.status(404).json({ msg: "User not found" });
+    await Post.deleteMany({ user: user._id });
     await user.remove();
 
     res.status(200).json({ msg: "User deleted" });
   } catch (error) {
+    console.log(error);
+
     return res.status(500).json({ msg: "server error :(" });
   }
 };

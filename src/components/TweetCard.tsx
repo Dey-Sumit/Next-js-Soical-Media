@@ -36,15 +36,7 @@ const Hash: FunctionComponent<{ children: string }> = ({ children }) => {
 const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
   tweet: {
     content,
-    user: {
-      _id: uid,
-      name,
-      username,
-      profilePicture,
-      noOfFollowers,
-      noOfFollowing,
-      bio,
-    },
+    user: { _id: uid, name, username, profilePicture },
     likes,
     comments,
     attachmentURL,
@@ -164,15 +156,15 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
       >
         {/* top */}
         <div className="flex items-center">
-          <span className="text-white">{name}</span>
-          <span className="ml-2 text-gray-400 cursor-pointer hover:text-blue-700">
+          <span className="flex-shrink-0 text-white">{name}</span>
+          <span className="flex-shrink-0 ml-2 overflow-hidden text-gray-400 cursor-pointer overflow-ellipsis flex-grow-1 whitespace-nowrap hover:text-blue-700 ">
             @{username}
           </span>
           {clientOnly && (
             <span className="w-3 h-3 ml-3 bg-blue-700 rounded-full animate-pulse"></span>
           )}
-          <div className="flex items-center ml-auto space-x-2">
-            <BsClockHistory size="14" />{" "}
+          <div className="flex items-center flex-shrink-0 ml-auto space-x-2">
+            <BsClockHistory size="14" className="hidden md:block" />{" "}
             <span>{timeSince(new Date(createdAt))}</span>
           </div>
         </div>

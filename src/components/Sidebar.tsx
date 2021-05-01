@@ -26,7 +26,7 @@ const SidebarItem: FunctionComponent<{
 }> = ({ Icon, text, handler }) => {
   return (
     <div className="navItem" onClick={handler}>
-      <Icon size="24" />
+      <Icon size="25" />
       <span className="hidden lg:block">{text}</span>
     </div>
   );

@@ -22,9 +22,6 @@ export default function Home({ user }) {
 
   return (
     <div className="grid grid-cols-8 gap-x-8 ">
-      <Head>
-        <title>Twitty</title>
-      </Head>
       <div className="col-span-8 md:col-span-5">
         {user ? (
           <CreateTweet />
@@ -59,8 +56,8 @@ export default function Home({ user }) {
         </InfiniteScroll>
       </div>
       <div className="hidden col-span-8 space-y-4 md:col-span-3 md:block">
-        {/* <Trends noOfElements={5} />
-        <People noOfElements={5} /> */}
+        <Trends noOfElements={5} />
+        <People noOfElements={5} />
       </div>
     </div>
   );

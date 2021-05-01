@@ -7,11 +7,12 @@ import classNames from "classnames";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { useAuthDispatch } from "../context/auth.context";
-import { AUTH_SUCCESS } from "../context/types";
+import { AUTH_SUCCESS, HIDE_MODAL } from "../context/types";
 
 import Input from "./Input";
 import { loginSchema } from "lib/schemaValidation";
 import cookie from "js-cookie";
+import { useLayoutDispatch } from "context/layout.context";
 // interface loginData {
 //   email?: string;
 //   username?: string;
@@ -26,6 +27,7 @@ const Login: FunctionComponent<{
     resolver: yupResolver(loginSchema),
   });
   const { push } = useRouter();
+  const layoutDispatch = useLayoutDispatch();
 
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -48,6 +50,9 @@ const Login: FunctionComponent<{
       cookie.set("user", res.data.user);
       // 3. redirect to home page
       push("/");
+      layoutDispatch({
+        type: HIDE_MODAL,
+      });
     } catch (error) {
       if (error.response.status === 401) {
         setErrorMessage("Invalid credentials");

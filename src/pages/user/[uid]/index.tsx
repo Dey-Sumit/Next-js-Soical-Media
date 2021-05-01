@@ -208,9 +208,9 @@ const profile = ({ sameUser }) => {
                   </p>
                 }
               >
-                {posts?.map((tweet, i) => (
+                {/* {posts?.map((tweet, i) => (
                   <TweetCard tweet={tweet} key={i} />
-                ))}
+                ))} */}
                 {/* key={tweet._id.toString()}  */}
               </InfiniteScroll>
             )}
