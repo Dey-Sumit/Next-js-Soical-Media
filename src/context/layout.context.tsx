@@ -8,8 +8,6 @@ import {
   SHOW_AUTH_MODAL,
   HIDE_MODAL,
   TOGGLE_NAVBAR,
-  SHOW_DELETE_MODAL,
-  SHOW_LOGOUT_MODAL,
   SHOW_CONFIRMATION_MODAL,
 } from "./types";
 // import { User } from '../types'
