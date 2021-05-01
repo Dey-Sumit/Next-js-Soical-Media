@@ -59,8 +59,8 @@ export default function Home({ user }) {
         </InfiniteScroll>
       </div>
       <div className="hidden col-span-8 space-y-4 md:col-span-3 md:block">
-        <Trends noOfElements={5} />
-        <People noOfElements={5} />
+        {/* <Trends noOfElements={5} />
+        <People noOfElements={5} /> */}
       </div>
     </div>
   );

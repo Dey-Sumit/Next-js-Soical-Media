@@ -8,10 +8,16 @@ import axios from "axios";
 import { useAuthState } from "context/auth.context";
 import timeSince from "lib/timeSince";
 import { useLayoutDispatch } from "context/layout.context";
-import { SHOW_MODAL } from "context/types";
+import {
+  SHOW_DELETE_MODAL,
+  SHOW_AUTH_MODAL,
+  SHOW_CONFIRMATION_MODAL,
+  HIDE_MODAL,
+} from "context/types";
 import { MdDelete } from "react-icons/md";
 import { mutate } from "swr";
 import Image from "next/image";
+import { usePaginatedPosts } from "lib/hooks";
 // import Heart from "react-animated-heart";
 
 const Hash: FunctionComponent<{ children: string }> = ({ children }) => {
@@ -48,8 +54,12 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
     clientOnly,
   },
 }) => {
+  const { pathname } = useRouter();
+
   const { user } = useAuthState();
   const dispatch = useLayoutDispatch();
+  // const { showDeleteModal, postId } = useLayoutState();
+  const { mutate: paginatedPostsMutate } = usePaginatedPosts("/api/posts/feed");
 
   // const extractedTags = tags.map((tag) => tag.name);
   const { push } = useRouter();
@@ -61,12 +71,11 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
   );
   // console.log({likedByMe,likes,user});
 
-  const [showCard, setShowCard] = useState(false);
   const handleLike = async (e: any) => {
     e.stopPropagation();
     if (!user) {
       dispatch({
-        type: SHOW_MODAL,
+        type: SHOW_AUTH_MODAL,
       });
       return;
     }
@@ -82,25 +91,42 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
   };
   const handleDelete = async (e: any) => {
     e.stopPropagation();
-
     await axios.delete(`/api/posts/${_id}/`);
-    //TODO optimistic using SWR
-    mutate("/api/posts/");
-  };
+    paginatedPostsMutate();
+    dispatch({
+      type: HIDE_MODAL,
+    });
 
-  const handleTags = (e, tag: string) => {
+    if (pathname === "/tweet/[tid]") {
+      push("/");
+    }
+  };
+  const showModal = async (e: any) => {
     e.stopPropagation();
-
-    push(`/tags/${tag}`);
+    dispatch({
+      type: SHOW_CONFIRMATION_MODAL,
+      // TODO ts on payload intellisense
+      payload: {
+        subTitle: `This can’t be undone `,
+        handleConfirmation: handleDelete,
+        buttonText: "Delete",
+      },
+    });
   };
+
+  // const handleTags = (e, tag: string) => {
+  //   e.stopPropagation();
+
+  //   push(`/tags/${tag}`);
+  // };
   // https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjIwP9FAQJOd8w7eHWWcjJyZnUwZN8ENSjFg&usqp=CAU
 
   return (
     <div className="flex p-2 space-x-3 ">
       {/* <div className="relative"> */}
       <Image
-        width={48}
-        height={48}
+        width={44}
+        height={44}
         layout="fixed"
         objectFit="cover"
         quality={100}
@@ -230,7 +256,7 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
             <MdDelete
               size={35}
               className="p-2 text-red-500 rounded-full hover:bg-red-600 hover:bg-opacity-30 hover:text-red-600"
-              onClick={handleDelete}
+              onClick={showModal}
             />
           )}
         </div>

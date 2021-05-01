@@ -19,6 +19,9 @@ const PostSchema = new Schema(
     attachmentURL: {
       type: String,
     },
+    cloudinaryImageId: {
+      type: String,
+    },
     // parentPost: {
     //   type: Schema.Types.ObjectId,
     //   ref: "Post",

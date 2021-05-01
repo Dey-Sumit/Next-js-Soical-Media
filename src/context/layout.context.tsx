@@ -1,10 +1,30 @@
-import { createContext, useContext, useReducer } from "react";
-import { SHOW_MODAL, HIDE_MODAL, TOGGLE_NAVBAR } from "./types";
+import {
+  createContext,
+  MouseEventHandler,
+  useContext,
+  useReducer,
+} from "react";
+import {
+  SHOW_AUTH_MODAL,
+  HIDE_MODAL,
+  TOGGLE_NAVBAR,
+  SHOW_DELETE_MODAL,
+  SHOW_LOGOUT_MODAL,
+  SHOW_CONFIRMATION_MODAL,
+} from "./types";
 // import { User } from '../types'
 
 interface State {
-  showModal: boolean;
+  showAuthModal: boolean;
   showNavbar: boolean;
+  showConfirmationModal: boolean;
+
+  modalData: {
+    subTitle: string;
+    handleConfirmation: MouseEventHandler<any>;
+    buttonText: string;
+  };
+  // showDeleteModal: boolean;
 }
 
 interface Action {
@@ -13,25 +33,32 @@ interface Action {
 }
 
 // create two context; one for the state and one for the dispatchs
-const StateContext = createContext<State>({
-  showModal: false,
-  showNavbar: false,
-});
+const StateContext = createContext<State>({} as State);
 
 const DispatchContext = createContext(null);
 
-const reducer = (state: State, { type }: Action) => {
+const reducer = (state: State, { type, payload }: Action) => {
   switch (type) {
-    case SHOW_MODAL:
+    case SHOW_AUTH_MODAL:
       return {
         ...state,
-        showModal: true,
+        showAuthModal: true,
       };
+
     case HIDE_MODAL:
       return {
         ...state,
-        showModal: false,
+        showAuthModal: false,
+        showConfirmationModal: false,
       };
+
+    case SHOW_CONFIRMATION_MODAL:
+      return {
+        ...state,
+        showConfirmationModal: true,
+        modalData: payload,
+      };
+
     case TOGGLE_NAVBAR:
       return {
         ...state,
@@ -45,8 +72,10 @@ const reducer = (state: State, { type }: Action) => {
 
 export const LayoutProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, {
-    showModal: false,
+    showAuthModal: false,
     showNavbar: false,
+    showConfirmationModal: false,
+    modalData: null,
   });
 
   return (

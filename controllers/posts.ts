@@ -62,16 +62,20 @@ export const createPost = async (
     if (!content) return res.status(400).json({ msg: "content is required" });
 
     // insert post
-    let attachmentURL: string;
+    let attachmentURL: string, cloudinaryImageId: string;
     if (req.file) {
       const image = await cloudinary.uploader.upload(req.file.path);
+      console.log({ image });
+
       attachmentURL = image.secure_url;
+      cloudinaryImageId = image.public_id;
     }
 
     const postDoc: IPost = {
       user: req.user._id,
       content: req.body.content,
       attachmentURL,
+      cloudinaryImageId,
     };
 
     let post = await Post.create(postDoc);
@@ -261,20 +265,22 @@ export const deletePostById = async (
     const post = await Post.findById(req.query.id);
 
     if (!post) return res.status(404).json({ msg: "Post not found" });
-    console.log(
-      post.user === req.user._id,
-      post.user,
-      req.user._id,
-      typeof post.user,
-      typeof req.user._id
-    );
 
     if (post.user.toString() !== req.user._id.toString()) {
       return res
         .status(401)
         .json({ msg: " user not authorized; seems like it's not your post" });
     }
+    console.log({ post });
+    const cloudinaryImageId = post.cloudinaryImageId;
     await post.remove();
+    // do not need to make this async
+    console.log({ cloudinaryImageId });
+
+    cloudinaryImageId &&
+      cloudinary.uploader.destroy(cloudinaryImageId, (result) =>
+        console.log(result)
+      );
     res.status(200).json({ msg: "Post removed" });
   } catch (error) {
     console.log(error.message);

@@ -41,6 +41,7 @@ export interface FTag extends Omit<Tag, "_id" | "posts"> {
 export interface Post {
   _id?: mongoose_id;
   user: mongoose_id;
+  cloudinaryImageId?: string;
   content: string;
   attachmentURL?: string;
   createdAt?: Date;
