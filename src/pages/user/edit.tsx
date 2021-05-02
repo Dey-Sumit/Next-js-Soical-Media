@@ -40,7 +40,7 @@ const profile: NextPage<{ user: FUser }> = ({ user }) => {
       formData.append("profilePicture", data.profilePicture[0]);
     }
 
-    await axios(`/api/users/${user._id}`, {
+    const { data: updatedUser } = await axios(`/api/users/${user._id}`, {
       method: "PUT",
       data: formData,
     });
@@ -52,9 +52,9 @@ const profile: NextPage<{ user: FUser }> = ({ user }) => {
     // update the user and the cookie
     dispatch({
       type: SET_USER_DUMMY, // change name of the type
-      payload: user,
+      payload: updatedUser,
     });
-    Cookies.set("user", user);
+    Cookies.set("user", updatedUser);
     push(`/user/${user._id}`);
   };
 
