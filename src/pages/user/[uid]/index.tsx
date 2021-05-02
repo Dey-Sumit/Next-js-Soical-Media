@@ -1,20 +1,22 @@
 import { useRouter } from "next/router";
-import { HiOutlineEmojiSad } from "react-icons/hi";
 import useSWR from "swr";
 import TweetCard from "components/TweetCard";
-import { useAuthState } from "context/auth.context";
 import Loader from "components/Loader";
 import { usePaginatedPosts } from "lib/hooks";
 import InfiniteScroll from "react-infinite-scroll-component";
 import UserCard from "components/UserCard";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { FUser } from "lib/types";
 import ProfileCard from "components/ProfileCard";
+import Error from "components/Error";
 
 const profile = () => {
-  const { query } = useRouter();
+  const {
+    query: { uid },
+  } = useRouter();
+
   const { data: profileData, error: profileDataError } = useSWR<FUser>(
-    `/api/users/${query?.uid}`
+    uid ? `/api/users/${uid}` : null
   );
 
   const [currentTab, setCurrentTab] = useState("posts");
@@ -25,14 +27,14 @@ const profile = () => {
     page,
     setPage,
     isReachingEnd,
-  } = usePaginatedPosts(`/api/posts?${query?.uid}`);
+  } = usePaginatedPosts(`/api/posts?uid=${uid}`);
 
   const { data: following, error: getFollowingsError } = useSWR<FUser[]>(
-    `/api/users/${query?.uid}/following`
+    uid ? `/api/users/${uid}/following` : null
   );
 
   const { data: followers, error: getFollowersError } = useSWR<FUser[]>(
-    `/api/users/${query?.uid}/followers`
+    uid ? `/api/users/${uid}/followers` : null
   );
 
   // TODO looks like you don't have a profile :) show funny image ; don't redirect
@@ -44,10 +46,7 @@ const profile = () => {
           {!profileDataError ? (
             <ProfileCard profileData={profileData} />
           ) : (
-            <h3 className="flex items-center justify-center customText-h3 ">
-              <HiOutlineEmojiSad className="mr-3 text-lg" /> Server Error on
-              Profile Data
-            </h3>
+            <Error text="Server Error on Profile  Data" />
           )}
         </div>
         <div className="col-span-8 rounded-sm lg:col-span-5 bg-dark-500">
@@ -80,7 +79,7 @@ const profile = () => {
           <div className="max-h-screen p-2 overflow-y-auto">
             {currentTab === "posts" &&
               (posts?.length === 0 ? (
-                <h3 className=" customText-h3">
+                <h3 className="customText-h3">
                   You don't have any posts yet, create one!
                 </h3>
               ) : (
@@ -89,7 +88,7 @@ const profile = () => {
                   next={() => setPage(page + 1)}
                   hasMore={!isReachingEnd}
                   loader={<Loader />}
-                  endMessage={<p className="cutomText-h3">No More Posts</p>}
+                  endMessage={<p className="customText-h3">No More Posts</p>}
                 >
                   {posts?.map((tweet, i) => (
                     <TweetCard tweet={tweet} key={i} />

@@ -15,7 +15,7 @@ const People: FunctionComponent<{ noOfElements?: number }> = ({
       <h3 className="px-3 py-1 text-xl font-bold text-white">
         People you may like
       </h3>
-      {error && <h4 className="text-lg ">Could not load</h4>}
+      {error && !users && <h3 className="customText-h3">Could not load</h3>}
       {users ? (
         users
           .slice(0, noOfElements)

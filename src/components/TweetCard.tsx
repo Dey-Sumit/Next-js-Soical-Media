@@ -26,7 +26,10 @@ const Hash: FunctionComponent<{ children: string }> = ({ children }) => {
   return (
     <span
       className="text-blue-600"
-      onClick={() => push(`/tags/${children.slice(1)}`)}
+      onClick={(e) => {
+        e.stopPropagation();
+        push(`/tags/${children.slice(1)}`);
+      }}
     >
       {children}{" "}
     </span>

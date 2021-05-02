@@ -9,11 +9,13 @@ import Loader from "components/Loader";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { usePaginatedPosts } from "lib/hooks";
 import CreateTweet from "components/CreateTweet";
+import { useAuthState } from "context/auth.context";
 // TODO error
 
-export default function Home({ user }) {
+export default function Home() {
   const { push } = useRouter();
 
+  const { user } = useAuthState();
   // const { data, error } = useSWR<FPaginatedPosts>("/api/posts");
   const { error, posts, page, setPage, isReachingEnd } = usePaginatedPosts(
     !user ? "/api/posts" : "/api/posts/feed"
@@ -37,8 +39,12 @@ export default function Home({ user }) {
           </div>
         )}
         {/* {!error && !data && <Loader />} */}
-        {error && <h3 className="customText-h3">Could not load the post</h3>}
-        {posts.length === 0 ? (
+        {error && (
+          <h3 className="customText-h3">
+            Could not load the post, Server Error
+          </h3>
+        )}
+        {user && posts.length === 0 ? (
           <h3 className=" customText-h3">
             You don't have any posts in your feed, create one or follow someone!
           </h3>
@@ -64,25 +70,25 @@ export default function Home({ user }) {
   );
 }
 //!FIX  this function takes time
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  try {
-    // Parse
-    const cookie = context.req.headers.cookie;
+// export async function getServerSideProps(context: GetServerSidePropsContext) {
+//   try {
+//     // Parse
+//     const cookie = context.req.headers.cookie;
 
-    if (!cookie) throw new Error("Missing auth token cookie");
-    // it returns 301 if the user is not authenticated
+//     if (!cookie) throw new Error("Missing auth token cookie");
+//     // it returns 301 if the user is not authenticated
 
-    const { data: user } = await axios.get(
-      `${process.env.API_BASE_ENDPOINT}/api/auth/me`,
-      {
-        headers: { cookie },
-      }
-    );
+//     const { data: user } = await axios.get(
+//       `${process.env.API_BASE_ENDPOINT}/api/auth/me`,
+//       {
+//         headers: { cookie },
+//       }
+//     );
 
-    return { props: { user } };
-  } catch (error) {
-    console.log("not authenticated");
+//     return { props: { user } };
+//   } catch (error) {
+//     console.log("not authenticated");
 
-    return { props: { user: null } };
-  }
-}
+//     return { props: { user: null } };
+//   }
+// }

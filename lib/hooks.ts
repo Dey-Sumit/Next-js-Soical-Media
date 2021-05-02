@@ -9,12 +9,21 @@ export const usePaginatedPosts = (URL: string) => {
     size: page,
     setSize: setPage,
     isValidating,
-  } = useSWRInfinite<FPaginatedPosts>((index) => `${URL}?page=${index}`); // /api/feed?page=
+  } = useSWRInfinite<FPaginatedPosts>((index) => {
+    //? HACK to pass multiple q params
+    let newURL = `${URL}?page=${index}`;
+    newURL = URL.replaceAll("?", "&");
+    newURL = newURL.replace("&", "?");
+    return newURL;
+  });
+  // /api/feed?uid = dsakdl?page=1
   // `/api/posts?page=${index}`
+  console.log({ URL });
 
   const posts: FPost[] = data
     ? [].concat(...data.map((paginatedPost) => paginatedPost.posts))
     : [];
+  console.log({ posts });
 
   const isReachingEnd =
     !isValidating &&
@@ -24,7 +33,7 @@ export const usePaginatedPosts = (URL: string) => {
     error,
     posts,
     page,
-    setPage, 
+    setPage,
     isReachingEnd,
     mutate,
   };
