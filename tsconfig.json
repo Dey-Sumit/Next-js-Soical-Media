@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    // TODO not working 👇
     "baseUrl": ".",
     "paths": {
       "components/*": ["src/components/*"],

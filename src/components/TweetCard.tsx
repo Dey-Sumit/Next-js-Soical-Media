@@ -12,7 +12,7 @@ import {
   SHOW_DELETE_MODAL,
   SHOW_AUTH_MODAL,
   SHOW_CONFIRMATION_MODAL,
-  HIDE_MODAL,
+  HIDE_CONFIRMATION_MODAL,
 } from "context/types";
 import { MdDelete } from "react-icons/md";
 import { mutate } from "swr";
@@ -86,7 +86,7 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
     await axios.delete(`/api/posts/${_id}/`);
     paginatedPostsMutate();
     dispatch({
-      type: HIDE_MODAL,
+      type: HIDE_CONFIRMATION_MODAL,
     });
 
     if (pathname === "/tweet/[tid]") {
@@ -116,40 +116,19 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
   return (
     <div className="flex p-2 space-x-3 ">
       {/* <div className="relative"> */}
-      <Image
-        width={44}
-        height={44}
-        layout="fixed"
-        objectFit="cover"
-        quality={100}
-        src={profilePicture}
-        alt=""
-        onClick={() => push(`/user/${uid}`)}
-        className="rounded-full cursor-pointer "
-      />
-      {/* //TODO separate component, remove this feature ; don't need this in the course */}
-      {/* {showCard && (
-          <div className="absolute z-10 flex flex-col flex-shrink-0 p-2 space-y-3 border rounded-lg shadow-lg top-10 left-10 bg-dark-700 w-60">
-            <Image
-              width={10}
-              height={10}
-              src={profilePicture}
-              alt=""
-              onClick={() => push(`/user/${uid}`)}
-              className="w-10 h-10 rounded-full cursor-pointer "
-            />
-            <p className="">
-              {name} | @{username}
-            </p>
-            {bio && <p>{bio}</p>}
-            <div className="flex p-1 space-x-2 ">
-              <span>Followers : {noOfFollowers}</span>
-              <span>Followings : {noOfFollowing}</span>
-            </div>
-          </div>
-        )} */}
-      {/* </div> */}
-
+      <div className="flex-shrink-0 cursor-pointer ">
+        <Image
+          width={44}
+          height={44}
+          layout="fixed"
+          objectFit="cover"
+          quality={100}
+          src={profilePicture}
+          alt=""
+          onClick={() => push(`/user/${uid}`)}
+          className="rounded-full "
+        />
+      </div>
       <div
         className="flex-col w-full p-3 px-4 space-y-3 rounded-md shadow-sm cursor-pointer bg-dark-600"
         onClick={() => !clientOnly && push(`/tweet/${_id}`)}

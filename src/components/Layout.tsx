@@ -5,15 +5,11 @@ import { useLayoutState } from "context/layout.context";
 import Overlay from "./Overlay";
 import ConfirmationModal from "./modals/ConfirmationModal";
 import AuthModal from "./modals/AuthModal";
-import Head from "next/head";
 const Layout = ({ children }) => {
   const { showAuthModal, showConfirmationModal } = useLayoutState();
 
   return (
     <div className="flex text-dark-100">
-      <Head>
-        <title>Twitty : Social Life</title>
-      </Head>
       <NextNprogress
         color="#29D"
         startPosition={0.3}

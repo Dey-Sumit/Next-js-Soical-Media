@@ -6,9 +6,10 @@ import {
 } from "react";
 import {
   SHOW_AUTH_MODAL,
-  HIDE_MODAL,
+  HIDE_CONFIRMATION_MODAL,
   TOGGLE_NAVBAR,
   SHOW_CONFIRMATION_MODAL,
+  HIDE_AUTH_MODAL,
 } from "./types";
 // import { User } from '../types'
 
@@ -43,11 +44,15 @@ const reducer = (state: State, { type, payload }: Action) => {
         showAuthModal: true,
       };
 
-    case HIDE_MODAL:
+    case HIDE_CONFIRMATION_MODAL:
+      return {
+        ...state,
+        showConfirmationModal: false,
+      };
+    case HIDE_AUTH_MODAL:
       return {
         ...state,
         showAuthModal: false,
-        showConfirmationModal: false,
       };
 
     case SHOW_CONFIRMATION_MODAL:

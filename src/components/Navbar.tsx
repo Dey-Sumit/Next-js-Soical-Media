@@ -12,7 +12,7 @@ import Image from "next/image";
 
 const Navbar = () => {
   const { push } = useRouter();
-  const { user, loading: userLoading } = useAuthState();
+  const { user } = useAuthState();
 
   const dispatch = useLayoutDispatch();
   // const [showResultsDiv, setShowResultsDiv] = useState(false);

@@ -27,7 +27,6 @@ const CommentCard: FunctionComponent<{ data: FComment }> = ({
         className="rounded-full cursor-pointer"
         onClick={() => push(`/user/${username}`)}
       />
-
       <div className="flex-col w-full p-3 px-4 space-y-3 rounded-md shadow-sm cursor-pointer bg-dark-600">
         {/* top */}
         <div className="flex items-center">

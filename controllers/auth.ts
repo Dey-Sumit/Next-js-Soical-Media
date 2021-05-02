@@ -27,7 +27,7 @@ export const logout = (req: ExtendedNextApiRequest, res: NextApiResponse) => {
 //? /api/auth/me
 export const me = (req: ExtendedNextApiRequest, res: NextApiResponse) => {
   if (!req.user) return res.status(401).json({ user: null });
-  return res.json({ user: extractUser(req.user) });
+  return res.json(extractUser(req.user));
 };
 export const signup = async (
   req: ExtendedNextApiRequest,

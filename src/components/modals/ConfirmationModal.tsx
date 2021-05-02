@@ -1,7 +1,7 @@
 import axios from "axios";
 import Overlay from "components/Overlay";
 import { useLayoutDispatch, useLayoutState } from "context/layout.context";
-import { HIDE_MODAL } from "context/types";
+import { HIDE_CONFIRMATION_MODAL } from "context/types";
 import { AnimatePresence, motion } from "framer-motion";
 import { popUp } from "lib/animations";
 import { usePaginatedPosts } from "lib/hooks";
@@ -30,7 +30,7 @@ const ConfirmationModal = () => {
             className="p-2 px-4 rounded-full bg-dark-500"
             onClick={(e) => {
               dispatch({
-                type: HIDE_MODAL,
+                type: HIDE_CONFIRMATION_MODAL,
               });
             }}
           >

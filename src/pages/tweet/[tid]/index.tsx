@@ -19,9 +19,6 @@ const index = () => {
   const { tid } = router.query;
   const { data, error } = useSWR<FPost>(tid ? `/api/posts/${tid}` : null);
 
-
-
-
   if (error) {
     return <h3>Opps Error!!!</h3>;
   }
@@ -30,7 +27,7 @@ const index = () => {
       <Head>
         <title>{data?.content}</title>
       </Head>
-      <div className="col-span-8 sm:col-span-5">
+      <div className="col-span-8 md:col-span-5">
         {/* Comment */}
         {!data ? (
           <Loader />

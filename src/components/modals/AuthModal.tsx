@@ -1,13 +1,21 @@
 import Login from "components/Login";
 import Register from "components/Register";
-import { useLayoutState } from "context/layout.context";
-import { useState } from "react";
+import { useAuthState } from "context/auth.context";
+import { useLayoutDispatch, useLayoutState } from "context/layout.context";
+import { HIDE_AUTH_MODAL } from "context/types";
+import { useEffect, useState } from "react";
 
 const AuthModal = () => {
   const [isLogin, setIsLogin] = useState(true);
   const { showAuthModal } = useLayoutState();
-
-  // TODO after HIDE MODAL after login and reg or create separate hide modal type
+  const dispatch = useLayoutDispatch();
+  const { user } = useAuthState();
+  useEffect(() => {
+    if (user)
+      dispatch({
+        type: HIDE_AUTH_MODAL,
+      });
+  }, [user]);
   return (
     <div
       className={`${

@@ -6,7 +6,7 @@ import { useAuthDispatch, useAuthState } from "../context/auth.context";
 import { useRouter } from "next/router";
 import axios from "axios";
 import {
-  HIDE_MODAL,
+  HIDE_CONFIRMATION_MODAL,
   LOG_OUT,
   SHOW_CONFIRMATION_MODAL,
   SHOW_LOGOUT_MODAL,
@@ -57,7 +57,7 @@ const Sidebar = () => {
     Cookies.remove("user");
     await axios.post("/api/auth/logout");
     layoutDispatch({
-      type: HIDE_MODAL,
+      type: HIDE_CONFIRMATION_MODAL,
     });
   };
 

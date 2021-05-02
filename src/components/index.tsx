@@ -4,7 +4,6 @@ export { default as TweetCard } from "./TweetCard";
 export { default as Trends } from "./Trends";
 export { default as Login } from "./Login";
 export { default as Layout } from "./Layout";
-export { default as Modal } from "./Modal";
 export { default as Navbar } from "./Navbar";
 export { default as Register } from "./Register";
 export { default as People } from "./People";

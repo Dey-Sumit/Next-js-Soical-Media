@@ -9,7 +9,7 @@ import {
   SET_USER_DUMMY,
 } from "./types";
 
-import cookie from "js-cookie";
+import Cookies from "js-cookie";
 interface State {
   //   authenticated: boolean;
   user: FUser | undefined;
@@ -62,21 +62,22 @@ export const AuthProvider = ({ children }) => {
     loading: true,
     // authenticated: false,
   });
-
+  // TODO refactor name of auth context types, too much redundancy
   useEffect(() => {
     async function loadUser() {
       try {
         // set initially from cookie
         dispatch({
           type: SET_USER_DUMMY,
-          payload: cookie.get("user") ? JSON.parse(cookie.get("user")) : null,
+          payload: Cookies.get("user") ? JSON.parse(Cookies.get("user")) : null,
         });
         const res = await axios.get("/api/auth/me");
 
         dispatch({
           type: AUTH_SUCCESS,
-          payload: res.data.user,
+          payload: res.data,
         });
+        Cookies.set("user", res.data);
       } catch (error) {
         console.log(error.message);
         dispatch({

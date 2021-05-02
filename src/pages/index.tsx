@@ -2,7 +2,6 @@ import TweetCard from "../components/TweetCard";
 import Trends from "../components/Trends";
 import { useRouter } from "next/router";
 import axios from "axios";
-import Head from "next/head";
 import { GetServerSidePropsContext } from "next";
 import React from "react";
 import People from "components/People";
@@ -38,22 +37,24 @@ export default function Home({ user }) {
           </div>
         )}
         {/* {!error && !data && <Loader />} */}
-        {error && <span>Could not load the post</span>}
-        <InfiniteScroll
-          dataLength={posts.length} //This is important field to render the next data
-          next={() => setPage(page + 1)}
-          hasMore={!isReachingEnd}
-          loader={<Loader />}
-          endMessage={
-            <p style={{ textAlign: "center" }}>
-              <b>No more posts</b>
-            </p>
-          }
-        >
-          {posts?.map((tweet) => (
-            <TweetCard tweet={tweet} key={tweet._id.toString()} />
-          ))}
-        </InfiniteScroll>
+        {error && <h3 className="customText-h3">Could not load the post</h3>}
+        {posts.length === 0 ? (
+          <h3 className=" customText-h3">
+            You don't have any posts in your feed, create one or follow someone!
+          </h3>
+        ) : (
+          <InfiniteScroll
+            dataLength={posts.length} //This is important field to render the next data
+            next={() => setPage(page + 1)}
+            hasMore={!isReachingEnd}
+            loader={<Loader />}
+            endMessage={<p className="customText-h3">No more posts</p>}
+          >
+            {posts?.map((tweet) => (
+              <TweetCard tweet={tweet} key={tweet._id.toString()} />
+            ))}
+          </InfiniteScroll>
+        )}
       </div>
       <div className="hidden col-span-8 space-y-4 md:col-span-3 md:block">
         <Trends noOfElements={5} />
@@ -62,27 +63,25 @@ export default function Home({ user }) {
     </div>
   );
 }
-
+//!FIX  this function takes time
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
     // Parse
     const cookie = context.req.headers.cookie;
 
     if (!cookie) throw new Error("Missing auth token cookie");
-    // await axios.get("/api/auth/me/");
-
     // it returns 301 if the user is not authenticated
 
-    const res = await axios.get(
+    const { data: user } = await axios.get(
       `${process.env.API_BASE_ENDPOINT}/api/auth/me`,
       {
         headers: { cookie },
       }
     );
 
-    return { props: { user: res.data.user } };
+    return { props: { user } };
   } catch (error) {
-    console.log(error.message);
+    console.log("not authenticated");
 
     return { props: { user: null } };
   }

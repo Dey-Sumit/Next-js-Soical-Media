@@ -4,29 +4,44 @@ import Head from "next/head";
 import Trends from "components/Trends";
 import TweetCard from "components/TweetCard";
 import { FPost } from "lib/types";
+import useSWR from "swr";
+import { useRouter } from "next/router";
+import Loader from "components/Loader";
 interface IData {
   posts: FPost[];
   name: string;
 }
-const index: NextPage<{ data: IData }> = ({ data }) => {
-  // console.log(data);
+const index = () => {
+  const {
+    query: { tag },
+  } = useRouter();
 
-  if (!data.posts.length) {
-    return <h1>{`There are no posts under ${data.name}`}</h1>;
+  const { data } = useSWR<IData>(tag ? `/api/tags/${tag}` : null);
+  if (data?.posts.length === 0) {
+    return (
+      <h3 className="textCustom-h3">{`There are no posts under ${tag}`}</h3>
+    );
   }
   return (
     <div className="grid grid-cols-8 gap-x-8 ">
       {/* <div className="col-span-2">Sidebar</div> */}
       <Head>
-        <title>{data.name || "Tweeter Clone"}</title>
+        <title>{tag}</title>
       </Head>
       <div className="col-span-8 md:col-span-5">
-        <div className="flex justify-between p-2 text-2xl font-semibold">
-          <span>#{data.name}</span> <span> {data.posts.length} Tweets</span>{" "}
-        </div>
-        {data?.posts?.map((tweet) => (
-          <TweetCard tweet={tweet} key={tweet._id} />
-        ))}
+        {data?.posts ? (
+          <>
+            <div className="flex justify-between p-2 text-2xl font-semibold">
+              <span>#{tag}</span> <span> {data?.posts.length} Tweets</span>{" "}
+            </div>
+            {/* // TODO tweet or post? :( */}
+            {data?.posts.map((tweet) => (
+              <TweetCard tweet={tweet} key={tweet._id} />
+            ))}
+          </>
+        ) : (
+          <Loader />
+        )}
       </div>
       <div className="col-span-8 md:col-span-3">
         <Trends />
@@ -35,32 +50,32 @@ const index: NextPage<{ data: IData }> = ({ data }) => {
   );
 };
 
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  const { tag } = ctx.query;
+// export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+//   const { tag } = ctx.query;
 
-  // TODO check if relative URL works or not in axios server side
-  // TODO make this client side, no point of making this server side
-  let posts;
-  try {
-    const { data } = await axios.get(
-      `${process.env.API_BASE_ENDPOINT}/api/tags/${tag}`
-    );
+//   // TODO check if relative URL works or not in axios server side
+//   // TODO make this client side, no point of making this server side
+//   let posts;
+//   try {
+//     const { data } = await axios.get(
+//       `${process.env.API_BASE_ENDPOINT}/api/tags/${tag}`
+//     );
 
-    posts = data.posts;
+//     posts = data.posts;
 
-    if (!posts) {
-      posts = [];
-    }
-    posts = JSON.parse(JSON.stringify(posts));
-  } catch (error) {
-    posts = [];
-  }
+//     if (!posts) {
+//       posts = [];
+//     }
+//     posts = JSON.parse(JSON.stringify(posts));
+//   } catch (error) {
+//     posts = [];
+//   }
 
-  return {
-    props: {
-      data: { posts, name: tag },
-    },
-  };
-};
+//   return {
+//     props: {
+//       data: { posts, name: tag },
+//     },
+//   };
+// };
 
 export default index;
