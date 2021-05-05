@@ -15,6 +15,7 @@ export default function Auth() {
         </h1>
         <div className="w-full h-full ">
           <Image
+            loading="eager"
             width={200}
             height={200}
             layout="responsive"

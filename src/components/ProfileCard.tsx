@@ -13,6 +13,7 @@ import { useLayoutDispatch } from "context/layout.context";
 import {
   HIDE_CONFIRMATION_MODAL,
   LOG_OUT,
+  SHOW_AUTH_MODAL,
   SHOW_CONFIRMATION_MODAL,
 } from "context/types";
 import Cookies from "js-cookie";
@@ -37,6 +38,12 @@ const ProfileCard: FunctionComponent<{ profileData: FUser }> = ({
 
   const handleFollow = async (e: MouseEvent<any>) => {
     e.stopPropagation();
+    if (!authUser) {
+      layoutDispatch({
+        type: SHOW_AUTH_MODAL,
+      });
+      return;
+    }
     if (loading) return;
     const type = isFollowing ? "unfollow" : "follow";
     const ENDPOINT = `/api/users/${profileData._id}/${type}`;

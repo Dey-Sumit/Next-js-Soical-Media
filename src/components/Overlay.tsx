@@ -1,5 +1,5 @@
 import { useLayoutDispatch } from "context/layout.context";
-import { HIDE_CONFIRMATION_MODAL } from "context/types";
+import { HIDE_AUTH_MODAL, HIDE_CONFIRMATION_MODAL } from "context/types";
 import AuthModal from "./modals/AuthModal";
 
 const Overlay = () => {
@@ -11,6 +11,9 @@ const Overlay = () => {
       onClick={() => {
         dispatch({
           type: HIDE_CONFIRMATION_MODAL,
+        });
+        dispatch({
+          type: HIDE_AUTH_MODAL,
         });
       }}
     ></div>

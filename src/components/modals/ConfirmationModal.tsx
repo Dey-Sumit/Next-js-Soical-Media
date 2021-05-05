@@ -20,7 +20,7 @@ const ConfirmationModal = () => {
     <motion.div
       className={`${
         showConfirmationModal ? "scale-100  " : "scale-0  "
-      }  text-center p-4 rounded-lg shadow-2xl bg-dark-600 transition-all duration-300 transform fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20`}
+      }  text-center p-4 rounded-lg shadow-2xl bg-dark-600 transition-all duration-250 transform fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20`}
     >
       <div className="flex flex-col items-center p-2 space-y-6 rounded-2xl">
         <h1 className="text-2xl font-semibold">Are you sure?</h1>

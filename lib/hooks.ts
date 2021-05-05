@@ -18,12 +18,10 @@ export const usePaginatedPosts = (URL: string) => {
   });
   // /api/feed?uid = dsakdl?page=1
   // `/api/posts?page=${index}`
-  console.log({ URL });
 
   const posts: FPost[] = data
     ? [].concat(...data.map((paginatedPost) => paginatedPost.posts))
     : [];
-  console.log({ posts });
 
   const isReachingEnd =
     !isValidating &&

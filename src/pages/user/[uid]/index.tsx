@@ -9,18 +9,43 @@ import { useRef, useState } from "react";
 import { FUser } from "lib/types";
 import ProfileCard from "components/ProfileCard";
 import Error from "components/Error";
+import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from "next";
+import axios from "axios";
+import { useAuthState } from "context/auth.context";
+import { useLayoutDispatch } from "context/layout.context";
+import { SHOW_AUTH_MODAL } from "context/types";
 
-const profile = () => {
+const profile = (props) => {
+  console.log({ props });
+
+  const { user: profileData } = props;
   const {
+    isFallback,
     query: { uid },
   } = useRouter();
+  const profileDataError = false; // TODO
+  // console.log({ profileData });
 
-  const { data: profileData, error: profileDataError } = useSWR<FUser>(
-    uid ? `/api/users/${uid}` : null
-  );
+  // if (isFallback) {
+  // }
+  // console.log({ profileData, isFallback });
+  // const { data: profileData, error: profileDataError } = useSWR<FUser>(
+  //   uid ? `/api/users/${uid}` : null
+  // );
 
   const [currentTab, setCurrentTab] = useState("posts");
+  const { user } = useAuthState();
+  const dispatch = useLayoutDispatch();
 
+  const handleTabChange = (value) => {
+    if (!user) {
+      dispatch({
+        type: SHOW_AUTH_MODAL,
+      });
+      return;
+    }
+    setCurrentTab(value);
+  };
   const {
     error: getPostsError,
     posts,
@@ -43,11 +68,15 @@ const profile = () => {
       <div className="grid gap-8 md:grid-cols-8 ">
         <div className="col-span-8 lg:col-span-3">
           {/* profile */}
-          {!profileDataError ? (
+          {!isFallback && !profileData && (
+            <Error text="Server Error on Profile  Data" />
+          )}
+          {!isFallback ? <ProfileCard profileData={profileData} /> : <Loader />}
+          {/* {!profileDataError ? (
             <ProfileCard profileData={profileData} />
           ) : (
             <Error text="Server Error on Profile  Data" />
-          )}
+          )} */}
         </div>
         <div className="col-span-8 rounded-sm lg:col-span-5 bg-dark-500">
           <div className="flex px-4 py-2 space-x-4 shadow-lg ">
@@ -55,7 +84,7 @@ const profile = () => {
               className={`${
                 currentTab === "posts" ? "text-blue-600 " : ""
               } cursor-pointer`}
-              onClick={() => setCurrentTab("posts")}
+              onClick={() => handleTabChange("posts")}
             >
               Tweets
             </span>
@@ -63,7 +92,7 @@ const profile = () => {
               className={`${
                 currentTab === "followers" ? "text-blue-600 " : ""
               } cursor-pointer`}
-              onClick={() => setCurrentTab("followers")}
+              onClick={() => handleTabChange("followers")}
             >
               Followers
             </span>
@@ -71,7 +100,7 @@ const profile = () => {
               className={`${
                 currentTab === "following" ? "text-blue-600 " : ""
               } cursor-pointer`}
-              onClick={() => setCurrentTab("following")}
+              onClick={() => handleTabChange("following")}
             >
               Followings
             </span>
@@ -127,6 +156,36 @@ const profile = () => {
 
 export default profile;
 
+export const getStaticProps: GetStaticProps = async (
+  ctx: GetStaticPropsContext
+) => {
+  console.log("-------------------here---------------");
+
+  const uid = ctx.params.uid;
+  try {
+    const { data: user } = await axios.get(
+      `${process.env.API_BASE_ENDPOINT}/api/users/${uid}`
+    );
+
+    return {
+      props: { user },
+      revalidate: 3,
+    };
+  } catch (error) {
+    return {
+      redirect: {
+        destination: "/",
+        statusCode: 302,
+      },
+    };
+  }
+};
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    fallback: true,
+    paths: [],
+  };
+};
 // export async function getServerSideProps(context: GetServerSidePropsContext) {
 //   // const cookie = context.req.headers?.cookie;
 //   // console.log("inside");

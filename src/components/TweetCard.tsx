@@ -18,6 +18,7 @@ import { MdDelete } from "react-icons/md";
 import { mutate } from "swr";
 import Image from "next/image";
 import { usePaginatedPosts } from "lib/hooks";
+import { IoMdShareAlt } from "react-icons/io";
 // import Heart from "react-animated-heart";
 
 const Hash: FunctionComponent<{ children: string }> = ({ children }) => {
@@ -224,7 +225,10 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
             <span>34</span>
           </div> */}
           {/* <div className="flex items-center space-x-2 cursor-pointer">
-            <IoMdShareAlt size={22} />
+            <IoMdShareAlt
+              size={22}
+              className="p-2 text-red-500 rounded-full hover:bg-red-600 hover:bg-opacity-30 hover:text-red-600"
+            />
           </div> */}
           {user?._id == uid && (
             <MdDelete

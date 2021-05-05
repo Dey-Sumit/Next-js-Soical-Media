@@ -16,6 +16,8 @@ function MyApp({ Component, pageProps }) {
     <AuthProvider>
       <Head>
         <title>Twitty : Social Life</title>
+        <script> </script>
+        {/* disable the animation on page load */}
       </Head>
       <LayoutProvider>
         {pathname !== "/auth" ? (
