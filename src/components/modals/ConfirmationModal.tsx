@@ -1,25 +1,14 @@
-import axios from "axios";
-import Overlay from "components/Overlay";
 import { useLayoutDispatch, useLayoutState } from "context/layout.context";
-import { HIDE_CONFIRMATION_MODAL } from "context/types";
-import { AnimatePresence, motion } from "framer-motion";
-import { popUp } from "lib/animations";
-import { usePaginatedPosts } from "lib/hooks";
-import { FunctionComponent, MouseEventHandler } from "react";
 
 const ConfirmationModal = () => {
-  const {
-    showConfirmationModal,
-
-    modalData,
-  } = useLayoutState();
+  const { showConfirmationModal, modalData } = useLayoutState();
 
   const dispatch = useLayoutDispatch();
 
   return (
-    <motion.div
-      className={`${
-        showConfirmationModal ? "scale-100  " : "scale-0  "
+    <div
+      className={`${showConfirmationModal ? "scale-100  " : "scale-0  "}  ${
+        showConfirmationModal === null ? "hidden" : " "
       }  text-center p-4 rounded-lg shadow-2xl bg-dark-600 transition-all duration-250 transform fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20`}
     >
       <div className="flex flex-col items-center p-2 space-y-6 rounded-2xl">
@@ -30,7 +19,7 @@ const ConfirmationModal = () => {
             className="p-2 px-4 rounded-full bg-dark-500"
             onClick={(e) => {
               dispatch({
-                type: HIDE_CONFIRMATION_MODAL,
+                type: "HIDE_CONFIRMATION_MODAL",
               });
             }}
           >
@@ -44,7 +33,7 @@ const ConfirmationModal = () => {
           </button>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

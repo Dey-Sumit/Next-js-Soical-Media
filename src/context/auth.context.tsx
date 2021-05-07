@@ -1,87 +1,74 @@
 import axios from "axios";
-import { createContext, useContext, useEffect, useReducer } from "react";
+import React, { createContext, useContext, useEffect, useReducer } from "react";
 import { FUser } from "lib/types";
-import {
-  AUTH_FAIL,
-  AUTH_SUCCESS,
-  LOG_OUT,
-  STOP_LOADING,
-  SET_USER_DUMMY,
-} from "./types";
 
 import Cookies from "js-cookie";
-interface State {
-  //   authenticated: boolean;
-  user: FUser | undefined;
-  loading?: boolean;
+interface IState {
+  user: FUser;
+  loading?: boolean; // might be needed later
 }
 
-interface Action {
-  type: string;
-  payload?: any;
+interface IAction {
+  type: "REMOVE_USER" | "SET_USER" | "STOP_LOADING";
+  payload?: FUser;
 }
-// TODO learn what the fuck is going on here
 // create two context; one for the state and one for the dispatch
-const StateContext = createContext<State>({
-  user: null, // what is this ; if this is initial state the wtf is inside useReducer
-});
+const StateContext = createContext<IState>(undefined); //create context default value only useful for testing
+//https://stackoverflow.com/questions/49949099/react-createcontext-point-of-defaultvalue
 
-const DispatchContext = createContext(null);
+const DispatchContext = createContext<React.Dispatch<IAction>>(null);
 
-const reducer = (state: State, { type, payload }: Action) => {
+const reducer = (state: IState, { type, payload }: IAction) => {
   switch (type) {
-    case AUTH_SUCCESS:
+    case "SET_USER":
       return {
         ...state,
         user: payload,
       };
-    case SET_USER_DUMMY:
-      return {
-        ...state,
-        user: payload,
-      };
-    case AUTH_FAIL:
-    case LOG_OUT:
+
+    case "REMOVE_USER":
       return {
         ...state,
         user: null,
       };
-    case STOP_LOADING:
+    case "STOP_LOADING":
       return {
         ...state,
         loading: false,
       };
     default:
-      throw new Error(`Unknown action type"${type}`);
+      throw new Error(`Unknown action type ${type}`);
   }
 };
 
 export const AuthProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, {
-    user: null,
-    loading: true,
-    // authenticated: false,
-  });
-  // TODO refactor name of auth context types, too much redundancy
+  const [state, dispatch] = useReducer<React.Reducer<IState, IAction>>(
+    reducer,
+    {
+      user: null,
+      loading: true, // might be needed later :(
+    }
+  );
+
   useEffect(() => {
     async function loadUser() {
       try {
         // set initially from cookie
         dispatch({
-          type: SET_USER_DUMMY,
+          type: "SET_USER",
           payload: Cookies.get("user") ? JSON.parse(Cookies.get("user")) : null,
         });
         const res = await axios.get("/api/auth/me");
 
         dispatch({
-          type: AUTH_SUCCESS,
+          type: "SET_USER",
           payload: res.data,
         });
         Cookies.set("user", res.data);
       } catch (error) {
         console.log(error.message);
         dispatch({
-          type: AUTH_FAIL,
+          type: "REMOVE_USER",
         });
       } finally {
         dispatch({

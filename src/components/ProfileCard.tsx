@@ -10,12 +10,7 @@ import Head from "next/head";
 import Loader from "components/Loader";
 import Image from "next/image";
 import { useLayoutDispatch } from "context/layout.context";
-import {
-  HIDE_CONFIRMATION_MODAL,
-  LOG_OUT,
-  SHOW_AUTH_MODAL,
-  SHOW_CONFIRMATION_MODAL,
-} from "context/types";
+
 import Cookies from "js-cookie";
 
 const ProfileCard: FunctionComponent<{ profileData: FUser }> = ({
@@ -40,7 +35,7 @@ const ProfileCard: FunctionComponent<{ profileData: FUser }> = ({
     e.stopPropagation();
     if (!authUser) {
       layoutDispatch({
-        type: SHOW_AUTH_MODAL,
+        type: "SHOW_AUTH_MODAL",
       });
       return;
     }
@@ -68,10 +63,10 @@ const ProfileCard: FunctionComponent<{ profileData: FUser }> = ({
       await axios.delete(`/api/users/${profileData._id}`);
       Cookies.remove("user");
       layoutDispatch({
-        type: HIDE_CONFIRMATION_MODAL,
+        type: "HIDE_CONFIRMATION_MODAL",
       });
       authDispatch({
-        type: LOG_OUT,
+        type: "REMOVE_USER",
       });
 
       push("/auth");
@@ -80,7 +75,7 @@ const ProfileCard: FunctionComponent<{ profileData: FUser }> = ({
 
   const showModal = async () => {
     layoutDispatch({
-      type: SHOW_CONFIRMATION_MODAL,
+      type: "SHOW_CONFIRMATION_MODAL",
       payload: {
         subTitle: "Account Delete?",
         handleConfirmation: handleDeleteProfile,

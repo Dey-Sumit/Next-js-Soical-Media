@@ -6,7 +6,6 @@ import { useAuthState } from "../context/auth.context";
 import { FUser } from "lib/types";
 import { SiTwitter } from "react-icons/si";
 import { useLayoutDispatch, useLayoutState } from "src/context/layout.context";
-import { TOGGLE_NAVBAR } from "src/context/types";
 import Loader from "./Loader";
 import Image from "next/image";
 
@@ -61,7 +60,7 @@ const Navbar = () => {
       <SiTwitter
         className="text-blue-600 cursor-pointer sm:hidden"
         size="24"
-        onClick={() => dispatch({ type: TOGGLE_NAVBAR })}
+        onClick={() => dispatch({ type: "TOGGLE_NAVBAR" })}
       />
 
       <div className="relative flex items-center justify-center flex-1 px-3 py-1 space-x-3 bg-dark-700">

@@ -18,7 +18,7 @@ export default function sessionMiddleware(
     saveUninitialized: false,
     // name: "twittyCookie",
     cookie: {
-      // maxAge: , // TODO make this 2 days
+      // maxAge: ,
     },
     // age
     // cookie: { secure: true, maxAge: 20 * 20 * 5, httpOnly: false }, //! don't know wtf is going on here :(

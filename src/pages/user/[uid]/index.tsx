@@ -13,7 +13,6 @@ import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from "next";
 import axios from "axios";
 import { useAuthState } from "context/auth.context";
 import { useLayoutDispatch } from "context/layout.context";
-import { SHOW_AUTH_MODAL } from "context/types";
 
 const profile = (props) => {
   console.log({ props });
@@ -40,7 +39,7 @@ const profile = (props) => {
   const handleTabChange = (value) => {
     if (!user) {
       dispatch({
-        type: SHOW_AUTH_MODAL,
+        type: "SHOW_AUTH_MODAL",
       });
       return;
     }

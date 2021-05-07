@@ -133,7 +133,7 @@ export const updateUserById = async (
       ? profilePicture
       : oldUser.profilePicture;
 
-    const user = await oldUser.save(); // TODO pass options if needed for updated doc
+    const user = await oldUser.save();
 
     res.status(200).json(user);
   } catch (error) {
@@ -152,7 +152,6 @@ export const followUser = async (
   //! 1. add the user to my following list
   //! 2. add me to the person's followers list
   try {
-    //TODO check auth
     if (!(await User.findById(id)))
       return res.status(404).json({ msg: "requested user not found" });
     // check if the user want's to follow himself

@@ -8,18 +8,10 @@ import axios from "axios";
 import { useAuthState } from "context/auth.context";
 import timeSince from "lib/timeSince";
 import { useLayoutDispatch } from "context/layout.context";
-import {
-  SHOW_DELETE_MODAL,
-  SHOW_AUTH_MODAL,
-  SHOW_CONFIRMATION_MODAL,
-  HIDE_CONFIRMATION_MODAL,
-} from "context/types";
+
 import { MdDelete } from "react-icons/md";
-import { mutate } from "swr";
 import Image from "next/image";
 import { usePaginatedPosts } from "lib/hooks";
-import { IoMdShareAlt } from "react-icons/io";
-// import Heart from "react-animated-heart";
 
 const Hash: FunctionComponent<{ children: string }> = ({ children }) => {
   const { push } = useRouter();
@@ -71,7 +63,7 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
     e.stopPropagation();
     if (!user) {
       dispatch({
-        type: SHOW_AUTH_MODAL,
+        type: "SHOW_AUTH_MODAL",
       });
       return;
     }
@@ -90,7 +82,7 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
     await axios.delete(`/api/posts/${_id}/`);
     paginatedPostsMutate();
     dispatch({
-      type: HIDE_CONFIRMATION_MODAL,
+      type: "HIDE_CONFIRMATION_MODAL",
     });
 
     if (pathname === "/tweet/[tid]") {
@@ -100,8 +92,7 @@ const TweetCard: FunctionComponent<{ tweet: FPost }> = ({
   const showModal = async (e: any) => {
     e.stopPropagation();
     dispatch({
-      type: SHOW_CONFIRMATION_MODAL,
-      // TODO ts on payload intellisense
+      type: "SHOW_CONFIRMATION_MODAL",
       payload: {
         subTitle: `This can’t be undone `,
         handleConfirmation: handleDelete,

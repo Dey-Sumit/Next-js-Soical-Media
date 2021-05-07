@@ -5,13 +5,7 @@ import Link from "next/link";
 import { useAuthDispatch, useAuthState } from "../context/auth.context";
 import { useRouter } from "next/router";
 import axios from "axios";
-import {
-  HIDE_CONFIRMATION_MODAL,
-  LOG_OUT,
-  SHOW_CONFIRMATION_MODAL,
-  SHOW_LOGOUT_MODAL,
-  TOGGLE_NAVBAR,
-} from "../context/types";
+
 import { AiOutlineUser } from "react-icons/ai";
 import { useLayoutDispatch, useLayoutState } from "src/context/layout.context";
 import { FunctionComponent, MouseEventHandler } from "react";
@@ -42,7 +36,7 @@ const Sidebar = () => {
 
   const showModal = async () => {
     layoutDispatch({
-      type: SHOW_CONFIRMATION_MODAL,
+      type: "SHOW_CONFIRMATION_MODAL",
       payload: {
         subTitle: "Great!!! Focus on your real life",
         handleConfirmation: handleLogout,
@@ -52,12 +46,12 @@ const Sidebar = () => {
   };
   const handleLogout = async (e: any) => {
     e.stopPropagation();
-    authDispatch({ type: LOG_OUT }); // ?NOT NEEDED I guess
+    authDispatch({ type: "REMOVE_USER" }); // ?NOT NEEDED I guess
     router.push("/auth");
     Cookies.remove("user");
     await axios.post("/api/auth/logout");
     layoutDispatch({
-      type: HIDE_CONFIRMATION_MODAL,
+      type: "HIDE_CONFIRMATION_MODAL",
     });
   };
 
@@ -76,7 +70,7 @@ const Sidebar = () => {
               <SiTwitter
                 className="text-blue-600 cursor-pointer "
                 size="28"
-                onClick={() => layoutDispatch({ type: TOGGLE_NAVBAR })}
+                onClick={() => layoutDispatch({ type: "TOGGLE_NAVBAR" })}
               />
             </a>
           </Link>
@@ -85,7 +79,7 @@ const Sidebar = () => {
           className="flex flex-col space-y-5 "
           onClick={(e) => {
             e.stopPropagation();
-            layoutDispatch({ type: TOGGLE_NAVBAR });
+            layoutDispatch({ type: "TOGGLE_NAVBAR" });
           }}
         >
           <SidebarItem

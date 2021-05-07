@@ -6,8 +6,6 @@ import session from "./session";
 
 const all = nextConnect();
 
-//TODO : FIX THIS - express session | store in mongo
-
 all
   .use(morgan("dev"))
   .use(database)

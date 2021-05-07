@@ -10,7 +10,6 @@ import Input from "components/Input";
 import { useAuthDispatch, useAuthState } from "context/auth.context";
 import { FUser } from "lib/types";
 import Loader from "components/Loader";
-import { SET_USER_DUMMY } from "context/types";
 import Cookies from "js-cookie";
 import { BiLoaderAlt } from "react-icons/bi";
 
@@ -51,7 +50,7 @@ const profile: NextPage<{ user: FUser }> = ({ user }) => {
 
     // update the user and the cookie
     dispatch({
-      type: SET_USER_DUMMY, // change name of the type
+      type: "SET_USER", // change name of the type
       payload: updatedUser,
     });
     Cookies.set("user", updatedUser);

@@ -9,6 +9,7 @@ const PostSchema = new Schema(
   {
     user: {
       type: Schema.Types.ObjectId,
+      // User ? not "User"
       ref: User,
     },
     // change this to text

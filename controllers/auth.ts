@@ -4,24 +4,11 @@ import extractUser from "lib/extractUser";
 import User from "models/User";
 
 export const login = (req: ExtendedNextApiRequest, res: NextApiResponse) => {
-  res.json({ user: extractUser(req.user) });
+  res.json(req.user);
 };
 export const logout = (req: ExtendedNextApiRequest, res: NextApiResponse) => {
   req.logOut();
-
   res.status(204).end();
-  //   serialize('mytoken1', '', {
-  //     maxAge: -1,
-  //     path: '/',
-  //   })),
-  // res.destroy()
-  // res.clearCookie('', {path: '/'}).status(200).send('Ok.');
-
-  // req.session.destroy(function (err) {
-
-  //   console.log(err);
-  //   res.status(204).redirect("/"); //Inside a callback… bulletproof!
-  // });
 };
 
 //? /api/auth/me
@@ -55,10 +42,7 @@ export const signup = async (
 
     req.login(user, (err) => {
       if (err) throw err;
-      //TODO extract password
-      res.status(201).json({
-        user: extractUser(req.user),
-      });
+      res.status(201).json(extractUser(req.user));
     });
   } catch (error) {
     res.status(500).json({ message: "Server Broken :(" });

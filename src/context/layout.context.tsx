@@ -1,68 +1,64 @@
-import {
+import React, {
   createContext,
   MouseEventHandler,
   useContext,
   useReducer,
 } from "react";
-import {
-  SHOW_AUTH_MODAL,
-  HIDE_CONFIRMATION_MODAL,
-  TOGGLE_NAVBAR,
-  SHOW_CONFIRMATION_MODAL,
-  HIDE_AUTH_MODAL,
-} from "./types";
-// import { User } from '../types'
 
-interface State {
-  showAuthModal: boolean;
-  showNavbar: boolean;
-  showConfirmationModal: boolean;
-
-  modalData: {
-    subTitle: string;
-    handleConfirmation: MouseEventHandler<any>;
-    buttonText: string;
-  };
-  // showDeleteModal: boolean;
+interface IModalData {
+  subTitle: string;
+  handleConfirmation: MouseEventHandler<any>;
+  buttonText: string;
 }
-
-interface Action {
-  type: string;
-  payload: any;
+interface IState {
+  showNavbar: boolean;
+  showAuthModal: boolean;
+  showConfirmationModal: boolean;
+  modalData?: IModalData;
+}
+type ActionType =
+  | "SHOW_AUTH_MODAL"
+  | "HIDE_CONFIRMATION_MODAL"
+  | "TOGGLE_NAVBAR"
+  | "SHOW_CONFIRMATION_MODAL"
+  | "HIDE_AUTH_MODAL";
+interface IAction {
+  type: ActionType;
+  payload?: IModalData;
 }
 
 // create two context; one for the state and one for the dispatchs
-const StateContext = createContext<State>({} as State);
+const StateContext = createContext<IState>(undefined);
 
-const DispatchContext = createContext(null);
+const DispatchContext = createContext<React.Dispatch<IAction>>(null);
 
-const reducer = (state: State, { type, payload }: Action) => {
+const reducer = (state: IState, { type, payload }: IAction) => {
   switch (type) {
-    case SHOW_AUTH_MODAL:
+    case "SHOW_AUTH_MODAL":
       return {
         ...state,
         showAuthModal: true,
       };
-
-    case HIDE_CONFIRMATION_MODAL:
-      return {
-        ...state,
-        showConfirmationModal: false,
-      };
-    case HIDE_AUTH_MODAL:
+    case "HIDE_AUTH_MODAL":
       return {
         ...state,
         showAuthModal: false,
       };
 
-    case SHOW_CONFIRMATION_MODAL:
+    case "SHOW_CONFIRMATION_MODAL":
       return {
         ...state,
         showConfirmationModal: true,
         modalData: payload,
       };
 
-    case TOGGLE_NAVBAR:
+    case "HIDE_CONFIRMATION_MODAL":
+      return {
+        ...state,
+        showConfirmationModal: false,
+      };
+
+    case "TOGGLE_NAVBAR":
       return {
         ...state,
         showNavbar: !state.showNavbar,
@@ -74,12 +70,15 @@ const reducer = (state: State, { type, payload }: Action) => {
 };
 
 export const LayoutProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, {
-    showAuthModal: false,
-    showNavbar: false,
-    showConfirmationModal: false,
-    modalData: null,
-  });
+  const [state, dispatch] = useReducer<React.Reducer<IState, IAction>>(
+    reducer,
+    {
+      showAuthModal: null,
+      showNavbar: false,
+      showConfirmationModal: null,
+      modalData: null,
+    }
+  );
 
   return (
     <DispatchContext.Provider value={dispatch}>

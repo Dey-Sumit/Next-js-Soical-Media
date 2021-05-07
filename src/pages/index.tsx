@@ -1,8 +1,6 @@
 import TweetCard from "../components/TweetCard";
 import Trends from "../components/Trends";
 import { useRouter } from "next/router";
-import axios from "axios";
-import { GetServerSidePropsContext } from "next";
 import React from "react";
 import People from "components/People";
 import Loader from "components/Loader";

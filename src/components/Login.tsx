@@ -7,7 +7,6 @@ import classNames from "classnames";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { useAuthDispatch } from "../context/auth.context";
-import { AUTH_SUCCESS } from "../context/types";
 
 import Input from "./Input";
 import { loginSchema } from "lib/schemaValidation";
@@ -43,11 +42,11 @@ const Login: FunctionComponent<{
       });
       // 2. set the global state
       dispatch({
-        type: AUTH_SUCCESS,
-        payload: res.data.user,
+        type: "SET_USER",
+        payload: res.data,
       });
       push("/");
-      cookie.set("user", res.data.user);
+      cookie.set("user", res.data);
 
       // 3. redirect to home page
     } catch (error) {

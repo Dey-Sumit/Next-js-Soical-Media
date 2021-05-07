@@ -4,10 +4,10 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { BiLoaderAlt } from "react-icons/bi";
 import { yupResolver } from "@hookform/resolvers/yup";
+import cookie from "js-cookie";
 
 import { registrationSchema } from "lib/schemaValidation";
 import { useAuthDispatch } from "../context/auth.context";
-import { AUTH_SUCCESS } from "../context/types";
 import Input from "./Input";
 
 export default function Register() {
@@ -31,8 +31,10 @@ export default function Register() {
         url: "/api/auth/signup",
         data: data,
       });
-      dispatch({ type: AUTH_SUCCESS, payload: res.data.user });
+
+      dispatch({ type: "SET_USER", payload: res.data });
       router.push("/");
+      cookie.set("user", res.data);
     } catch (error) {
       setErrorMessage(error.response.data.message);
     } finally {
